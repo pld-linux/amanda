@@ -1,17 +1,40 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.1
+Version:	2.4.1p1
 Release:	1
 Copyright:      distributable
 Group:          Networking/Utilities
 Group(pl):      Sieciowe/Narzêdzia
-Source:		ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
+Source1:	amanda-srv.crontab
+Source2:	amanda.inetd
+Source3:	amandaidx.inetd
+Source4:	amidxtape.inetd
+BuildRequires:	flex
+BuildRequires:	dump
+BuildRequires:	tar
+BuildRequires:	ncurses-devel
+BuildRequires:	readline-devel
+Prereq:		/sbin/ldconfig
 URL:		http://www.amanda.org/
 BuildRoot:	/tmp/%{name}-%{version}-root
 
+%define		_sysconfdir	/etc
+%define		_localstatedir	/var
+%define		_libexecdir	%{_libdir}/amanda
+
 %description 
-A network-capable tape backup solution.
+AMANDA, the Advanced Maryland Automatic Network Disk Archiver, is a backup
+system that allows the administrator of a LAN to set up a single master
+backup server to back up multiple hosts to a single large capacity tape
+drive. AMANDA uses native dump and/or GNU tar facilities and can back up a
+large number of workstations running multiple versions of Unix. Newer
+versions of AMANDA (including this version) can use SAMBA to back up
+Microsoft(TM) Windows95/NT hosts. The amanda package contains the core
+AMANDA programs and will need to be installed on both AMANDA clients and
+AMANDA servers. Note that you will have to install the amanda-client and
+amanda-server packages as well.
 
 %description -l pl
 Sieciowo zorientowany system tworzenia kopii zapasowych
@@ -21,26 +44,36 @@ Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
+Prereq:		/sbin/ldconfig
+Requires:	%{name} = %{version}
 
 %description client
-This package should be installed on machines that are to be backed
-up by Amanda.  (Including, the server if it should be backed up.)
+The Amanda-client package should be installed on any machine that will be
+backed up by AMANDA (including the server if it also needs to be backed up).
+You will also need to install the amanda package to each AMANDA client.
 
 %description -l pl client
 Ten pakiet powinien byæ zainstalowany ma maszynach, z których
 zawarto¶ci bêd± tworzone kopie zapasowe.
-
 
 %package server
 Summary:	The server side of Amanda
 Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
+Prereq:		rc-inetd
+Prereq:		/sbin/ldconfig
 Requires:	gnuplot
+Requires:	%{name} = %{version}
+Requires:	crondaemon
+Requires:	/etc/cron.d
 
 %description server
-This package should be installed on the machine that has the device
-(such as a tape drive) where backups will be written.
+The amanda-server package should be installed on the AMANDA server, the
+machine attached to the device (such as a tape drive) where backups will be
+written. You will also need to install the amanda package to the AMANDA
+server. And, if the server is also to be backed up, the server also needs to
+have the amanda-client package installed.
 
 %description -l pl server
 Ten pakiet powinien byæ zainstalowanych na maszynach, na których
@@ -51,12 +84,8 @@ urz±dzenia typu streamer).
 %setup -q
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
-./configure %{_target_platform} \
-	--prefix=%{_prefix} \
-	--mandir=%{_mandir} \
-	--sysconfdir=/etc \
-	--localstatedir=/var \
+LDFLAGS="-s"; export LDFLAGS
+%configure \
 	--disable-static \
 	--with-index-server=localhost \
 	--with-user=amanda \
@@ -70,74 +99,135 @@ CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 	--with-bsd-security \
 	--with-buffered-dump \
 	--with-amandahosts \
-        --with-debugging=/var/amanda/debug
+        --with-debugging=%{_localstatedir}/amanda/debug
 
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/etc/{amanda,cron.d,sysconfig/rc-inetd} \
+	$RPM_BUILD_ROOT%{_localstatedir}/state/amanda
+
 make install \
-	prefix=$RPM_BUILD_ROOT%{_prefix} \
-	mandir=$RPM_BUILD_ROOT%{_mandir} \
-	sysconfdir=$RPM_BUILD_ROOT/etc \
-	libexecdir=$RPM_BUILD_ROOT%{_sbindir} \
+	DESTDIR=$RPM_BUILD_ROOT \
 	SETUID_GROUP=`id -g`
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amanda-srv
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amanda
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amandaidx
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
+
+install example/{amanda,chg-multi,chg-scsi}.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
+install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/state/amanda
+
+strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man8/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post 		-p /sbin/ldconfig
-%postun		-p /sbin/ldconfig
-%post   client	-p /sbin/ldconfig
-%postun client	-p /sbin/ldconfig
-%post   server	-p /sbin/ldconfig
-%postun server	-p /sbin/ldconfig
+%pre
+/usr/sbin/groupadd -g 80 -r -f amanda
+
+%post
+/sbin/ldconfig
+if [ -f /var/lock/subsys/rc-inetd ]; then
+	/etc/rc.d/init.d/rc-inetd restart 1>&2
+else
+	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
+fi
+
+%preun
+if [ $1 = 0 ]; then
+	groupdel amanda
+fi
+
+%posun
+/sbin/ldconfig
+if [ -f /var/lock/subsys/rc-inetd ]; then
+	/etc/rc.d/init.d/rc-inetd restart
+fi
+
+%post client
+/sbin/ldconfig
+if [ -f /var/lock/subsys/rc-inetd ]; then
+	/etc/rc.d/init.d/rc-inetd restart 1>&2
+else
+	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
+fi
+
+%postun client
+/sbin/ldconfig
+if [ -f /var/lock/subsys/rc-inetd ]; then
+	/etc/rc.d/init.d/rc-inetd restart
+fi
+
+%post server
+/sbin/ldconfig
+if [ -f /var/lock/subsys/rc-inetd ]; then
+	/etc/rc.d/init.d/rc-inetd restart 1>&2
+else
+	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
+fi
+
+%postun server
+/sbin/ldconfig
+if [ -f /var/lock/subsys/rc-inetd ]; then
+	/etc/rc.d/init.d/rc-inetd restart
+fi
 
 %files
 %defattr(644,root,root,755)
-%{_sbindir}/amidxtaped
-%{_libdir}/libamanda*
-%{_libdir}/libamtape*
+%config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
+%attr(755,root,root) %{_libdir}/amidxtaped
+%attr(755,root,root) %{_libdir}/libamanda*.so.*.*
+%attr(755,root,root) %{_libdir}/libamtape*.so.*.*
 %attr(755,root,root) %{_sbindir}/amrestore
+%attr(770,root,amanda) %dir %{_libexecdir}
 %{_mandir}/man8/amrestore.8*
 
 %files server
-%{_libdir}/libamserver*
-%{_sbindir}/amindexd
-%{_sbindir}/amtrmidx
-%{_sbindir}/driver
-%{_sbindir}/dumper
-%{_sbindir}/getconf
-%{_sbindir}/planner
-#%{_sbindir}/reporter
-%{_sbindir}/taper
-%{_sbindir}/chg-chio
-%{_sbindir}/chg-manual
-%{_sbindir}/chg-multi
-%{_sbindir}/chg-mtx
-%{_sbindir}/chg-rth
-%{_sbindir}/chg-chs
-#%{_sbindir}/amcat.awk
-#%{_sbindir}/amplot.awk
-#%{_sbindir}/amplot.g
-#%{_sbindir}/amplot.gp
-%{_sbindir}/amadmin
-%{_sbindir}/amcheck
-%{_sbindir}/amflush
-%{_sbindir}/amlabel
-%{_sbindir}/amtape
-%{_sbindir}/amcheckdb
-%{_sbindir}/amcleanup
-%{_sbindir}/amdump
-%{_sbindir}/amoverview
-%{_sbindir}/amrmtape
-%{_sbindir}/amtoc
-%{_sbindir}/amverify
-#%{_sbindir}/amplot
-%{_sbindir}/amreport
-%{_sbindir}/amstatus
+%defattr(644,root,root,755)
+%config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
+
+%dir %{_sysconfdir}/amanda
+%attr(640,root,amanda) %{_sysconfdir}/amanda/*
+
+%dir %{_localstatedir}/state/amanda
+%{_localstatedir}/state/amanda/*
+
+%attr(640,root,root) /etc/cron.d/amanda-srv
+
+%attr(755,root,root) %{_libdir}/libamserver*.so.*.*
+%attr(755,root,root) %{_libexecdir}/amindexd
+%attr(755,root,root) %{_libexecdir}/amtrmidx
+%attr(755,root,root) %{_libexecdir}/driver
+%attr(755,root,root) %{_libexecdir}/dumper
+%attr(755,root,root) %{_libexecdir}/getconf
+%attr(755,root,root) %{_libexecdir}/planner
+%attr(755,root,root) %{_libexecdir}/taper
+%attr(755,root,root) %{_libexecdir}/chg-chio
+%attr(755,root,root) %{_libexecdir}/chg-manual
+%attr(755,root,root) %{_libexecdir}/chg-multi
+%attr(755,root,root) %{_libexecdir}/chg-mtx
+%attr(755,root,root) %{_libexecdir}/chg-rth
+%attr(755,root,root) %{_libexecdir}/chg-chs
+%attr(755,root,root) %{_sbindir}/amadmin
+%attr(755,root,root) %{_sbindir}/amcheck
+%attr(755,root,root) %{_sbindir}/amflush
+%attr(755,root,root) %{_sbindir}/amlabel
+%attr(755,root,root) %{_sbindir}/amtape
+%attr(755,root,root) %{_sbindir}/amcheckdb
+%attr(755,root,root) %{_sbindir}/amcleanup
+%attr(755,root,root) %{_sbindir}/amdump
+%attr(755,root,root) %{_sbindir}/amoverview
+%attr(755,root,root) %{_sbindir}/amrmtape
+%attr(755,root,root) %{_sbindir}/amtoc
+%attr(755,root,root) %{_sbindir}/amverify
+#%attr(755,root,root) %{_sbindir}/amplot
+%attr(755,root,root) %{_sbindir}/amreport
+%attr(755,root,root) %{_sbindir}/amstatus
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amtape.8*
@@ -153,16 +243,19 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/amstatus.8*
 
 %files client
-%{_libdir}/libamclient*
-%{_sbindir}/versionsuffix
-%{_sbindir}/amandad
-%{_sbindir}/calcsize
-%{_sbindir}/rundump
-%{_sbindir}/runtar
-%{_sbindir}/selfcheck
-%{_sbindir}/sendbackup
-%{_sbindir}/sendsize
-%{_sbindir}/patch-system
-%{_sbindir}/killpgrp
-%{_sbindir}/amrecover
+%defattr(644,root,root,755)
+%config(noreplace) /etc/sysconfig/rc-inetd/amanda
+
+%attr(755,root,root) %{_libdir}/libamclient*.so.*.*
+%attr(755,root,root) %{_libexecdir}/versionsuffix
+%attr(755,root,root) %{_libexecdir}/amandad
+%attr(755,root,root) %{_libexecdir}/calcsize
+%attr(755,root,root) %{_libexecdir}/rundump
+%attr(755,root,root) %{_libexecdir}/runtar
+%attr(755,root,root) %{_libexecdir}/selfcheck
+%attr(755,root,root) %{_libexecdir}/sendbackup
+%attr(755,root,root) %{_libexecdir}/sendsize
+%attr(755,root,root) %{_libexecdir}/patch-system
+%attr(755,root,root) %{_libexecdir}/killpgrp
+%attr(755,root,root) %{_sbindir}/amrecover
 %{_mandir}/man8/amrecover.8*
