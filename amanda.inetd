@@ -1,8 +1,10 @@
 SERVICE_NAME=amanda
-SOCK_TYPE=stream
-PROTOCOL=tcp
+SOCK_TYPE=dgram
+PROTOCOL=udp
 PORT=10080
-FLAGS=nowait
+FLAGS=wait
 USER=amanda
+GROUP=disk
 SERVER=/usr/lib/amanda/amandad
 DAEMON=/usr/lib/amanda/amandad
+FAMILY=ipv4

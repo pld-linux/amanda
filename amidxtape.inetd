@@ -4,5 +4,7 @@ PROTOCOL=tcp
 PORT=10083
 FLAGS=nowait
 USER=amanda
+GROUP=disk
 SERVER=/usr/lib/amanda/amidxtaped
 DAEMON=/usr/lib/amanda/amidxtaped
+FAMILY=ipv4
