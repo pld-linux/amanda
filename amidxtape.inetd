@@ -1,0 +1,7 @@
+SERVICE_NAME=amidxtape
+SOCK_TYPE=stream
+PROTOCOL=tcp
+FLAGS=nowait
+USER=amanda
+SERVER=/usr/sbin/amidxtaped
+DAEMON=/usr/sbin/amidxtaped
