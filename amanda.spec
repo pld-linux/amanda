@@ -1,7 +1,7 @@
 Summary:	A network-capable tape backup solution
 Name:		amanda
-Version:	2.4.1
-Release:	2d
+Version:	2.4.1p1
+Release:	3
 Source:		ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
 Copyright:	distributable
 Group:		Networking/Utilities 
@@ -39,25 +39,42 @@ CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure \
 	--prefix=/usr \
 	--sysconfdir=/etc \
-	--libexecdir=\${exec_prefix}/lib/amanda \
+	--localstatedir=/var \
+	--disable-static \
 	--with-index-server=localhost \
+	--with-user=amanda \
+	--with-group=amanda \
+	--with-samba-user=amanda \
+	--with-tape-device=/dev/null \
+	--with-ftape-rawdevice=/dev/null \
+	--with-changer-device=/dev/null \
+	--with-fqdn \
+	--with-smbclient=/usr/bin/smbclient \
+	--with-bsd-security \
+	--with-buffered-dump \
 	--with-amandahosts \
-	--with-user=operator \
-	--with-group=disk
+        --with-debugging=/var/amanda/debug
+
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make install prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_OPT_FLAGS/etc 
+make install \
+	prefix=$RPM_BUILD_ROOT/usr \
+	sysconfdir=$RPM_BUILD_ROOT/etc \
+	libexecdir=$RPM_BUILD_ROOT/usr/sbin \
+	SETUID_GROUP=`id -g`
 
-%clean 
+gzip -9nf $RPM_BUILD_ROOT/usr/man/man8/*
+
+%clean
 rm -rf $RPM_BUILD_ROOT
 
 %post 		-p /sbin/ldconfig
 %postun		-p /sbin/ldconfig
-%post client	-p /sbin/ldconfig
+%post   client	-p /sbin/ldconfig
 %postun client	-p /sbin/ldconfig
-%post server	-p /sbin/ldconfig
+%post   server	-p /sbin/ldconfig
 %postun server	-p /sbin/ldconfig
 
 %files
@@ -66,28 +83,28 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libamtape*
 /usr/lib/amanda/amidxtaped
 %attr(755,root,root) /usr/sbin/amrestore
-%attr(644,root, man) /usr/man/man8/amrestore.8*
+/usr/man/man8/amrestore.8*
 
 %files server
 /usr/lib/libamserver*
-/usr/lib/amanda/amindexd
-/usr/lib/amanda/amtrmidx
-/usr/lib/amanda/driver
-/usr/lib/amanda/dumper
-/usr/lib/amanda/getconf
-/usr/lib/amanda/planner
-#/usr/lib/amanda/reporter
-/usr/lib/amanda/taper
-/usr/lib/amanda/chg-chio
-/usr/lib/amanda/chg-manual
-/usr/lib/amanda/chg-multi
-/usr/lib/amanda/chg-mtx
-/usr/lib/amanda/chg-rth
-/usr/lib/amanda/chg-chs
-/usr/lib/amanda/amcat.awk
-/usr/lib/amanda/amplot.awk
-/usr/lib/amanda/amplot.g
-/usr/lib/amanda/amplot.gp
+/usr/sbin/amindexd
+/usr/sbin/amtrmidx
+/usr/sbin/driver
+/usr/sbin/dumper
+/usr/sbin/getconf
+/usr/sbin/planner
+#/usr/sbin/reporter
+/usr/sbin/taper
+/usr/sbin/chg-chio
+/usr/sbin/chg-manual
+/usr/sbin/chg-multi
+/usr/sbin/chg-mtx
+/usr/sbin/chg-rth
+/usr/sbin/chg-chs
+/usr/sbin/amcat.awk
+/usr/sbin/amplot.awk
+/usr/sbin/amplot.g
+/usr/sbin/amplot.gp
 /usr/sbin/amadmin
 /usr/sbin/amcheck
 /usr/sbin/amflush
@@ -103,34 +120,34 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/amplot
 /usr/sbin/amreport
 /usr/sbin/amstatus
-%attr(644,root, man) /usr/man/man8/amadmin.8*
-%attr(644,root, man) /usr/man/man8/amrmtape.8*
-%attr(644,root, man) /usr/man/man8/amtape.8*
-%attr(644,root, man) /usr/man/man8/amtoc.8*
-%attr(644,root, man) /usr/man/man8/amanda.8*
-%attr(644,root, man) /usr/man/man8/amcheck.8*
-%attr(644,root, man) /usr/man/man8/amcleanup.8*
-%attr(644,root, man) /usr/man/man8/amdump.8*
-%attr(644,root, man) /usr/man/man8/amflush.8*
-%attr(644,root, man) /usr/man/man8/amlabel.8*
-%attr(644,root, man) /usr/man/man8/amplot.8*
-%attr(644,root, man) /usr/man/man8/amreport.8*
-%attr(644,root, man) /usr/man/man8/amstatus.8*
+/usr/man/man8/amadmin.8*
+/usr/man/man8/amrmtape.8*
+/usr/man/man8/amtape.8*
+/usr/man/man8/amtoc.8*
+/usr/man/man8/amanda.8*
+/usr/man/man8/amcheck.8*
+/usr/man/man8/amcleanup.8*
+/usr/man/man8/amdump.8*
+/usr/man/man8/amflush.8*
+/usr/man/man8/amlabel.8*
+/usr/man/man8/amplot.8*
+/usr/man/man8/amreport.8*
+/usr/man/man8/amstatus.8*
 
 %files client
 /usr/lib/libamclient*
-/usr/lib/amanda/versionsuffix
-/usr/lib/amanda/amandad
-/usr/lib/amanda/calcsize
-/usr/lib/amanda/rundump
-/usr/lib/amanda/runtar
-/usr/lib/amanda/selfcheck
-/usr/lib/amanda/sendbackup
-/usr/lib/amanda/sendsize
-/usr/lib/amanda/patch-system
-/usr/lib/amanda/killpgrp
+/usr/sbin/versionsuffix
+/usr/sbin/amandad
+/usr/sbin/calcsize
+/usr/sbin/rundump
+/usr/sbin/runtar
+/usr/sbin/selfcheck
+/usr/sbin/sendbackup
+/usr/sbin/sendsize
+/usr/sbin/patch-system
+/usr/sbin/killpgrp
 /usr/sbin/amrecover
-%attr(644,root, man) /usr/man/man8/amrecover.8*
+/usr/man/man8/amrecover.8*
 
 %changelog
 * Sat Jan 30 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
