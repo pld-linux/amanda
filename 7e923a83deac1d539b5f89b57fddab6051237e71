@@ -1,0 +1,5 @@
+- release 4,
+- "Requires: %{name}-libs = %{version}" in server and cliet changed to
+  "Prereq: %{name}-libs = %{version}" because libs subpackage creates
+  amanda accout and this accout must exist before installing client or
+  server.
