@@ -1,2 +1,0 @@
-#0 16 * * 1-5	amanda	/usr/sbin/amcheck -m <config name>
-#45 0 * * 2-6	amanda	/usr/sbin/amdump <config name>
