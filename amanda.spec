@@ -19,6 +19,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	dump
+BuildRequires:	gnuplot
 BuildRequires:	tar
 BuildRequires:	cpio
 BuildRequires:	ncurses-devel >= 5.0
