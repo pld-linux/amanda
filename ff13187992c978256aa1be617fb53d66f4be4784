@@ -1,0 +1,10 @@
+- moved /var/lib/amanda dir to -libs, changed owner to root
+  (%_localstatedir macro set to /var/lib)
+- moved /var/amanda/gnutar-lists to /var/lib/amanda/gnutar-lists
+- added /etc/amandates file (dumpdates for gnutar) to -client
+- changed GROUP in .inetd to amanda
+  (if you need disk group - add amanda user to disk group and add INITGROUPS=y
+  to .inetd - at least rlinetd supports this)
+- removed tar,dump,cpio from -server Requires list; added note to -client
+  description (it's -client that require dump or GNU tar; cpio is not used)
+- release 6, STBR
