@@ -6,7 +6,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.4p1
-Release:	2
+Release:	3
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -17,10 +17,9 @@ Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
 Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-bug18322.patch
-Patch2:		%{name}-no_private_libtool.m4.patch
-Patch3:		%{name}-ac25x.patch
-Patch4:		%{name}-chg-zd-mtx-sh.patch
+Patch1:		%{name}-no_private_libtool.m4.patch
+Patch2:		%{name}-ac25x.patch
+Patch3:		%{name}-chg-zd-mtx-sh.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -129,11 +128,8 @@ typu streamer).
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %build
-touch COPYING
-rm -f missing
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
