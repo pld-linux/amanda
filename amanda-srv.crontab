@@ -1,2 +1,2 @@
-0 16 * * 1-5 /usr/sbin/amcheck -m csd                                                    
-45 0 * * 2-6 /usr/sbin/amdump csd
+0 16 * * 1-5 /usr/sbin/amcheck -m
+45 0 * * 2-6 /usr/sbin/amdump
