@@ -71,7 +71,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires(post,postun):	/sbin/ldconfig
+Requires(post):	/sbin/ldconfig
 Provides:	group(amanda)
 Provides:	user(amanda)
 
@@ -87,7 +87,7 @@ Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
 PreReq:		%{name}-libs = %{version}
 PreReq:		rc-inetd
-Requires(post,postun):	/sbin/ldconfig
+Requires(post):	/sbin/ldconfig
 Conflicts:	tar < 1.13
 
 %description client
@@ -107,7 +107,7 @@ Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
 PreReq:		%{name}-libs = %{version}
 PreReq:		rc-inetd
-Requires(post,postun):	/sbin/ldconfig
+Requires(post):	/sbin/ldconfig
 Requires:	gnuplot
 Requires:	crondaemon
 Requires:	/etc/cron.d
