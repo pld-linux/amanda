@@ -7,7 +7,7 @@ License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
-Source0:	ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
+Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -18,6 +18,7 @@ Patch1:		%{name}-am_fixes.patch
 Patch2:		%{name}-bug18322.patch
 Patch3:		%{name}-build_tapetype.patch
 Patch4:		%{name}-no_private_libtool.m4.patch
+URL:		http://www.amanda.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	cpio
@@ -28,7 +29,6 @@ BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
 Prereq:		/sbin/ldconfig
-URL:		http://www.amanda.org/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
