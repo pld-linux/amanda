@@ -5,7 +5,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	16
+Release:	17
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -34,7 +34,6 @@ BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
 BuildRequires:	samba-client
-Prereq:		/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
@@ -68,12 +67,13 @@ amanda-client i amanda-server!
 Summary:	Amanda shared libraries
 Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
 Group:		Networking/Utilities
-Prereq:		/usr/bin/getgid
-Prereq:		/bin/id
-Prereq:		/usr/sbin/groupadd
-Prereq:		/usr/sbin/useradd
-Prereq:		/usr/sbin/groupdel
-Prereq:		/usr/sbin/userdel
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/sbin/ldconfig
 
 %description libs
 Amanda shared libraries.
@@ -85,9 +85,9 @@ Biblioteki wspó³dzielone pakietu amanda.
 Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
-Prereq:		/sbin/ldconfig
-Prereq:		rc-inetd
-Prereq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}
+PreReq:		rc-inetd
+Requires(post,postun):	/sbin/ldconfig
 Conflicts:	tar < 1.13
 
 %description client
@@ -105,15 +105,14 @@ najmniej jednego z pakietów dump i GNU tar.
 Summary:	The server side of Amanda
 Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
-Prereq:		rc-inetd
-Prereq:		/sbin/ldconfig
+PreReq:		%{name}-libs = %{version}
+PreReq:		rc-inetd
+Requires(post,postun):	/sbin/ldconfig
 Requires:	gnuplot
 Requires:	crondaemon
 Requires:	/etc/cron.d
 Requires:	mt-st
 Requires:	mtx
-Prereq:		rc-inetd
-Prereq:		%{name}-libs = %{version}
 
 %description server
 The amanda-server package should be installed on the AMANDA server,
@@ -197,7 +196,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre libs
 if [ -n "`/usr/bin/getgid amanda`" ]; then
 	if [ "`getgid amanda`" != "80" ]; then
-		echo "Warning: group amanda haven't gid=80. Correct this before installing amanda-libs" 1>&2
+		echo "Error: group amanda doesn't have gid=80. Correct this before installing amanda-libs." 1>&2
 		exit 1
 	fi
 else
@@ -205,7 +204,7 @@ else
 fi
 if [ -n "`/bin/id -u amanda 2>/dev/null`" ]; then
 	if [ "`/bin/id -u amanda`" != "80" ]; then
-		echo "Warning: user amanda haven't uid=80. Correct this before installing amanda-libs" 1>&2
+		echo "Error: user amanda doesn't have uid=80. Correct this before installing amanda-libs." 1>&2
 		exit 1
 	fi
 else
@@ -226,7 +225,7 @@ fi
 if [ -f /var/lock/subsys/rc-inetd ]; then
 	/etc/rc.d/init.d/rc-inetd restart 1>&2
 else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
+	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server." 1>&2
 fi
 
 %postun client
@@ -240,9 +239,9 @@ fi
 if [ -f /var/lock/subsys/rc-inetd ]; then
 	/etc/rc.d/init.d/rc-inetd restart 1>&2
 else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
+	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server." 1>&2
 fi
-echo "Don't forget to edit /etc/cron.d/amanda-srv" 1>&2
+echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
 
 %postun server
 /sbin/ldconfig
@@ -257,7 +256,6 @@ fi
 %attr(770,root,amanda) %dir %{_libexecdir}
 %attr(770,root,amanda) %dir %{_localstatedir}/amanda
 
-
 %files server
 %defattr(644,root,root,755)
 %doc docs/*
@@ -267,7 +265,7 @@ fi
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %config(noreplace) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/*
 
-%attr(664,amanda,amanda) %{_localstatedir}/amanda/*
+%attr(664,amanda,amanda) %{_localstatedir}/amanda/*.ps
 
 %config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
