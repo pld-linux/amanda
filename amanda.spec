@@ -194,7 +194,7 @@ fi
 %dir %{_sysconfdir}/amanda
 %attr(640,root,amanda) %{_sysconfdir}/amanda/*
 
-%dir %{_localstatedir}/state/amanda
+%attr(660,amanda,amanda) %dir %{_localstatedir}/state/amanda
 %{_localstatedir}/state/amanda/*
 
 %attr(640,root,root) /etc/cron.d/amanda-srv
