@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	4
+Release:	5
 Copyright:      distributable
 Group:          Networking/Utilities
 Group(pl):      Sieciowe/Narzêdzia
@@ -18,7 +18,7 @@ BuildRequires:	dump
 BuildRequires:	tar
 BuildRequires:	cpio
 BuildRequires:	ncurses-devel >= 5.0
-BuildRequires:	readline-devel
+BuildRequires:	readline-devel >= 4.1
 Prereq:		/sbin/ldconfig
 URL:		http://www.amanda.org/
 BuildRoot:	/tmp/%{name}-%{version}-root
