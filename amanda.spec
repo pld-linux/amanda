@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	1
+Release:	2
 Copyright:      distributable
 Group:          Networking/Utilities
 Group(pl):      Sieciowe/Narzêdzia
@@ -15,7 +15,8 @@ Source5:	amanda.conf
 BuildRequires:	flex
 BuildRequires:	dump
 BuildRequires:	tar
-BuildRequires:	ncurses-devel
+BuildRequires:	cpio
+BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	readline-devel
 Prereq:		/sbin/ldconfig
 URL:		http://www.amanda.org/
@@ -208,9 +209,9 @@ fi
 %attr(755,root,root) %{_libexecdir}/amindexd
 %attr(755,root,root) %{_libexecdir}/amtrmidx
 %attr(755,root,root) %{_libexecdir}/driver
-%attr(755,root,root) %{_libexecdir}/dumper
+%attr(4754,root,amanda) %{_libexecdir}/dumper
 %attr(755,root,root) %{_libexecdir}/getconf
-%attr(755,root,root) %{_libexecdir}/planner
+%attr(4754,root,amanda) %{_libexecdir}/planner
 %attr(755,root,root) %{_libexecdir}/taper
 %attr(755,root,root) %{_libexecdir}/chg-chio
 %attr(755,root,root) %{_libexecdir}/chg-manual
@@ -254,14 +255,14 @@ fi
 %attr(755,root,root) %{_libdir}/libamclient*.so.*.*
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
-%attr(755,root,root) %{_libexecdir}/calcsize
+%attr(4754,root,amanda) %{_libexecdir}/calcsize
 %attr(755,root,root) %{_libexecdir}/rundump
-%attr(755,root,root) %{_libexecdir}/runtar
-%attr(755,root,root) %{_libexecdir}/selfcheck
+%attr(4754,root,amanda) %{_libexecdir}/runtar
+%attr(4754,root,amanda) %{_libexecdir}/selfcheck
 %attr(755,root,root) %{_libexecdir}/sendbackup
 %attr(755,root,root) %{_libexecdir}/sendsize
 %attr(755,root,root) %{_libexecdir}/patch-system
-%attr(755,root,root) %{_libexecdir}/killpgrp
+%attr(4754,root,amanda) %{_libexecdir}/killpgrp
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(755,root,root) %{_sbindir}/amrestore
 %{_mandir}/man8/amrecover.8*
