@@ -1,5 +1,6 @@
 # Conditional build:                                                                 
-# _without_xfs  - without support for xfsdump
+# _with_xfs	- without support for xfsdump
+
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
@@ -25,7 +26,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
-%{!?_without_xfs:BuildRequires:	xfsdump}
+%{!?_with_xfs:BuildRequires:	xfsdump}
 BuildRequires:	flex
 BuildRequires:	gnuplot
 BuildRequires:	libtool
