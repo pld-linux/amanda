@@ -142,7 +142,7 @@ typu streamer).
 
 %build
 %{__libtoolize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 touch COPYING
 rm -f missing
