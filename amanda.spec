@@ -1,29 +1,26 @@
-# Conditional build:                                                                 
-# _with_xfs	- without support for xfsdump
+# Conditional build:
+# _with_xfs	- with support for xfsdump
 
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.2p2
-Release:	17
+Version:	2.4.4
+Release:	1
 License:	BSD
 Group:		Networking/Utilities
-Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
-Source6:	tapetype.1
 Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-am_fixes.patch
-Patch2:		%{name}-bug18322.patch
-Patch3:		%{name}-build_tapetype.patch
-Patch4:		%{name}-no_private_libtool.m4.patch
-Patch5:		%{name}-ac25x.patch
-Patch6:		%{name}-chg-zd-mtx-sh.patch
+Patch1:		%{name}-bug18322.patch
+Patch2:		%{name}-no_private_libtool.m4.patch
+Patch3:		%{name}-ac25x.patch
+Patch4:		%{name}-chg-zd-mtx-sh.patch
 URL:		http://www.amanda.org/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
@@ -33,7 +30,12 @@ BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
-BuildRequires:	samba-client
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
@@ -133,15 +135,13 @@ typu streamer).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
-%{__libtoolize}
-aclocal
-%{__autoconf}
 touch COPYING
 rm -f missing
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
 %{__automake}
 %configure \
 	--disable-static \
@@ -180,7 +180,6 @@ install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/amanda
-install %{SOURCE6} $RPM_BUILD_ROOT%{_mandir}/man1/tapetype.1
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/amandates
 
@@ -211,10 +210,9 @@ else
 	/usr/sbin/useradd -u 80 -G disk -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda 1>&2
 fi
 
-%post libs -p /sbin/ldconfig
+%post   libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
-%postun libs
-/sbin/ldconfig
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel amanda
 	/usr/sbin/groupdel amanda
@@ -285,13 +283,14 @@ fi
 %attr(755,root,root) %{_libexecdir}/amtrmlog
 %attr(755,root,root) %{_libexecdir}/chg-chio
 %attr(755,root,root) %{_libexecdir}/chg-chs
+%attr(755,root,root) %{_libexecdir}/chg-juke
 %attr(755,root,root) %{_libexecdir}/chg-manual
 %attr(755,root,root) %{_libexecdir}/chg-mtx
 %attr(755,root,root) %{_libexecdir}/chg-multi
+%attr(755,root,root) %{_libexecdir}/chg-rait
 %attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-scsi
 %attr(755,root,root) %{_libexecdir}/chg-zd-mtx
-%attr(755,root,root) %{_libexecdir}/selfcheck
 %attr(755,root,root) %{_libexecdir}/taper
 %attr(755,root,root) %{_sbindir}/amadmin
 %attr(4754,root,amanda) %{_sbindir}/amcheck
@@ -303,27 +302,33 @@ fi
 %attr(755,root,root) %{_sbindir}/amlabel
 %attr(755,root,root) %{_sbindir}/amoverview
 %attr(755,root,root) %{_sbindir}/amplot
-%attr(755,root,root) %{_sbindir}/amrmtape
 %attr(755,root,root) %{_sbindir}/amreport
+%attr(755,root,root) %{_sbindir}/amrmtape
 %attr(755,root,root) %{_sbindir}/amstatus
 %attr(755,root,root) %{_sbindir}/amtape
+%attr(755,root,root) %{_sbindir}/amtapetype
 %attr(755,root,root) %{_sbindir}/amtoc
 %attr(755,root,root) %{_sbindir}/amverify
-%attr(755,root,root) %{_sbindir}/tapetype
-%{_mandir}/man1/tapetype.1*
+%attr(755,root,root) %{_sbindir}/amverifyrun
 %{_mandir}/man8/amadmin.8*
-%{_mandir}/man8/amrmtape.8*
-%{_mandir}/man8/amtape.8*
-%{_mandir}/man8/amtoc.8*
 %{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amcheck.8*
+%{_mandir}/man8/amcheckdb.8*
 %{_mandir}/man8/amcleanup.8*
 %{_mandir}/man8/amdump.8*
 %{_mandir}/man8/amflush.8*
+%{_mandir}/man8/amgetconf.8*
 %{_mandir}/man8/amlabel.8*
+%{_mandir}/man8/amoverview.8*
 %{_mandir}/man8/amplot.8*
 %{_mandir}/man8/amreport.8*
+%{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amstatus.8*
+%{_mandir}/man8/amtape.8*
+%{_mandir}/man8/amtapetype.8*
+%{_mandir}/man8/amtoc.8*
+%{_mandir}/man8/amverify.8*
+%{_mandir}/man8/amverifyrun.8*
 
 %files client
 %defattr(644,root,root,755)
@@ -340,8 +345,12 @@ fi
 %attr(755,root,root) %{_libexecdir}/sendsize
 %attr(755,root,root) %{_libexecdir}/patch-system
 %attr(4754,root,amanda) %{_libexecdir}/killpgrp
+%attr(755,root,root) %{_sbindir}/amdd
+%attr(755,root,root) %{_sbindir}/ammt
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(755,root,root) %{_sbindir}/amrestore
 %attr(770,amanda,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
+%{_mandir}/man8/amdd.8*
+%{_mandir}/man8/ammt.8*
 %{_mandir}/man8/amrecover.8*
 %{_mandir}/man8/amrestore.8*

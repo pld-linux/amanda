@@ -1,58 +1,11 @@
 --- amanda-2.4.2p2/configure.in.orig	Wed Sep 19 09:50:57 2001
 +++ amanda-2.4.2p2/configure.in	Wed Sep 19 10:06:27 2001
-@@ -1399,8 +1399,8 @@
+@@ -1441,7 +1441,7 @@
  if test "$XFSDUMP" -a "$XFSRESTORE"; then
      AC_DEFINE_UNQUOTED(XFSDUMP,"$XFSDUMP",[Define the location of the xfsdump program on Irix hosts. ])
      AC_DEFINE_UNQUOTED(XFSRESTORE,"$XFSRESTORE",[Define the location of the xfsrestore program on Irix hosts. ])
 -    AC_MSG_WARN([*** xfsdump causes the setuid-root rundump program to be enabled])
--    AC_MSG_WARN([*** to disable it, just #undef XFSDUMP in config/config.h])
 +    AC_MSG_WARN([[*** xfsdump causes the setuid-root rundump program to be enabled]])
-+    AC_MSG_WARN([[*** to disable it, just #undef XFSDUMP in config/config.h]])
+     AC_MSG_WARN([[*** to disable it, just #undef XFSDUMP in config/config.h]])
  fi
  
- VXSYSLOCPATH="$SYSLOCPATH:/usr/lib/fs/vxfs"
-@@ -1666,7 +1666,7 @@
-    test x"$ac_cv_header_sys_scsi_h" = x"yes"; then 
- 	AC_CACHE_CHECK([for HP-UX like scsi support],
- 	amanda_cv_hpux_scsi,
--	AC_TRY_COMPILE([
-+	[AC_TRY_COMPILE([
- #include <stdio.h>
- #include <sys/ioctl.h>
- #include <sys/scsi.h>
-@@ -1689,7 +1689,7 @@
-    test x"$ac_cv_header_sys_dsreq_h" = x"yes"; then 
- 	AC_CACHE_CHECK([for Irix like scsi support],
- 	amanda_cv_irix_scsi,
--	AC_TRY_COMPILE([
-+	[AC_TRY_COMPILE([
- #include <sys/types.h>
- #include <sys/dsreq.h>
- #include <sys/mtio.h>
-@@ -1710,7 +1710,7 @@
-    test x"$ac_cv_header_sys_scsi_impl_uscsi_h" = x"yes"; then 
- 	AC_CACHE_CHECK([for Solaris like scsi support],
- 	amanda_cv_solaris_scsi,
--	AC_TRY_COMPILE([
-+	[AC_TRY_COMPILE([
- #include <sys/types.h>
- #include <sys/scsi/impl/uscsi.h>
- #include <sys/mtio.h>
-@@ -1731,7 +1731,7 @@
-    test x"$ac_cv_header_sys_scarray_h" = x"yes"; then 
- 	AC_CACHE_CHECK([for AIX like scsi support],
- 	amanda_cv_aix_scsi,
--	AC_TRY_COMPILE([
-+	[AC_TRY_COMPILE([
- #include <sys/types.h>
- #include <sys/scarray.h>
- #include <sys/tape.h>
-@@ -1752,7 +1752,7 @@
-    test x"$ac_cv_header_sys_scsiio_h" = x"yes"; then
-     AC_CACHE_CHECK([for BSD like scsi support],
-     amanda_cv_bsd_scsi,
--    AC_TRY_COMPILE([
-+    [AC_TRY_COMPILE([
- #include <sys/types.h>
- #include <sys/scsiio.h>
- #include <sys/mtio.h>
