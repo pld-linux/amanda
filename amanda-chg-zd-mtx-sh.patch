@@ -1,0 +1,156 @@
+diff -urN amanda-2.4.2p2/changer-src/chg-zd-mtx.sh.in amanda-2.4.2p2.new/changer-src/chg-zd-mtx.sh.in
+--- amanda-2.4.2p2/changer-src/chg-zd-mtx.sh.in	Tue Apr  3 02:43:07 2001
++++ amanda-2.4.2p2.new/changer-src/chg-zd-mtx.sh.in	Tue Mar 19 20:06:46 2002
+@@ -158,8 +158,8 @@
+ eject() {
+ 	readstatus 
+ 	echo "EJECT -> ejecting tape from $tape to slot $usedslot" >> $DBGFILE
+-	if [ $usedslot -gt 0 ]; then
+-		if [ $OFFLINE_BEFORE_UNLOAD -gt 0 ]; then
++	if [ "$usedslot" -gt 0 ]; then
++		if [ "$OFFLINE_BEFORE_UNLOAD" -gt 0 ]; then
+ 			$MT $MTF $tape offline
+ 		fi
+ 		$MTX unload $usedslot $drivenum 2>/dev/null
+@@ -192,7 +192,7 @@
+ 	echo "LOADSLOT -> load tape from slot $whichslot" >> $DBGFILE
+ 	case $whichslot in
+ 		current)
+-			if [ $usedslot -lt 0 ]; then
++			if [ "$usedslot" -lt 0 ]; then
+ 				loadslot=$firstslot
+ 			else 
+ 				echo "$usedslot $tape"
+@@ -200,18 +200,18 @@
+ 			fi
+ 			;;
+ 		next|advance)
+-			if [ $usedslot -lt 0 ]; then
++			if [ "$usedslot" -lt 0 ]; then
+ 				loadslot=$firstslot
+ 			else
+ 				loadslot=`expr $usedslot + 1`
+-				if [ $loadslot -gt $lastslot ]; then
++				if [ "$loadslot" -gt "$lastslot" ]; then
+ 					loadslot=$firstslot
+ 				fi
+ 			fi
+ 			;;
+ 		prev)
+ 			loadslot=`expr $usedslot - 1`
+-			if [ $loadslot -lt $firstslot ]; then
++			if [ "$loadslot" -lt "$firstslot" ]; then
+ 				loadslot=$lastslot
+ 			fi
+ 			;;
+@@ -222,7 +222,7 @@
+ 			loadslot=$lastslot
+ 			;;
+ 		$numeric)
+-                        if [ $whichslot -gt $lastslot ] || [ $whichslot -lt $firstslot ]; then
++                        if [ "$whichslot" -gt "$lastslot" ] || [ "$whichslot" -lt "$firstslot" ]; then
+                                 echo "0 Slot $whichslot is out of range ($firstslot - $lastslot)"
+                                 exit 1
+                         else
+@@ -239,18 +239,18 @@
+ 	esac
+ 
+ 	# Is this already the current slot?
+-	if [ $loadslot = $usedslot ]; then
++	if [ "$loadslo"t = "$usedslot" ]; then
+ 		echo "$usedslot $tape"
+ 		exit 0
+ 	fi
+ 
+ 	# Is this a cleaning request?
+-	if [ $loadslot = $cleanslot ]; then
++	if [ "$loadslot" = "$cleanslot" ]; then
+ 		expr $cleancount + 1 > $cleanfile
+ 		echo 0 > $accessfile
+ 	else
+ 		expr $accesscount + 1 > $accessfile
+-		if [ $AUTOCLEAN -gt 0  -a  $accesscount -gt $autocleancount ]; then
++		if [ "$AUTOCLEAN" -gt 0  -a  "$accesscount" -gt "$autocleancount" ]; then
+ 			$myname -slot clean >/dev/null
+ 
+ 			# Slot $cleanslot might contain an ordinary tape rather than a cleaning
+@@ -261,9 +261,9 @@
+ 	fi
+ 
+ 	# Unload any previous tape
+-	if [ $usedslot -ne "-1" ]; then
++	if [ "$usedslot" -ne "-1" ]; then
+ 		echo "         -> unload $usedslot from $tape" >> $DBGFILE
+-		if [ $OFFLINE_BEFORE_UNLOAD -gt 0 ]; then
++		if [ "$OFFLINE_BEFORE_UNLOAD" -gt 0 ]; then
+ 			$MT $MTF $tape offline
+ 		fi
+ 		result=`$MTX unload $usedslot $drivenum 2>&1`
+@@ -282,7 +282,7 @@
+ 	echo "         -> status $status, result '$result'" >> $DBGFILE
+ 
+ 	# If there is an error, abort unless the slot is simply empty
+-	if [ $status -ne 0 ]; then
++	if [ "$status" -ne 0 ]; then
+ 		empty=`echo $result | grep "Empty"`
+ 		if [ -z "$empty" ]; then
+ 			echo "$loadslot $result"
+@@ -299,7 +299,7 @@
+                 #### Don't assume the drive is ready until we get an ONLINE
+ 		#### This is tested by the variable $offlinestatus from the beginning.
+ 
+-		if [ $offlinestatus -eq 0 ]; then
++		if [ "$offlinestatus" -eq 0 ]; then
+                 	readyError="offline"
+                 	while [ -n "$readyError" ]; do
+                        		readyStatus=`$MT $MTF $tape status 2>&1`
+@@ -330,8 +330,8 @@
+ 	echo "INFO -> current slot $usedslot, last slot $lastslot, can go backwards 1" >> $DBGFILE
+         #### Checks if you have a barcode reader or not.  If so, it passes the 4th item in the echo
+         #### back to amtape signifying it can search based on barcodes.
+-        if [ $havereader -eq 1 ]; then
+-                if [ $usedslot -lt 0 ]; then
++        if [ "$havereader" -eq 1 ]; then
++                if [ "$usedslot" -lt 0 ]; then
+                         #### added a variable to the end of the following 2 echos.
+ 			#### This indicates to amtape that it can/cannot read barcodes.
+                         echo "0 $lastslot 1 1"
+@@ -340,7 +340,7 @@
+                 fi
+                 exit 0
+         else
+-                if [ $usedslot -lt 0 ]; then
++                if [ "$usedslot" -lt 0 ]; then
+                         echo "0 $lastslot 1"
+                 else
+                         echo "$usedslot $lastslot 1"
+@@ -360,17 +360,17 @@
+         case $tapelabel in
+         $tapelabel)
+                 echo "LABEL -> Adding Barcode $barcode and amlabel $tapelabel for Slot $usedslot into $labelfile" >> $DBGFILE
+-                if [ $labelfilesize -eq 2 ]; then
++                if [ "$labelfilesize" -eq 2 ]; then
+                         echo "$tapelabel $barcode" > $labelfile
+                         echo "0 $usedslot $tape"
+                 else
+                         included=`grep $tapelabel $labelfile | awk '{print $1}'`
+-                        if [ -z $included ]; then
++                        if [ -z "$included" ]; then
+                                 echo "$tapelabel $barcode" >> $labelfile
+                                 echo "0 $usedslot $tape"
+                         else
+                                 oldbarcode=`grep $tapelabel $labelfile | awk '{print $2}'`
+-                                if [ $oldbarcode -eq $barcode ]; then
++                                if [ "$oldbarcode" -eq "$barcode" ]; then
+                                         echo "      -> Barcode $barcode $oldbarcode already synced for $tapelabel" >> $DBGFILE
+                                         echo "0 $usedslot $tape"
+ 
+@@ -403,7 +403,7 @@
+ 	includedslot=`echo $tmpincludedslot | sed -n "s/\(.*\)Storage Element \([1-9][0-9]*\):\(.*\)/\2/p;s/Data Transfer Element $drivenum:Full (Storage Element \([1-9][0-9]*\) Loaded)\(.*\)/\1/p"`
+         case $tapelabel in
+         $tapelabel)
+-                if [ $tapelabel == $includedtag ]; then
++                if [ "$tapelabel" == "$includedtag" ]; then
+                         shift 
+                         loadslot $includedslot
+                         echo "$tape"
