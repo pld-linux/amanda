@@ -1,7 +1,7 @@
 Summary:	A network-capable tape backup solution
 Name:		amanda
-Version:	2.4.1p1
-Release:	3
+Version:	2.4.1
+Release:	1
 Source:		ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
 Copyright:	distributable
 Group:		Networking/Utilities 
@@ -38,6 +38,7 @@ This package should be installed on the machine that has the device
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure %{_target_platform} \
 	--prefix=/usr \
+	--mandir=%{_mandir} \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
 	--disable-static \
@@ -61,6 +62,7 @@ make
 rm -rf $RPM_BUILD_ROOT
 make install \
 	prefix=$RPM_BUILD_ROOT/usr \
+	mandir=$RPM_BUILD_ROOT%{_mandir} \
 	sysconfdir=$RPM_BUILD_ROOT/etc \
 	libexecdir=$RPM_BUILD_ROOT%{_sbindir} \
 	SETUID_GROUP=`id -g`
@@ -79,9 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%{_sbindir}/amidxtaped
 %{_libdir}/libamanda*
 %{_libdir}/libamtape*
-%{_libdir}/amanda/amidxtaped
 %attr(755,root,root) %{_sbindir}/amrestore
 %{_mandir}/man8/amrestore.8*
 
@@ -101,10 +103,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/chg-mtx
 %{_sbindir}/chg-rth
 %{_sbindir}/chg-chs
-%{_sbindir}/amcat.awk
-%{_sbindir}/amplot.awk
-%{_sbindir}/amplot.g
-%{_sbindir}/amplot.gp
+#%{_sbindir}/amcat.awk
+#%{_sbindir}/amplot.awk
+#%{_sbindir}/amplot.g
+#%{_sbindir}/amplot.gp
 %{_sbindir}/amadmin
 %{_sbindir}/amcheck
 %{_sbindir}/amflush
@@ -117,7 +119,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/amrmtape
 %{_sbindir}/amtoc
 %{_sbindir}/amverify
-%{_sbindir}/amplot
+#%{_sbindir}/amplot
 %{_sbindir}/amreport
 %{_sbindir}/amstatus
 %{_mandir}/man8/amadmin.8*
@@ -150,6 +152,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/amrecover.8*
 
 %changelog
+* Sun Jun 06 1999 Jan Rêkorajski <baggins@pld.org.pl>
+  [2.4.1-1]
+- spec cleanup
+
 * Sat Jan 30 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
   [2.4.1-2d]
 - added -q %setup parameter,
