@@ -131,7 +131,7 @@ LDFLAGS="-s"; export LDFLAGS
 	--with-amandahosts \
         --with-debugging=%{_localstatedir}/lib/amanda/debug
 
-make
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
