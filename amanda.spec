@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	8
+Release:	9
 License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -265,7 +265,7 @@ fi
 %config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
 
 %attr(750,root,amanda) %dir %{_sysconfdir}/amanda
-%attr(640,root,amanda) %{_sysconfdir}/amanda/*
+%config(noreplace) %attr(640,root,amanda) %{_sysconfdir}/amanda/*
 
 %attr(664,amanda,amanda) %{_localstatedir}/amanda/*
 
