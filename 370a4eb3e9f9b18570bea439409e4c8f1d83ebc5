@@ -1,0 +1,4 @@
+- NFY
+- backed my %attr() changes
+- userdel must go first in postun
+- add amanda user to group disk (also added trigger)
