@@ -65,7 +65,7 @@ make install \
 	libexecdir=$RPM_BUILD_ROOT/usr/sbin \
 	SETUID_GROUP=`id -g`
 
-gzip -9nf $RPM_BUILD_ROOT/usr/man/man8/*
+gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man8/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -83,7 +83,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libamtape*
 /usr/lib/amanda/amidxtaped
 %attr(755,root,root) /usr/sbin/amrestore
-/usr/man/man8/amrestore.8*
+%{_mandir}/man8/amrestore.8*
 
 %files server
 /usr/lib/libamserver*
@@ -120,19 +120,19 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/amplot
 /usr/sbin/amreport
 /usr/sbin/amstatus
-/usr/man/man8/amadmin.8*
-/usr/man/man8/amrmtape.8*
-/usr/man/man8/amtape.8*
-/usr/man/man8/amtoc.8*
-/usr/man/man8/amanda.8*
-/usr/man/man8/amcheck.8*
-/usr/man/man8/amcleanup.8*
-/usr/man/man8/amdump.8*
-/usr/man/man8/amflush.8*
-/usr/man/man8/amlabel.8*
-/usr/man/man8/amplot.8*
-/usr/man/man8/amreport.8*
-/usr/man/man8/amstatus.8*
+%{_mandir}/man8/amadmin.8*
+%{_mandir}/man8/amrmtape.8*
+%{_mandir}/man8/amtape.8*
+%{_mandir}/man8/amtoc.8*
+%{_mandir}/man8/amanda.8*
+%{_mandir}/man8/amcheck.8*
+%{_mandir}/man8/amcleanup.8*
+%{_mandir}/man8/amdump.8*
+%{_mandir}/man8/amflush.8*
+%{_mandir}/man8/amlabel.8*
+%{_mandir}/man8/amplot.8*
+%{_mandir}/man8/amreport.8*
+%{_mandir}/man8/amstatus.8*
 
 %files client
 /usr/lib/libamclient*
@@ -147,7 +147,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/patch-system
 /usr/sbin/killpgrp
 /usr/sbin/amrecover
-/usr/man/man8/amrecover.8*
+%{_mandir}/man8/amrecover.8*
 
 %changelog
 * Sat Jan 30 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
