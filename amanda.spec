@@ -1,3 +1,7 @@
+# TODO
+#  - as of setup-2.4.6-8:
+#   service/protocol combination not in /etc/services: amandaidx/tcp
+#   service/protocol combination not in /etc/services: amidxtape/tcp
 #
 # Conditional build:
 %bcond_with	xfs	# with support for xfsdump 
