@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	12
+Release:	13
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -18,16 +18,19 @@ Patch3:		%{name}-build_tapetype.patch
 Patch4:		%{name}-no_private_libtool.m4.patch
 Patch5:		%{name}-ac25x.patch
 Patch6:		%{name}-chg-zd-mtx-sh.patch
+Patch7:		%{name}-sendbackup-dump.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
+BuildRequires:	xfsdump
 BuildRequires:	flex
 BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
+BuildRequires:	samba-client
 Prereq:		/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -129,6 +132,7 @@ typu streamer).
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 libtoolize --copy --force
@@ -160,7 +164,7 @@ automake -a -c -f
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
-	$RPM_BUILD_ROOT%{_localstatedir}/amanda
+	$RPM_BUILD_ROOT%{_localstatedir}/amanda/gnutar-lists
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
