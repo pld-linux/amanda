@@ -79,6 +79,7 @@ Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 Prereq:		/sbin/ldconfig
+Prereq:		rc-inetd
 Prereq:		%{name}-libs = %{version}
 
 %description client
