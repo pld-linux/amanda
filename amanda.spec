@@ -84,7 +84,7 @@ Group:		Networking/Utilities
 Prereq:		/sbin/ldconfig
 Prereq:		rc-inetd
 Prereq:		%{name}-libs = %{version}
-Requires:	tar >= 1.13
+Conflicts:	tar < 1.13
 
 %description client
 The Amanda-client package should be installed on any machine that will
