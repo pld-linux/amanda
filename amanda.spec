@@ -30,6 +30,7 @@ BuildRequires:	flex
 BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
+BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	tar
 %{?with_xfs:BuildRequires:	xfsdump}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -64,13 +65,15 @@ amanda-client i amanda-server!
 Summary:	Amanda shared libraries
 Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
 Group:		Networking/Utilities
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/sbin/ldconfig
+Provides:	group(amanda)
+Provides:	user(amanda)
 
 %description libs
 Amanda shared libraries.
@@ -187,20 +190,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre libs
 if [ -n "`/usr/bin/getgid amanda`" ]; then
-	if [ "`getgid amanda`" != "80" ]; then
+	if [ "`/usr/bin/getgid amanda`" != 80 ]; then
 		echo "Error: group amanda doesn't have gid=80. Correct this before installing amanda-libs." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 80 -r -f amanda
+	/usr/sbin/groupadd -g 80 amanda
 fi
 if [ -n "`/bin/id -u amanda 2>/dev/null`" ]; then
-	if [ "`/bin/id -u amanda`" != "80" ]; then
+	if [ "`/bin/id -u amanda`" != 80 ]; then
 		echo "Error: user amanda doesn't have uid=80. Correct this before installing amanda-libs." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 80 -G disk -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda 1>&2
+	/usr/sbin/useradd -u 80 -G disk -d /var/lib/amanda -s /bin/sh \
+		-c "Amanda Backup user" -g amanda amanda 1>&2
 fi
 
 %post   libs -p /sbin/ldconfig
@@ -208,8 +212,8 @@ fi
 %postun libs
 /sbin/ldconfig
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel amanda
-	/usr/sbin/groupdel amanda
+	%userremove amanda
+	%groupremove amanda
 fi
 
 %post client
