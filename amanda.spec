@@ -153,7 +153,7 @@ typu streamer).
 	--with-bsd-security \
 	--with-buffered-dump \
 	--with-amandahosts \
-        --with-debugging=%{_localstatedir}/amanda/debug \
+	--with-debugging=%{_localstatedir}/amanda/debug \
 	--with-gnutar-listdir=%{_localstatedir}/amanda/gnutar-lists \
 	--with-tmpdir=/var/tmp
 
@@ -207,7 +207,7 @@ else
 		-c "Amanda Backup user" -g amanda amanda 1>&2
 fi
 
-%post   libs -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
 
 %postun libs
 /sbin/ldconfig
