@@ -34,7 +34,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_localstatedir	/var/lib
 %define		_libexecdir	%{_libdir}/amanda
 
-%description 
+%description
 AMANDA, the Advanced Maryland Automatic Network Disk Archiver, is a
 backup system that allows the administrator of a LAN to set up a
 single master backup server to back up multiple hosts to a single
