@@ -125,7 +125,6 @@ aclocal
 autoconf
 touch COPYING
 automake
-LDFLAGS="-s"; export LDFLAGS
 %configure \
 	--disable-static \
 	--with-index-server=localhost \
@@ -160,10 +159,6 @@ install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
-
-strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
-
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man8/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
