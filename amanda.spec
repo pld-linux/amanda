@@ -5,7 +5,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	14
+Release:	15
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -14,6 +14,7 @@ Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
+Source6:	tapetype.1
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-am_fixes.patch
 Patch2:		%{name}-bug18322.patch
@@ -166,7 +167,8 @@ automake -a -c -f
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
-	$RPM_BUILD_ROOT%{_localstatedir}/amanda/gnutar-lists
+	$RPM_BUILD_ROOT%{_localstatedir}/amanda/gnutar-lists \
+	$RPM_BUILD_ROOT%{_mandir}/man1
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -179,6 +181,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/amanda
+install %{SOURCE6} $RPM_BUILD_ROOT%{_mandir}/man1/tapetype.1
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/amandates
 
@@ -311,6 +314,7 @@ fi
 %attr(755,root,root) %{_sbindir}/amtoc
 %attr(755,root,root) %{_sbindir}/amverify
 %attr(755,root,root) %{_sbindir}/tapetype
+%{_mandir}/man1/tapetype.1*
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amtape.8*
