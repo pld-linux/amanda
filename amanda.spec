@@ -240,7 +240,7 @@ fi
 %attr(755,root,root) %{_libdir}/libamanda*.so
 %attr(755,root,root) %{_libdir}/libamtape*.so
 %attr(750,amanda,disk) %dir %{_libexecdir}
-%attr(770,root,amanda) %dir %{_localstatedir}/amanda
+%attr(750,amanda,disk) %dir %{_localstatedir}/amanda
 
 %files server
 %defattr(644,root,root,755)
