@@ -62,7 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 make install \
 	prefix=$RPM_BUILD_ROOT/usr \
 	sysconfdir=$RPM_BUILD_ROOT/etc \
-	libexecdir=$RPM_BUILD_ROOT/usr/sbin \
+	libexecdir=$RPM_BUILD_ROOT%{_sbindir} \
 	SETUID_GROUP=`id -g`
 
 gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man8/*
@@ -82,44 +82,44 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libamanda*
 %{_libdir}/libamtape*
 %{_libdir}/amanda/amidxtaped
-%attr(755,root,root) /usr/sbin/amrestore
+%attr(755,root,root) %{_sbindir}/amrestore
 %{_mandir}/man8/amrestore.8*
 
 %files server
 %{_libdir}/libamserver*
-/usr/sbin/amindexd
-/usr/sbin/amtrmidx
-/usr/sbin/driver
-/usr/sbin/dumper
-/usr/sbin/getconf
-/usr/sbin/planner
-#/usr/sbin/reporter
-/usr/sbin/taper
-/usr/sbin/chg-chio
-/usr/sbin/chg-manual
-/usr/sbin/chg-multi
-/usr/sbin/chg-mtx
-/usr/sbin/chg-rth
-/usr/sbin/chg-chs
-/usr/sbin/amcat.awk
-/usr/sbin/amplot.awk
-/usr/sbin/amplot.g
-/usr/sbin/amplot.gp
-/usr/sbin/amadmin
-/usr/sbin/amcheck
-/usr/sbin/amflush
-/usr/sbin/amlabel
-/usr/sbin/amtape
-/usr/sbin/amcheckdb
-/usr/sbin/amcleanup
-/usr/sbin/amdump
-/usr/sbin/amoverview
-/usr/sbin/amrmtape
-/usr/sbin/amtoc
-/usr/sbin/amverify
-/usr/sbin/amplot
-/usr/sbin/amreport
-/usr/sbin/amstatus
+%{_sbindir}/amindexd
+%{_sbindir}/amtrmidx
+%{_sbindir}/driver
+%{_sbindir}/dumper
+%{_sbindir}/getconf
+%{_sbindir}/planner
+#%{_sbindir}/reporter
+%{_sbindir}/taper
+%{_sbindir}/chg-chio
+%{_sbindir}/chg-manual
+%{_sbindir}/chg-multi
+%{_sbindir}/chg-mtx
+%{_sbindir}/chg-rth
+%{_sbindir}/chg-chs
+%{_sbindir}/amcat.awk
+%{_sbindir}/amplot.awk
+%{_sbindir}/amplot.g
+%{_sbindir}/amplot.gp
+%{_sbindir}/amadmin
+%{_sbindir}/amcheck
+%{_sbindir}/amflush
+%{_sbindir}/amlabel
+%{_sbindir}/amtape
+%{_sbindir}/amcheckdb
+%{_sbindir}/amcleanup
+%{_sbindir}/amdump
+%{_sbindir}/amoverview
+%{_sbindir}/amrmtape
+%{_sbindir}/amtoc
+%{_sbindir}/amverify
+%{_sbindir}/amplot
+%{_sbindir}/amreport
+%{_sbindir}/amstatus
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amtape.8*
@@ -136,17 +136,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files client
 %{_libdir}/libamclient*
-/usr/sbin/versionsuffix
-/usr/sbin/amandad
-/usr/sbin/calcsize
-/usr/sbin/rundump
-/usr/sbin/runtar
-/usr/sbin/selfcheck
-/usr/sbin/sendbackup
-/usr/sbin/sendsize
-/usr/sbin/patch-system
-/usr/sbin/killpgrp
-/usr/sbin/amrecover
+%{_sbindir}/versionsuffix
+%{_sbindir}/amandad
+%{_sbindir}/calcsize
+%{_sbindir}/rundump
+%{_sbindir}/runtar
+%{_sbindir}/selfcheck
+%{_sbindir}/sendbackup
+%{_sbindir}/sendsize
+%{_sbindir}/patch-system
+%{_sbindir}/killpgrp
+%{_sbindir}/amrecover
 %{_mandir}/man8/amrecover.8*
 
 %changelog
