@@ -1,0 +1,39 @@
+diff -ur amanda-2.4.3b3.orig/client-src/sendbackup-dump.c amanda-2.4.3b3/client-src/sendbackup-dump.c
+--- amanda-2.4.3b3.orig/client-src/sendbackup-dump.c	Sun Mar  3 18:10:51 2002
++++ amanda-2.4.3b3/client-src/sendbackup-dump.c	Sun Mar 31 23:43:49 2002
+@@ -215,7 +215,7 @@
+ 	dumppid = pipespawn(progname, STDIN_PIPE,
+ 			    &dumpin, &dumpout, &mesgf,
+ 			    "xfsdump",
+-			    no_record ? "-J" : skip_argument,
++			    options->no_record ? "-J" : skip_argument,
+ 			    "-F",
+ 			    "-l", dumpkeys,
+ 			    "-",
+@@ -241,7 +241,7 @@
+ 	program->restore_name = VXRESTORE;
+ 
+ 	dumpkeys = vstralloc(level_str,
+-			     no_record ? "" : "u",
++			     options->no_record ? "" : "u",
+ 			     "s",
+ 			     "f",
+ 			     NULL);
+@@ -282,7 +282,7 @@
+ 	program->restore_name = VRESTORE;
+ 
+ 	dumpkeys = vstralloc(level_str,
+-			     no_record ? "" : "u",
++			     options->no_record ? "" : "u",
+ 			     "b",
+ 			     "f",
+ 			     NULL);
+@@ -350,7 +350,7 @@
+     /* AIX backup program */
+     dumpkeys = vstralloc("-",
+ 			 level_str,
+-			 no_record ? "" : "u",
++			 options->no_record ? "" : "u",
+ 			 "f",
+ 			 NULL);
+ 
