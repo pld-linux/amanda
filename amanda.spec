@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	3
+Release:	4
 Copyright:      distributable
 Group:          Networking/Utilities
 Group(pl):      Sieciowe/Narzêdzia
@@ -67,7 +67,7 @@ Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
 Prereq:		/sbin/ldconfig
-Requires:	%{name}-libs = %{version}
+Prereq:		%{name}-libs = %{version}
 
 %description client
 The Amanda-client package should be installed on any machine that will be
@@ -89,9 +89,9 @@ Requires:	gnuplot
 Requires:	tar
 Requires:	cpio
 Requires:	dump
-Requires:	%{name}-libs = %{version}
 Requires:	crondaemon
 Requires:	/etc/cron.d
+Prereq:		%{name}-libs = %{version}
 
 %description server
 The amanda-server package should be installed on the AMANDA server, the
