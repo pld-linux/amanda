@@ -8,7 +8,7 @@ Version:	2.4.3
 Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
-Source0:	ftp://ftp.sourceforge.net/pub/sourceforge/amanda/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
