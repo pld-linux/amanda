@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with xfs 	# with support for xfsdump 
+%bcond_with	xfs	# with support for xfsdump 
 #
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
@@ -71,7 +71,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/sbin/ldconfig
+Requires(post,postun):	/sbin/ldconfig
 Provides:	group(amanda)
 Provides:	user(amanda)
 
