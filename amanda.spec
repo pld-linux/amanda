@@ -1,6 +1,7 @@
+#
 # Conditional build:
 # _with_xfs	- with support for xfsdump
-
+#
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
@@ -30,12 +31,6 @@ BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/bin/id
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
@@ -211,8 +206,9 @@ else
 fi
 
 %post   libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
 
+%postun libs
+/sbin/ldconfig
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel amanda
 	/usr/sbin/groupdel amanda
