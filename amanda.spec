@@ -149,7 +149,8 @@ automake -a -c
 	--with-bsd-security \
 	--with-buffered-dump \
 	--with-amandahosts \
-        --with-debugging=%{_localstatedir}/lib/amanda/debug
+        --with-debugging=%{_localstatedir}/lib/amanda/debug \
+	--with-tmpdir=/var/tmp
 
 %{__make}
 
