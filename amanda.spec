@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	2
+Release:	3
 Copyright:      distributable
 Group:          Networking/Utilities
 Group(pl):      Sieciowe/Narzêdzia
@@ -12,6 +12,7 @@ Source2:	amanda.inetd
 Source3:	amandaidx.inetd
 Source4:	amidxtape.inetd
 Source5:	amanda.conf
+Patch:		amanda-DESTDIR.patch
 BuildRequires:	flex
 BuildRequires:	dump
 BuildRequires:	tar
@@ -51,7 +52,7 @@ Group(pl):	Sieciowe/Narzêdzia
 Amanda shared libraries.
 
 %description -l pl libs
-Summary(pl):    Biblioteki wspó³dzielone pakietu amanda.
+Biblioteki wspó³dzielone pakietu amanda.
 
 %package client
 Summary:	The client side of Amanda
@@ -99,8 +100,11 @@ urz±dzenia typu streamer).
 
 %prep
 %setup -q
+%patch -p1
 
 %build
+touch COPYING
+automake
 LDFLAGS="-s"; export LDFLAGS
 %configure \
 	--disable-static \
