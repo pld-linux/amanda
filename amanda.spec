@@ -3,10 +3,10 @@ Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1
 Release:	1
+Copyright:      distributable
+Group:          Networking/Utilities
+Group(pl):      Sieciowe/Narzêdzia
 Source:		ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
-Copyright:	distributable
-Group:		Networking/Utilities 
-Group(pl):	Sieciowe/Narzêdzia
 URL:		http://www.amanda.org/
 BuildRoot:	/tmp/%{name}-%{version}-root
 
@@ -53,7 +53,7 @@ urz±dzenia typu streamer).
 %build
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 ./configure %{_target_platform} \
-	--prefix=/usr \
+	--prefix=%{_prefix} \
 	--mandir=%{_mandir} \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
@@ -77,7 +77,7 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT
 make install \
-	prefix=$RPM_BUILD_ROOT/usr \
+	prefix=$RPM_BUILD_ROOT%{_prefix} \
 	mandir=$RPM_BUILD_ROOT%{_mandir} \
 	sysconfdir=$RPM_BUILD_ROOT/etc \
 	libexecdir=$RPM_BUILD_ROOT%{_sbindir} \
