@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	3
+Release:	4
 License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -173,9 +173,12 @@ gzip -9nf docs/*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%triggerpostun -- amanda-libs < 2.4.2p2-3
+/usr/sbin/chsh -s /bin/sh amanda
+
 %pre libs
 /usr/sbin/groupadd -g 80 -r -f amanda
-/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/false -c "Amanda Backup user" -g amanda amanda
+/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
 
 %post   libs -p /sbin/ldconfig
 
@@ -226,11 +229,11 @@ fi
 %config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
 
-%dir %{_sysconfdir}/amanda
+%attr(750,root,amanda) %dir %{_sysconfdir}/amanda
 %attr(640,root,amanda) %{_sysconfdir}/amanda/*
 
-%attr(660,root,amanda) %dir %{_localstatedir}/lib/amanda
-%{_localstatedir}/lib/amanda/*
+%attr(660,amanda,amanda) %dir %{_localstatedir}/lib/amanda
+%attr(664,amanda,amanda) %{_localstatedir}/lib/amanda/*
 
 %attr(640,root,root) /etc/cron.d/amanda-srv
 
