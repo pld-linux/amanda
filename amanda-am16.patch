@@ -109,7 +109,7 @@ diff -Nur amanda-2.4.2p2.orig/server-src/Makefile.am amanda-2.4.2p2/server-src/M
 diff -Nur amanda-2.4.2p2.orig/tape-src/Makefile.am amanda-2.4.2p2/tape-src/Makefile.am
 --- amanda-2.4.2p2.orig/tape-src/Makefile.am	Tue Aug 27 09:25:46 2002
 +++ amanda-2.4.2p2/tape-src/Makefile.am	Tue Aug 27 09:37:09 2002
-@@ -2,20 +2,13 @@
+@@ -2,13 +2,8 @@
  
  INCLUDES =		-I$(top_srcdir)/common-src
  
@@ -121,12 +121,14 @@ diff -Nur amanda-2.4.2p2.orig/tape-src/Makefile.am amanda-2.4.2p2/tape-src/Makef
 -LIB_EXTENSION = a
 -endif
  
- libamtape_la_SOURCES = 	tapeio.c
+ sbin_PROGRAMS=          ammt amdd
+ 
+@@ -20,8 +15,6 @@
  
  libamtape_la_LDFLAGS =  -release $(VERSION)
  
 -libamtape_a_SOURCES =	$(libamtape_la_SOURCES)
 -
- noinst_HEADERS = 	tapeio.h
- 
- sbin_PROGRAMS = 	tapetype
+ ###
+ # Because libamanda includes routines (e.g. regex) provided by some system
+ # libraries, and because of the way libtool sets up the command line, we
