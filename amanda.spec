@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	5
+Release:	6
 License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -33,7 +33,7 @@ Prereq:		/sbin/ldconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
-%define		_localstatedir	/var
+%define		_localstatedir	/var/lib
 %define		_libexecdir	%{_libdir}/amanda
 
 %description 
@@ -86,11 +86,12 @@ Prereq:		%{name}-libs = %{version}
 The Amanda-client package should be installed on any machine that will
 be backed up by AMANDA (including the server if it also needs to be
 backed up). You will also need to install the amanda package to each
-AMANDA client.
+AMANDA client. It requires at least one of dump and GNU tar installed.
 
 %description -l pl client
 Ten pakiet powinien byæ zainstalowany ma maszynach, z których
-zawarto¶ci bêd± tworzone kopie zapasowe.
+zawarto¶ci bêd± tworzone kopie zapasowe. Wymaga zainstalowanego co
+najmniej jednego z pakietów dump i GNU tar.
 
 %package server
 Summary:	The server side of Amanda
@@ -101,9 +102,6 @@ Group(pl):	Sieciowe/Narzêdzia
 Prereq:		rc-inetd
 Prereq:		/sbin/ldconfig
 Requires:	gnuplot
-Requires:	tar
-Requires:	cpio
-Requires:	dump
 Requires:	crondaemon
 Requires:	/etc/cron.d
 Prereq:		rc-inetd
@@ -151,7 +149,8 @@ automake -a -c
 	--with-bsd-security \
 	--with-buffered-dump \
 	--with-amandahosts \
-        --with-debugging=%{_localstatedir}/lib/amanda/debug \
+        --with-debugging=%{_localstatedir}/amanda/debug \
+	--with-gnutar-listdir=%{_localstatedir}/amanda/gnutar-lists \
 	--with-tmpdir=/var/tmp
 
 %{__make}
@@ -159,7 +158,7 @@ automake -a -c
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
-	$RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
+	$RPM_BUILD_ROOT%{_localstatedir}/amanda
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -171,7 +170,9 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amandaidx
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
-install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
+install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/amanda
+
+> $RPM_BUILD_ROOT%{_sysconfdir}/amandates
 
 gzip -9nf docs/*
 
@@ -227,6 +228,7 @@ fi
 %attr(755,root,root) %{_libdir}/libamanda*.so
 %attr(755,root,root) %{_libdir}/libamtape*.so
 %attr(770,root,amanda) %dir %{_libexecdir}
+%attr(660,root,amanda) %dir %{_localstatedir}/amanda
 
 %files server
 %defattr(644,root,root,755)
@@ -237,8 +239,7 @@ fi
 %attr(750,root,amanda) %dir %{_sysconfdir}/amanda
 %attr(640,root,amanda) %{_sysconfdir}/amanda/*
 
-%attr(660,amanda,amanda) %dir %{_localstatedir}/lib/amanda
-%attr(664,amanda,amanda) %{_localstatedir}/lib/amanda/*
+%attr(664,amanda,amanda) %{_localstatedir}/amanda/*
 
 %attr(640,root,root) /etc/cron.d/amanda-srv
 
@@ -300,7 +301,7 @@ fi
 %files client
 %defattr(644,root,root,755)
 %config(noreplace) /etc/sysconfig/rc-inetd/amanda
-
+%attr(664,root,amanda) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/amandates
 %attr(755,root,root) %{_libdir}/libamclient*.so
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
