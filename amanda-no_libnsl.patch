@@ -1,0 +1,12 @@
+diff -Nru amanda-2.4.1p1/configure.in amanda-2.4.1p1.new/configure.in
+--- amanda-2.4.1p1/configure.in	Sat Nov 21 18:05:28 1998
++++ amanda-2.4.1p1.new/configure.in	Wed Aug 23 01:35:53 2000
+@@ -1596,6 +1596,8 @@
+     *sgi-irix*)
+ 			AC_CHECK_LIB(socket,main)
+ 			;;
++    *linux*)
++			;;
+     *)
+ 			AC_CHECK_LIB(nsl,main)
+ 			AC_CHECK_LIB(socket,main)
