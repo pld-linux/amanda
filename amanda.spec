@@ -184,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 %triggerpostun -- amanda-libs < 2.4.2p2-3
 /usr/sbin/chsh -s /bin/sh amanda
 
+%triggerpostun -- amanda-libs < 2.4.2p2-11
+/usr/sbin/usermod -G disk amanda
+
 %pre libs
 if [ -n "`/usr/bin/getgid amanda`" ]; then
 	if [ "`getgid amanda`" != "80" ]; then
@@ -199,7 +202,7 @@ if [ -n "`/bin/id -u amanda 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda 1>&2
+	/usr/sbin/useradd -u 80 -G disk -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda 1>&2
 fi
 
 %post libs -p /sbin/ldconfig
@@ -207,8 +210,8 @@ fi
 %postun libs
 /sbin/ldconfig
 if [ "$1" = "0" ]; then
-	/usr/sbin/groupdel amanda
 	/usr/sbin/userdel amanda
+	/usr/sbin/groupdel amanda
 fi
 
 %post client
@@ -243,8 +246,9 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libamanda*.so
 %attr(755,root,root) %{_libdir}/libamtape*.so
-%attr(750,amanda,disk) %dir %{_libexecdir}
-%attr(750,amanda,disk) %dir %{_localstatedir}/amanda
+%attr(770,root,amanda) %dir %{_libexecdir}
+%attr(770,root,amanda) %dir %{_localstatedir}/amanda
+
 
 %files server
 %defattr(644,root,root,755)
