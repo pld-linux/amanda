@@ -1,28 +1,31 @@
-Name: amanda
-Version: 2.4.1
-Release: 1
-Source: ftp://ftp.amanda.org/pub/amanda/amanda-2.4.1.tar.gz
-Copyright: distributable
-Group: Networking/Utilities 
-URL: http://www.amanda.org
-Summary: A network-capable tape backup solution
-BuildRoot: /var/tmp/amanda-root
+Summary:	A network-capable tape backup solution
+Name:		amanda
+Version:	2.4.1
+Release:	2d
+Source:		ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
+Copyright:	distributable
+Group:		Networking/Utilities 
+Group(pl):	Sieciowe/Narzêdzia
+URL:		http://www.amanda.org/
+BuildRoot: 	/tmp/%{name}-%{version}-root
 
 %description 
 A network-capable tape backup solution.
 
 %package client
-Summary: The client side of Amanda
-Group: Networking/Utilities
+Summary:	The client side of Amanda
+Group:		Networking/Utilities
+Group(pl):	Sieciowe/Narzêdzia
 
 %description client
 This package should be installed on machines that are to be backed
 up by Amanda.  (Including, the server if it should be backed up.)
 
 %package server
-Summary: The server side of Amanda
-Group: Networking/Utilities
-Requires: gnuplot
+Summary:	The server side of Amanda
+Group:		Networking/Utilities
+Group(pl):	Sieciowe/Narzêdzia
+Requires:	gnuplot
 
 %description server
 This package should be installed on the machine that has the device
@@ -32,39 +35,38 @@ This package should be installed on the machine that has the device
 %setup -q
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=/usr \
+CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
+./configure \
+	--prefix=/usr \
 	--sysconfdir=/etc \
 	--libexecdir=\${exec_prefix}/lib/amanda \
 	--with-index-server=localhost \
-	--with-amandahosts --with-user=operator --with-group=disk
+	--with-amandahosts \
+	--with-user=operator \
+	--with-group=disk
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install prefix=$RPM_BUILD_ROOT/usr sysconfdir=$RPM_OPT_FLAGS/etc 
-chmod 755 $RPM_BUILD_ROOT/usr/lib/lib*.so.*
 
 %clean 
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-
-%post client -p /sbin/ldconfig
-
-%post server -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-%postun client -p /sbin/ldconfig
-
-%postun server -p /sbin/ldconfig
+%post 		-p /sbin/ldconfig
+%postun		-p /sbin/ldconfig
+%post client	-p /sbin/ldconfig
+%postun client	-p /sbin/ldconfig
+%post server	-p /sbin/ldconfig
+%postun server	-p /sbin/ldconfig
 
 %files
+%defattr(644,root,root,755)
 /usr/lib/libamanda*
 /usr/lib/libamtape*
 /usr/lib/amanda/amidxtaped
-/usr/sbin/amrestore
-/usr/man/man8/amrestore.8
+%attr(755,root,root) /usr/sbin/amrestore
+%attr(644,root, man) /usr/man/man8/amrestore.8*
 
 %files server
 /usr/lib/libamserver*
@@ -101,19 +103,19 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/amplot
 /usr/sbin/amreport
 /usr/sbin/amstatus
-/usr/man/man8/amadmin.8
-/usr/man/man8/amrmtape.8
-/usr/man/man8/amtape.8
-/usr/man/man8/amtoc.8
-/usr/man/man8/amanda.8
-/usr/man/man8/amcheck.8
-/usr/man/man8/amcleanup.8
-/usr/man/man8/amdump.8
-/usr/man/man8/amflush.8
-/usr/man/man8/amlabel.8
-/usr/man/man8/amplot.8
-/usr/man/man8/amreport.8
-/usr/man/man8/amstatus.8
+%attr(644,root, man) /usr/man/man8/amadmin.8*
+%attr(644,root, man) /usr/man/man8/amrmtape.8*
+%attr(644,root, man) /usr/man/man8/amtape.8*
+%attr(644,root, man) /usr/man/man8/amtoc.8*
+%attr(644,root, man) /usr/man/man8/amanda.8*
+%attr(644,root, man) /usr/man/man8/amcheck.8*
+%attr(644,root, man) /usr/man/man8/amcleanup.8*
+%attr(644,root, man) /usr/man/man8/amdump.8*
+%attr(644,root, man) /usr/man/man8/amflush.8*
+%attr(644,root, man) /usr/man/man8/amlabel.8*
+%attr(644,root, man) /usr/man/man8/amplot.8*
+%attr(644,root, man) /usr/man/man8/amreport.8*
+%attr(644,root, man) /usr/man/man8/amstatus.8*
 
 %files client
 /usr/lib/libamclient*
@@ -128,9 +130,21 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/amanda/patch-system
 /usr/lib/amanda/killpgrp
 /usr/sbin/amrecover
-/usr/man/man8/amrecover.8
+%attr(644,root, man) /usr/man/man8/amrecover.8*
 
 %changelog
+* Sat Jan 30 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [2.4.1-2d]
+- added -q %setup parameter,
+- added gzipping man pages,
+- added Group(pl),
+- added LDFLAGS="-s" to ./configure enviroment,
+- changed Buildroot to /tmp/%%{name}-%%{version}-root,
+- added using %%{name} and %%{version} in Source,
+- added stripping shared libraries,
+- added %attr and %defattr macros in %files (allows build package from
+  non-root account).
+
 * Tue Oct 27 1998 Cristian Gafton <gafton@redhat.com>
 - version 2.4.1
 
