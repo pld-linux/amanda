@@ -5,7 +5,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	15
+Release:	16
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -185,8 +185,6 @@ install %{SOURCE6} $RPM_BUILD_ROOT%{_mandir}/man1/tapetype.1
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/amandates
 
-gzip -9nf docs/*
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -262,7 +260,7 @@ fi
 
 %files server
 %defattr(644,root,root,755)
-%doc docs/*.gz
+%doc docs/*
 %config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
 
