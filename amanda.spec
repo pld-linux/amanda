@@ -42,7 +42,7 @@ well.
 
 %description -l pl
 AMANDA jest sieciowo zorientowanym systemem tworzenia kopii
-zapasowych. Umo¿liwia administratorowi sieci tworzenie kopii z wilku
+zapasowych. Umo¿liwia administratorowi sieci tworzenie kopii z kilku
 hostów na jednej maszynie wyposa¿onej w pojemny dysk lub streamer.
 Nowsze wersje programu umo¿liwiaj± zabezpieczanie zasobów Microsoft
 Windows 95/98/NT/2000 przy u¿yciu protoko³u Samba. Ten pakiet zawiera
