@@ -5,10 +5,6 @@ Version:	2.4.2p2
 Release:	10
 License:	BSD
 Group:		Networking/Utilities
-Group(de):	Netzwerkwesen/Werkzeuge
-Group(es):	Red/Utilitarios
-Group(pl):	Sieciowe/Narzêdzia
-Group(pt_BR):	Rede/Utilitários
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
@@ -65,10 +61,6 @@ amanda-client i amanda-server!
 Summary:	Amanda shared libraries
 Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
 Group:		Networking/Utilities
-Group(de):	Netzwerkwesen/Werkzeuge
-Group(es):	Red/Utilitarios
-Group(pl):	Sieciowe/Narzêdzia
-Group(pt_BR):	Rede/Utilitários
 Prereq:		/usr/bin/getgid
 Prereq:		/bin/id
 Prereq:		/usr/sbin/groupadd
@@ -86,10 +78,6 @@ Biblioteki wspó³dzielone pakietu amanda.
 Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
-Group(de):	Netzwerkwesen/Werkzeuge
-Group(es):	Red/Utilitarios
-Group(pl):	Sieciowe/Narzêdzia
-Group(pt_BR):	Rede/Utilitários
 Prereq:		/sbin/ldconfig
 Prereq:		rc-inetd
 Prereq:		%{name}-libs = %{version}
@@ -109,10 +97,6 @@ najmniej jednego z pakietów dump i GNU tar.
 Summary:	The server side of Amanda
 Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
-Group(de):	Netzwerkwesen/Werkzeuge
-Group(es):	Red/Utilitarios
-Group(pl):	Sieciowe/Narzêdzia
-Group(pt_BR):	Rede/Utilitários
 Prereq:		rc-inetd
 Prereq:		/sbin/ldconfig
 Requires:	gnuplot
