@@ -1,7 +1,7 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.2
+Version:	2.4.2p2
 Release:	1
 License:	BSD
 Group:		Networking/Utilities
@@ -15,6 +15,7 @@ Source4:	amidxtape.inetd
 Source5:	%{name}.conf
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-am_fixes.patch
+Patch2:		%{name}-bug18322.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flex
@@ -22,8 +23,7 @@ BuildRequires:	dump
 BuildRequires:	gnuplot
 BuildRequires:	tar
 BuildRequires:	cpio
-BuildRequires:	ncurses-devel >= 5.0
-BuildRequires:	readline-devel >= 4.1
+BuildRequires:	readline-devel >= 4.2
 Prereq:		/sbin/ldconfig
 URL:		http://www.amanda.org/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -119,6 +119,7 @@ typu streamer).
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 aclocal
