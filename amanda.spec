@@ -140,10 +140,10 @@ typu streamer).
 %build
 libtoolize --copy --force
 aclocal
-autoconf
+%{__autoconf}
 touch COPYING
 rm -f missing
-automake -a -c -f
+%{__automake}
 %configure \
 	--disable-static \
 	--enable-shared \
