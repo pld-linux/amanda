@@ -1,7 +1,7 @@
 #
 # Conditional build:
 %bcond_with xfs 	# with support for xfsdump 
-
+#
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
@@ -31,7 +31,7 @@ BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
-%{?_with_xfs:BuildRequires:	xfsdump}
+%{?with_xfs:BuildRequires:	xfsdump}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var/lib
@@ -233,7 +233,9 @@ if [ -f /var/lock/subsys/rc-inetd ]; then
 else
 	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server." 1>&2
 fi
-echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
+if [ "$1" = "1" ]; then
+	echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
+fi
 
 %postun server
 /sbin/ldconfig
