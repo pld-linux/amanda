@@ -22,8 +22,10 @@ Patch3:		%{name}-build_tapetype.patch
 Patch4:		%{name}-no_private_libtool.m4.patch
 Patch5:		%{name}-ac25x.patch
 Patch6:		%{name}-chg-zd-mtx-sh.patch
+Patch7:		%{name}-ac253.patch
+Patch8:		%{name}-am16.patch
 URL:		http://www.amanda.org/
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
@@ -135,6 +137,8 @@ typu streamer).
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 %build
 %{__libtoolize}
@@ -310,20 +314,24 @@ fi
 %attr(755,root,root) %{_sbindir}/amtoc
 %attr(755,root,root) %{_sbindir}/amverify
 %attr(755,root,root) %{_sbindir}/tapetype
-%{_mandir}/man1/tapetype.1*
 %{_mandir}/man8/amadmin.8*
-%{_mandir}/man8/amrmtape.8*
-%{_mandir}/man8/amtape.8*
-%{_mandir}/man8/amtoc.8*
 %{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amcheck.8*
+%{_mandir}/man8/amcheckdb.8*
 %{_mandir}/man8/amcleanup.8*
 %{_mandir}/man8/amdump.8*
 %{_mandir}/man8/amflush.8*
+%{_mandir}/man8/amgetconf.8*
 %{_mandir}/man8/amlabel.8*
+%{_mandir}/man8/amoverview.8*
 %{_mandir}/man8/amplot.8*
 %{_mandir}/man8/amreport.8*
+%{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amstatus.8*
+%{_mandir}/man8/amtape.8*
+%{_mandir}/man8/amtoc.8*
+%{_mandir}/man8/amverify.8*
+%{_mandir}/man1/tapetype.1*
 
 %files client
 %defattr(644,root,root,755)
