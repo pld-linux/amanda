@@ -7,12 +7,12 @@ Copyright:	distributable
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
 Source0:	ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
-Source1:	amanda-srv.crontab
-Source2:	amanda.inetd
-Source3:	amandaidx.inetd
+Source1:	%{name}-srv.crontab
+Source2:	%{name}.inetd
+Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
-Source5:	amanda.conf
-Patch0:		amanda-DESTDIR.patch
+Source5:	%{name}.conf
+Patch0:		%{name}-DESTDIR.patch
 BuildRequires:	flex
 BuildRequires:	dump
 BuildRequires:	tar
