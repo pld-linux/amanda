@@ -159,7 +159,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre libs
 /usr/sbin/groupadd -g 80 -r -f amanda
-/usr/sbin/useradd -u 80 -r -m -d /var/lib/amanda -s /bin/false -c "Amanda Backup user" -g amanda amanda
+/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/false -c "Amanda Backup user" -g amanda amanda
 
 %post   libs -p /sbin/ldconfig
 
