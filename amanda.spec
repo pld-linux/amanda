@@ -26,7 +26,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
-%{!?_with_xfs:BuildRequires:	xfsdump}
+%{?_with_xfs:BuildRequires:	xfsdump}
 BuildRequires:	flex
 BuildRequires:	gnuplot
 BuildRequires:	libtool
