@@ -1,6 +1,7 @@
 SERVICE_NAME=amandaidx
 SOCK_TYPE=stream
 PROTOCOL=tcp
+PORT=10082
 FLAGS=nowait
 USER=amanda
 SERVER=/usr/sbin/amindexd
