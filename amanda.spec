@@ -40,13 +40,25 @@ amanda-server packages as well.
 %description -l pl
 Sieciowo zorientowany system tworzenia kopii zapasowych
 
+%package libs
+Summary:	Amanda shared libraries
+Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
+Group:		Networking/Utilities
+Group(pl):	Sieciowe/Narzêdzia
+
+%description libs
+Amanda shared libraries.
+
+%description -l pl libs
+Summary(pl):    Biblioteki wspó³dzielone pakietu amanda.
+
 %package client
 Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
 Prereq:		/sbin/ldconfig
-Requires:	%{name} = %{version}
+Requires:	%{name}-libs = %{version}
 
 %description client
 The Amanda-client package should be installed on any machine that will be
@@ -65,7 +77,10 @@ Group(pl):	Sieciowe/Narzêdzia
 Prereq:		rc-inetd
 Prereq:		/sbin/ldconfig
 Requires:	gnuplot
-Requires:	%{name} = %{version}
+Requires:	tar
+Requires:	cpio
+Requires:	dump
+Requires:	%{name}-libs = %{version}
 Requires:	crondaemon
 Requires:	/etc/cron.d
 
@@ -128,26 +143,17 @@ gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man8/*
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
+%pre libs
 /usr/sbin/groupadd -g 80 -r -f amanda
+/usr/sbin/useradd -u 80 -r -d /var/state/amanda -s /bin/false -c "Amanda Backup user" -g amanda amanda
 
-%post
+%post   libs -p /sbin/ldconfig
+
+%preun libs
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
-fi
-
-%preun
-if [ $1 = 0 ]; then
-	groupdel amanda
-fi
-
-%posun
-/sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart
+if [ "$1" = "0" ]; then
+	/usr/sbin/groupdel amanda
+	/usr/sbin/userdel mananda
 fi
 
 %post client
@@ -178,19 +184,17 @@ if [ -f /var/lock/subsys/rc-inetd ]; then
 	/etc/rc.d/init.d/rc-inetd restart
 fi
 
-%files
+%files libs
 %defattr(644,root,root,755)
-%config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
-%attr(755,root,root) %{_libexecdir}/amidxtaped
 %attr(755,root,root) %{_libdir}/libamanda*.so.*.*
 %attr(755,root,root) %{_libdir}/libamtape*.so.*.*
-%attr(755,root,root) %{_sbindir}/amrestore
 %attr(770,root,amanda) %dir %{_libexecdir}
-%{_mandir}/man8/amrestore.8*
 
 %files server
 %defattr(644,root,root,755)
 %config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
+%config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
+%attr(755,root,root) %{_libexecdir}/amidxtaped
 
 %dir %{_sysconfdir}/amanda
 %attr(640,root,amanda) %{_sysconfdir}/amanda/*
@@ -259,4 +263,6 @@ fi
 %attr(755,root,root) %{_libexecdir}/patch-system
 %attr(755,root,root) %{_libexecdir}/killpgrp
 %attr(755,root,root) %{_sbindir}/amrecover
+%attr(755,root,root) %{_sbindir}/amrestore
 %{_mandir}/man8/amrecover.8*
+%{_mandir}/man8/amrestore.8*
