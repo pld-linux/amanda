@@ -336,5 +336,6 @@ fi
 %attr(4754,root,amanda) %{_libexecdir}/killpgrp
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(755,root,root) %{_sbindir}/amrestore
+%attr(770,amanda,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
 %{_mandir}/man8/amrecover.8*
 %{_mandir}/man8/amrestore.8*
