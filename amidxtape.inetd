@@ -4,5 +4,5 @@ PROTOCOL=tcp
 PORT=10083
 FLAGS=nowait
 USER=amanda
-SERVER=/usr/sbin/amidxtaped
-DAEMON=/usr/sbin/amidxtaped
+SERVER=/usr/lib/amanda/amidxtaped
+DAEMON=/usr/lib/amanda/amidxtaped

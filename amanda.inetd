@@ -4,5 +4,5 @@ PROTOCOL=tcp
 PORT=10080
 FLAGS=nowait
 USER=amanda
-SERVER=/usr/sbin/amandad
-DAEMON=/usr/sbin/amandad
+SERVER=/usr/lib/amanda/amandad
+DAEMON=/usr/lib/amanda/amandad
