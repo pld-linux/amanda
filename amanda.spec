@@ -49,7 +49,7 @@ CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
 	--with-ftape-rawdevice=/dev/null \
 	--with-changer-device=/dev/null \
 	--with-fqdn \
-	--with-smbclient=/usr/bin/smbclient \
+	--with-smbclient=%{_bindir}/smbclient \
 	--with-bsd-security \
 	--with-buffered-dump \
 	--with-amandahosts \
