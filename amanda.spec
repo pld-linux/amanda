@@ -262,11 +262,11 @@ fi
 %files server
 %defattr(644,root,root,755)
 %doc docs/*
-%config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
-%config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amidxtape
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
-%config(noreplace) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/*
+%config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/*
 
 %attr(664,amanda,amanda) %{_localstatedir}/amanda/*.ps
 
@@ -337,7 +337,7 @@ fi
 
 %files client
 %defattr(644,root,root,755)
-%config(noreplace) /etc/sysconfig/rc-inetd/amanda
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
 %attr(664,root,amanda) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/amandates
 %attr(755,root,root) %{_libdir}/libamclient*.so
 %attr(755,root,root) %{_libexecdir}/versionsuffix
