@@ -165,7 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 /sbin/ldconfig
 if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel amanda
-	/usr/sbin/userdel mananda
+	/usr/sbin/userdel amanda
 fi
 
 %post client
