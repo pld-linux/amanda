@@ -11,6 +11,7 @@ Source1:	amanda-srv.crontab
 Source2:	amanda.inetd
 Source3:	amandaidx.inetd
 Source4:	amidxtape.inetd
+Source5:	amanda.conf
 BuildRequires:	flex
 BuildRequires:	dump
 BuildRequires:	tar
@@ -117,7 +118,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amanda
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amandaidx
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
-install example/{amanda,chg-multi,chg-scsi}.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
+install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/state/amanda
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
@@ -180,7 +181,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
-%attr(755,root,root) %{_libdir}/amidxtaped
+%attr(755,root,root) %{_libexecdir}/amidxtaped
 %attr(755,root,root) %{_libdir}/libamanda*.so.*.*
 %attr(755,root,root) %{_libdir}/libamtape*.so.*.*
 %attr(755,root,root) %{_sbindir}/amrestore
