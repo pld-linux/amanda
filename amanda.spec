@@ -1,14 +1,14 @@
-# Conditional build:                                                                 
-# _with_xfs	- without support for xfsdump
+# Conditional build:
+# _with_xfs	- with support for xfsdump
 
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.2p2
-Release:	18
+Version:	2.4.3
+Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
-Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.sourceforge.net/pub/sourceforge/amanda/%{name}-%{version}.tar.gz
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -16,14 +16,12 @@ Source4:	amidxtape.inetd
 Source5:	%{name}.conf
 Source6:	tapetype.1
 Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-am_fixes.patch
-Patch2:		%{name}-bug18322.patch
-Patch3:		%{name}-build_tapetype.patch
-Patch4:		%{name}-no_private_libtool.m4.patch
-Patch5:		%{name}-ac25x.patch
-Patch6:		%{name}-chg-zd-mtx-sh.patch
-Patch7:		%{name}-ac253.patch
-Patch8:		%{name}-am16.patch
+Patch1:		%{name}-bug18322.patch
+Patch2:		%{name}-no_private_libtool.m4.patch
+Patch3:		%{name}-ac25x.patch
+Patch4:		%{name}-chg-zd-mtx-sh.patch
+Patch5:		%{name}-ac253.patch
+Patch6:		%{name}-am16.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -137,8 +135,6 @@ typu streamer).
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
-%patch8 -p1
 
 %build
 %{__libtoolize}
