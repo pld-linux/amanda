@@ -5,7 +5,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	17
+Release:	18
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -295,7 +295,6 @@ fi
 %attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-scsi
 %attr(755,root,root) %{_libexecdir}/chg-zd-mtx
-%attr(755,root,root) %{_libexecdir}/selfcheck
 %attr(755,root,root) %{_libexecdir}/taper
 %attr(755,root,root) %{_sbindir}/amadmin
 %attr(4754,root,amanda) %{_sbindir}/amcheck
