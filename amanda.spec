@@ -2,8 +2,8 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	10
-Copyright:	distributable
+Release:	18
+License:	distributable
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
 Source0:	ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
@@ -13,6 +13,11 @@ Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
 Patch0:		%{name}-DESTDIR.patch
+Patch1:		amanda-no_libnsl.patch
+Patch2:		amanda-glibc21.patch
+Patch3:		amanda-glibc22.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	flex
 BuildRequires:	dump
 BuildRequires:	tar
@@ -109,9 +114,15 @@ typu streamer).
 
 %prep
 %setup -q
-%patch -p1
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
+cp config/acinclude.m4 .
+aclocal
+autoconf
 touch COPYING
 automake
 LDFLAGS="-s"; export LDFLAGS
@@ -233,7 +244,7 @@ fi
 %attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-chs
 %attr(755,root,root) %{_sbindir}/amadmin
-%attr(755,root,root) %{_sbindir}/amcheck
+%attr(4754,root,amanda) %{_sbindir}/amcheck
 %attr(755,root,root) %{_sbindir}/amflush
 %attr(755,root,root) %{_sbindir}/amlabel
 %attr(755,root,root) %{_sbindir}/amtape
@@ -269,7 +280,7 @@ fi
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
 %attr(4754,root,amanda) %{_libexecdir}/calcsize
-%attr(755,root,root) %{_libexecdir}/rundump
+%attr(4754,root,amanda) %{_libexecdir}/rundump
 %attr(4754,root,amanda) %{_libexecdir}/runtar
 %attr(4754,root,amanda) %{_libexecdir}/selfcheck
 %attr(755,root,root) %{_libexecdir}/sendbackup
