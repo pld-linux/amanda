@@ -1,0 +1,6 @@
+- release 4,
+- fixed permission on some files/directories,
+- change shell for amanda user to /bin/sh,
+- added %triggerpostun -- amanda-libs < 2.4.2p2-3 script with fix amanda
+  user shell,
+- fixed crontab entries.
