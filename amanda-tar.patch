@@ -1,0 +1,10 @@
+--- amanda-2.4.4p2/client-src/sendbackup-gnutar.c~	2003-10-30 19:04:45.000000000 +0100
++++ amanda-2.4.4p2/client-src/sendbackup-gnutar.c	2004-05-10 12:55:24.962182232 +0200
+@@ -58,6 +58,7 @@
+   /* GNU tar 1.13.17 will print this warning when (not) backing up a
+      Unix named socket.  */
+   AM_NORMAL_RE(": socket ignored$"),
++  AM_NORMAL_RE(": Removing leading .* from member names$"),
+ 
+   /* GNUTAR produces a few error messages when files are modified or
+      removed while it is running.  They may cause data to be lost, but
