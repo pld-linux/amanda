@@ -203,3 +203,22 @@ diff -Nru amanda-2.4.2/server-src/Makefile.am amanda-2.4.2.new/server-src/Makefi
  	ZFTAPE
 -
 -EXTRA_DIST = $(pkgdata_DATA)
+--- amanda-2.4.2p2/Makefile.am~	Thu Sep 20 06:26:24 2001
++++ amanda-2.4.2p2/Makefile.am	Thu Sep 20 06:27:05 2001
+@@ -16,13 +16,13 @@
+ SERVER_SUBDIRS = server-src changer-src
+ endif
+ if WANT_RESTORE
+-RESTORE_SUBDIRS += restore-src
++RESTORE_SUBDIRS = restore-src
+ endif
+ if WANT_RECOVER
+-RECOVER_SUBDIRS += recover-src
++RECOVER_SUBDIRS = recover-src
+ endif
+ if WANT_AMPLOT
+-PLOT_SUBDIRS += amplot
++PLOT_SUBDIRS = amplot
+ endif
+ # order is significant, don't change it arbitrarily
+ SUBDIRS = \
