@@ -1,0 +1,3 @@
+- ac25x patch for autoconf 2.5x
+- changes %preun libs to %postun libs
+- release 5
