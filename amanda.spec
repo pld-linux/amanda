@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	4
+Release:	5
 License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -18,6 +18,7 @@ Patch1:		%{name}-am_fixes.patch
 Patch2:		%{name}-bug18322.patch
 Patch3:		%{name}-build_tapetype.patch
 Patch4:		%{name}-no_private_libtool.m4.patch
+Patch5:		%{name}-ac25x.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -125,6 +126,7 @@ typu streamer).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %build
 libtoolize --copy --force
@@ -180,9 +182,9 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/groupadd -g 80 -r -f amanda
 /usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
 
-%post   libs -p /sbin/ldconfig
+%post libs -p /sbin/ldconfig
 
-%preun libs
+%postun libs
 /sbin/ldconfig
 if [ "$1" = "0" ]; then
 	/usr/sbin/groupdel amanda
