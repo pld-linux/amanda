@@ -177,45 +177,32 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/chsh -s /bin/sh amanda
 
 %pre libs
-/usr/sbin/groupadd -g 80 -r -f amanda
-/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
+GID=80; %groupadd
+UID=80; HOMEDIR=/var/lib/amanda; SHELL=/bin/bash
+COMMENT="Amanda Backup user"; %useradd
 
 %post   libs -p /sbin/ldconfig
 
 %preun libs
 /sbin/ldconfig
-if [ "$1" = "0" ]; then
-	/usr/sbin/groupdel amanda
-	/usr/sbin/userdel amanda
-fi
+%userdel
+%groupdel
 
 %post client
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
-fi
+%rc_inetd_post
 
 %postun client
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart
-fi
+%rc_inetd_postun
 
 %post server
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet sever" 1>&2
-fi
+%rc_inetd_post
 
 %postun server
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart
-fi
+%rc_inetd_postun
 
 %files libs
 %defattr(644,root,root,755)
