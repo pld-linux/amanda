@@ -257,12 +257,12 @@ fi
 %config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
 
-%attr(750,root,amanda) %dir %{_sysconfdir}/amanda
-%config(noreplace) %attr(640,root,amanda) %{_sysconfdir}/amanda/*
+%attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
+%config(noreplace) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/*
 
 %attr(664,amanda,amanda) %{_localstatedir}/amanda/*
 
-%attr(640,root,root) /etc/cron.d/amanda-srv
+%config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
 %attr(755,root,root) %{_libdir}/libamserver*.so
 %attr(755,root,root) %{_libexecdir}/amindexd
