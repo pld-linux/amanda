@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	13
+Release:	14
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://prdownloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -84,6 +84,7 @@ Group:		Networking/Utilities
 Prereq:		/sbin/ldconfig
 Prereq:		rc-inetd
 Prereq:		%{name}-libs = %{version}
+Requires:	tar >= 1.13
 
 %description client
 The Amanda-client package should be installed on any machine that will
