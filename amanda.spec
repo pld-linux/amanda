@@ -26,12 +26,12 @@ BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
-%{?_with_xfs:BuildRequires:	xfsdump}
 BuildRequires:	flex
 BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	tar
+%{?_with_xfs:BuildRequires:	xfsdump}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
