@@ -1,0 +1,24 @@
+--- amanda-2.4.2p2/tape-src/Makefile.am~	Sat Feb  3 23:17:11 2001
++++ amanda-2.4.2p2/tape-src/Makefile.am	Fri Jun  1 14:59:50 2001
+@@ -18,7 +18,7 @@
+ 
+ noinst_HEADERS = 	tapeio.h
+ 
+-EXTRA_PROGRAMS = 	tapetype
++sbin_PROGRAMS = 	tapetype
+ 
+ CLEANFILES = *.test.c
+ 
+@@ -29,9 +29,9 @@
+ # routines, and second to pick up any references in the other libraries.
+ ###
+ 
+-tapetype_LDADD =	../common-src/libamanda.$(LIB_EXTENSION) \
+-			libamtape.$(LIB_EXTENSION) \
+-			../common-src/libamanda.$(LIB_EXTENSION)
++tapetype_LDADD =	../common-src/libamanda.la \
++			libamtape.la \
++			../common-src/libamanda.la
+ 
+ ## So that we can tell people to `cd tape-src && make tapetype':
+ ../common-src/libamanda.$(LIB_EXTENSION):
