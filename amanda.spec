@@ -1,4 +1,5 @@
 Summary:	A network-capable tape backup solution
+Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1
 Release:	1
@@ -12,8 +13,12 @@ BuildRoot:	/tmp/%{name}-%{version}-root
 %description 
 A network-capable tape backup solution.
 
+%description -l pl
+Sieciowo zorientowany system tworzenia kopii zapasowych
+
 %package client
 Summary:	The client side of Amanda
+Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
 
@@ -21,8 +26,14 @@ Group(pl):	Sieciowe/Narzêdzia
 This package should be installed on machines that are to be backed
 up by Amanda.  (Including, the server if it should be backed up.)
 
+%description -l pl client
+Ten pakiet powinien byæ zainstalowany ma maszynach, z których
+zawarto¶ci bêd± tworzone kopie zapasowe.
+
+
 %package server
 Summary:	The server side of Amanda
+Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
 Requires:	gnuplot
@@ -30,6 +41,11 @@ Requires:	gnuplot
 %description server
 This package should be installed on the machine that has the device
 (such as a tape drive) where backups will be written.
+
+%description -l pl server
+Ten pakiet powinien byæ zainstalowanych na maszynach, na których
+bêd± magazynowane kopie zapasowe (lub do których podpiête s±
+urz±dzenia typu streamer).
 
 %prep
 %setup -q
