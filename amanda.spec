@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	8
+Release:	9
 Copyright:	distributable
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
