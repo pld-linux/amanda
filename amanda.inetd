@@ -1,7 +1,7 @@
 SERVICE_NAME=amanda
 SOCK_TYPE=stream
 PROTOCOL=tcp
-PORT10080
+PORT=10080
 FLAGS=nowait
 USER=amanda
 SERVER=/usr/sbin/amandad
