@@ -106,6 +106,7 @@ Requires:	cpio
 Requires:	dump
 Requires:	crondaemon
 Requires:	/etc/cron.d
+Prereq:		rc-inetd
 Prereq:		%{name}-libs = %{version}
 
 %description server
