@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.1p1
-Release:	6
+Release:	7
 Copyright:	distributable
 Group:		Networking/Utilities
 Group(pl):	Sieciowe/Narzêdzia
@@ -127,14 +127,14 @@ LDFLAGS="-s"; export LDFLAGS
 	--with-bsd-security \
 	--with-buffered-dump \
 	--with-amandahosts \
-        --with-debugging=%{_localstatedir}/amanda/debug
+        --with-debugging=%{_localstatedir}/lib/amanda/debug
 
 make
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{amanda,cron.d,sysconfig/rc-inetd} \
-	$RPM_BUILD_ROOT%{_localstatedir}/state/amanda
+	$RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
 
 make install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -146,7 +146,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amandaidx
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
-install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/state/amanda
+install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
 
 strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*
 
@@ -157,7 +157,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre libs
 /usr/sbin/groupadd -g 80 -r -f amanda
-/usr/sbin/useradd -u 80 -r -d /var/state/amanda -s /bin/false -c "Amanda Backup user" -g amanda amanda
+/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/false -c "Amanda Backup user" -g amanda amanda
 
 %post   libs -p /sbin/ldconfig
 
@@ -211,8 +211,8 @@ fi
 %dir %{_sysconfdir}/amanda
 %attr(640,root,amanda) %{_sysconfdir}/amanda/*
 
-%attr(660,amanda,amanda) %dir %{_localstatedir}/state/amanda
-%{_localstatedir}/state/amanda/*
+%attr(660,amanda,amanda) %dir %{_localstatedir}/lib/amanda
+%{_localstatedir}/lib/amanda/*
 
 %attr(640,root,root) /etc/cron.d/amanda-srv
 
