@@ -4,8 +4,8 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.3
-Release:	0.1
+Version:	2.4.4
+Release:	1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -14,14 +14,11 @@ Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
-Source6:	tapetype.1
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-bug18322.patch
 Patch2:		%{name}-no_private_libtool.m4.patch
 Patch3:		%{name}-ac25x.patch
 Patch4:		%{name}-chg-zd-mtx-sh.patch
-Patch5:		%{name}-ac253.patch
-Patch6:		%{name}-am16.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -128,15 +125,13 @@ typu streamer).
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
 
 %build
+touch COPYING
+rm -f missing
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
-touch COPYING
-rm -f missing
 %{__automake}
 %configure \
 	--disable-static \
@@ -175,7 +170,6 @@ install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/amanda
-install %{SOURCE6} $RPM_BUILD_ROOT%{_mandir}/man1/tapetype.1
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/amandates
 
@@ -188,10 +182,8 @@ rm -rf $RPM_BUILD_ROOT
 %triggerpostun -- amanda-libs < 2.4.2p2-12
 /usr/sbin/usermod -G disk amanda
 
-%post libs -p /sbin/ldconfig
-
-%postun libs
-/sbin/ldconfig
+%post   libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 
 %post client
 /sbin/ldconfig
@@ -258,9 +250,11 @@ fi
 %attr(755,root,root) %{_libexecdir}/amtrmlog
 %attr(755,root,root) %{_libexecdir}/chg-chio
 %attr(755,root,root) %{_libexecdir}/chg-chs
+%attr(755,root,root) %{_libexecdir}/chg-juke
 %attr(755,root,root) %{_libexecdir}/chg-manual
 %attr(755,root,root) %{_libexecdir}/chg-mtx
 %attr(755,root,root) %{_libexecdir}/chg-multi
+%attr(755,root,root) %{_libexecdir}/chg-rait
 %attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-scsi
 %attr(755,root,root) %{_libexecdir}/chg-zd-mtx
@@ -275,13 +269,14 @@ fi
 %attr(755,root,root) %{_sbindir}/amlabel
 %attr(755,root,root) %{_sbindir}/amoverview
 %attr(755,root,root) %{_sbindir}/amplot
-%attr(755,root,root) %{_sbindir}/amrmtape
 %attr(755,root,root) %{_sbindir}/amreport
+%attr(755,root,root) %{_sbindir}/amrmtape
 %attr(755,root,root) %{_sbindir}/amstatus
 %attr(755,root,root) %{_sbindir}/amtape
+%attr(755,root,root) %{_sbindir}/amtapetype
 %attr(755,root,root) %{_sbindir}/amtoc
 %attr(755,root,root) %{_sbindir}/amverify
-%attr(755,root,root) %{_sbindir}/tapetype
+%attr(755,root,root) %{_sbindir}/amverifyrun
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amcheck.8*
@@ -297,9 +292,10 @@ fi
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amstatus.8*
 %{_mandir}/man8/amtape.8*
+%{_mandir}/man8/amtapetype.8*
 %{_mandir}/man8/amtoc.8*
 %{_mandir}/man8/amverify.8*
-%{_mandir}/man1/tapetype.1*
+%{_mandir}/man8/amverifyrun.8*
 
 %files client
 %defattr(644,root,root,755)
@@ -316,8 +312,12 @@ fi
 %attr(755,root,root) %{_libexecdir}/sendsize
 %attr(755,root,root) %{_libexecdir}/patch-system
 %attr(4754,root,amanda) %{_libexecdir}/killpgrp
+%attr(755,root,root) %{_sbindir}/amdd
+%attr(755,root,root) %{_sbindir}/ammt
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(755,root,root) %{_sbindir}/amrestore
 %attr(770,amanda,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
+%{_mandir}/man8/amdd.8*
+%{_mandir}/man8/ammt.8*
 %{_mandir}/man8/amrecover.8*
 %{_mandir}/man8/amrestore.8*
