@@ -195,3 +195,11 @@ diff -Nru amanda-2.4.2/server-src/Makefile.am amanda-2.4.2.new/server-src/Makefi
  	@list="$(sbindir)/amcheck $(libexecdir)/dumper $(libexecdir)/planner"; \
  	for p in $$list; do \
  		if echo "$(sbin_PROGRAMS) $(sbin_SCRIPTS) $(libexec_PROGRAMS) $(libexec_SCRIPTS)" | grep `basename $$p` >/dev/null 2>&1; then \
+--- amanda-2.4.2p2/docs/Makefile.am~	Wed Apr 18 11:54:43 2001
++++ amanda-2.4.2p2/docs/Makefile.am	Wed Apr 18 11:58:02 2001
+@@ -19,5 +19,3 @@
+ 	WISHLIST		\
+ 	YEAR2000		\
+ 	ZFTAPE
+-
+-EXTRA_DIST = $(pkgdata_DATA)
