@@ -235,6 +235,7 @@ if [ -f /var/lock/subsys/rc-inetd ]; then
 else
 	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server" 1>&2
 fi
+echo "Don't forget to edit /etc/cron.d/amanda-srv" 1>&2
 
 %postun server
 /sbin/ldconfig
