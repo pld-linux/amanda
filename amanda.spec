@@ -136,7 +136,7 @@ aclocal
 autoconf
 touch COPYING
 rm -f missing
-automake -a -c
+automake -a -c -f
 %configure \
 	--disable-static \
 	--enable-shared \
