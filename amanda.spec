@@ -34,7 +34,6 @@ BuildRequires:	tar
 %{?_with_xfs:BuildRequires:	xfsdump}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc
 %define		_localstatedir	/var/lib
 %define		_libexecdir	%{_libdir}/amanda
 
