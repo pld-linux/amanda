@@ -1,10 +1,11 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.1p1
-Release:	18
-License:	distributable
+Version:	2.4.2
+Release:	1
+License:	BSD
 Group:		Networking/Utilities
+Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 Source0:	ftp://ftp.amanda.org/pub/amanda/%{name}-%{version}.tar.gz
 Source1:	%{name}-srv.crontab
@@ -12,10 +13,8 @@ Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
-Patch0:		%{name}-DESTDIR.patch
-Patch1:		amanda-no_libnsl.patch
-Patch2:		amanda-glibc21.patch
-Patch3:		amanda-glibc22.patch
+Patch0:		%{name}-no_libnsl.patch
+Patch1:		%{name}-am_fixes.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	flex
@@ -59,6 +58,7 @@ amanda-client i amanda-server!
 Summary:	Amanda shared libraries
 Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
 Group:		Networking/Utilities
+Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 
 %description libs
@@ -71,6 +71,7 @@ Biblioteki wspó³dzielone pakietu amanda.
 Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
+Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 Prereq:		/sbin/ldconfig
 Prereq:		%{name}-libs = %{version}
@@ -89,6 +90,7 @@ zawarto¶ci bêd± tworzone kopie zapasowe.
 Summary:	The server side of Amanda
 Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
+Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
 Prereq:		rc-inetd
 Prereq:		/sbin/ldconfig
@@ -116,21 +118,18 @@ typu streamer).
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
 
 %build
-cp config/acinclude.m4 .
 aclocal
 autoconf
 touch COPYING
-automake
+automake -a -c
 %configure \
 	--disable-static \
+	--enable-shared \
 	--with-index-server=localhost \
 	--with-user=amanda \
 	--with-group=amanda \
-	--with-samba-user=amanda \
 	--with-tape-device=/dev/null \
 	--with-ftape-rawdevice=/dev/null \
 	--with-changer-device=/dev/null \
@@ -159,6 +158,8 @@ install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
+
+gzip -9nf docs/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -206,15 +207,15 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libamanda*.so.*.*
-%attr(755,root,root) %{_libdir}/libamtape*.so.*.*
+%attr(755,root,root) %{_libdir}/libamanda*.so
+%attr(755,root,root) %{_libdir}/libamtape*.so
 %attr(770,root,amanda) %dir %{_libexecdir}
 
 %files server
 %defattr(644,root,root,755)
+%doc docs/*.gz
 %config(noreplace) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) /etc/sysconfig/rc-inetd/amandaidx
-%attr(755,root,root) %{_libexecdir}/amidxtaped
 
 %dir %{_sysconfdir}/amanda
 %attr(640,root,amanda) %{_sysconfdir}/amanda/*
@@ -224,35 +225,46 @@ fi
 
 %attr(640,root,root) /etc/cron.d/amanda-srv
 
-%attr(755,root,root) %{_libdir}/libamserver*.so.*.*
+%attr(755,root,root) %{_libdir}/libamserver*.so
 %attr(755,root,root) %{_libexecdir}/amindexd
 %attr(755,root,root) %{_libexecdir}/amtrmidx
 %attr(755,root,root) %{_libexecdir}/driver
 %attr(4754,root,amanda) %{_libexecdir}/dumper
-%attr(755,root,root) %{_libexecdir}/getconf
 %attr(4754,root,amanda) %{_libexecdir}/planner
-%attr(755,root,root) %{_libexecdir}/taper
+%attr(755,root,root) %{_libexecdir}/amcat.awk
+%attr(755,root,root) %{_libexecdir}/amcleanupdisk
+%attr(755,root,root) %{_libexecdir}/amidxtaped
+%attr(755,root,root) %{_libexecdir}/amlogroll
+%attr(755,root,root) %{_libexecdir}/amplot.awk
+%attr(755,root,root) %{_libexecdir}/amplot.g
+%attr(755,root,root) %{_libexecdir}/amplot.gp
+%attr(755,root,root) %{_libexecdir}/amtrmlog
 %attr(755,root,root) %{_libexecdir}/chg-chio
-%attr(755,root,root) %{_libexecdir}/chg-manual
-%attr(755,root,root) %{_libexecdir}/chg-multi
-%attr(755,root,root) %{_libexecdir}/chg-mtx
-%attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-chs
+%attr(755,root,root) %{_libexecdir}/chg-manual
+%attr(755,root,root) %{_libexecdir}/chg-mtx
+%attr(755,root,root) %{_libexecdir}/chg-multi
+%attr(755,root,root) %{_libexecdir}/chg-rth
+%attr(755,root,root) %{_libexecdir}/chg-scsi
+%attr(755,root,root) %{_libexecdir}/chg-zd-mtx
+%attr(755,root,root) %{_libexecdir}/selfcheck
+%attr(755,root,root) %{_libexecdir}/taper
 %attr(755,root,root) %{_sbindir}/amadmin
 %attr(4754,root,amanda) %{_sbindir}/amcheck
-%attr(755,root,root) %{_sbindir}/amflush
-%attr(755,root,root) %{_sbindir}/amlabel
-%attr(755,root,root) %{_sbindir}/amtape
 %attr(755,root,root) %{_sbindir}/amcheckdb
 %attr(755,root,root) %{_sbindir}/amcleanup
 %attr(755,root,root) %{_sbindir}/amdump
+%attr(755,root,root) %{_sbindir}/amflush
+%attr(755,root,root) %{_sbindir}/amgetconf
+%attr(755,root,root) %{_sbindir}/amlabel
 %attr(755,root,root) %{_sbindir}/amoverview
+%attr(755,root,root) %{_sbindir}/amplot
 %attr(755,root,root) %{_sbindir}/amrmtape
-%attr(755,root,root) %{_sbindir}/amtoc
-%attr(755,root,root) %{_sbindir}/amverify
-#%attr(755,root,root) %{_sbindir}/amplot
 %attr(755,root,root) %{_sbindir}/amreport
 %attr(755,root,root) %{_sbindir}/amstatus
+%attr(755,root,root) %{_sbindir}/amtape
+%attr(755,root,root) %{_sbindir}/amtoc
+%attr(755,root,root) %{_sbindir}/amverify
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amtape.8*
@@ -271,7 +283,7 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) /etc/sysconfig/rc-inetd/amanda
 
-%attr(755,root,root) %{_libdir}/libamclient*.so.*.*
+%attr(755,root,root) %{_libdir}/libamclient*.so
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
 %attr(4754,root,amanda) %{_libexecdir}/calcsize
