@@ -184,7 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 %triggerpostun -- amanda-libs < 2.4.2p2-3
 /usr/sbin/chsh -s /bin/sh amanda
 
-%triggerpostun -- amanda-libs < 2.4.2p2-11
+%triggerpostun -- amanda-libs < 2.4.2p2-12
 /usr/sbin/usermod -G disk amanda
 
 %pre libs
