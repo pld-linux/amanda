@@ -79,14 +79,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-/usr/lib/libamanda*
-/usr/lib/libamtape*
-/usr/lib/amanda/amidxtaped
+%{_libdir}/libamanda*
+%{_libdir}/libamtape*
+%{_libdir}/amanda/amidxtaped
 %attr(755,root,root) /usr/sbin/amrestore
 %{_mandir}/man8/amrestore.8*
 
 %files server
-/usr/lib/libamserver*
+%{_libdir}/libamserver*
 /usr/sbin/amindexd
 /usr/sbin/amtrmidx
 /usr/sbin/driver
@@ -135,7 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/amstatus.8*
 
 %files client
-/usr/lib/libamclient*
+%{_libdir}/libamclient*
 /usr/sbin/versionsuffix
 /usr/sbin/amandad
 /usr/sbin/calcsize
