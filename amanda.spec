@@ -17,6 +17,7 @@ Patch2:		%{name}-bug18322.patch
 Patch3:		%{name}-build_tapetype.patch
 Patch4:		%{name}-no_private_libtool.m4.patch
 Patch5:		%{name}-ac25x.patch
+Patch6:		%{name}-chg-zd-mtx-sh.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -127,6 +128,7 @@ typu streamer).
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 libtoolize --copy --force
