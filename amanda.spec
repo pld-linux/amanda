@@ -21,7 +21,7 @@ BuildRequires:	ncurses-devel >= 5.0
 BuildRequires:	readline-devel >= 4.1
 Prereq:		/sbin/ldconfig
 URL:		http://www.amanda.org/
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc
 %define		_localstatedir	/var
