@@ -12,7 +12,7 @@ Source2:	amanda.inetd
 Source3:	amandaidx.inetd
 Source4:	amidxtape.inetd
 Source5:	amanda.conf
-Patch:		amanda-DESTDIR.patch
+Patch0:		amanda-DESTDIR.patch
 BuildRequires:	flex
 BuildRequires:	dump
 BuildRequires:	tar
@@ -28,26 +28,27 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_libexecdir	%{_libdir}/amanda
 
 %description 
-AMANDA, the Advanced Maryland Automatic Network Disk Archiver, is a backup
-system that allows the administrator of a LAN to set up a single master
-backup server to back up multiple hosts to a single large capacity tape
-drive. AMANDA uses native dump and/or GNU tar facilities and can back up a
-large number of workstations running multiple versions of Unix. Newer
-versions of AMANDA (including this version) can use SAMBA to back up
-Microsoft(TM) Windows95/NT hosts. The amanda package contains the core
-AMANDA programs and will need to be installed on both AMANDA clients and
-AMANDA servers. Note that you will have to install the amanda-client and
-amanda-server packages as well.
+AMANDA, the Advanced Maryland Automatic Network Disk Archiver, is a
+backup system that allows the administrator of a LAN to set up a
+single master backup server to back up multiple hosts to a single
+large capacity tape drive. AMANDA uses native dump and/or GNU tar
+facilities and can back up a large number of workstations running
+multiple versions of Unix. Newer versions of AMANDA (including this
+version) can use SAMBA to back up Microsoft(TM) Windows95/NT hosts.
+The amanda package contains the core AMANDA programs and will need to
+be installed on both AMANDA clients and AMANDA servers. Note that you
+will have to install the amanda-client and amanda-server packages as
+well.
 
 %description -l pl
 AMANDA jest sieciowo zorientowanym systemem tworzenia kopii
-zapasowych. Umo¿liwia administratorowi sieci tworzenie
-kopii z wilku hostów na jednej maszynie wyposa¿onej w pojemny
-dysk lub streamer. Nowsze wersje programu umo¿liwiaj± zabezpieczanie
-zasobów Microsoft Windows 95/98/NT/2000 przy u¿yciu protoko³u Samba.
-Ten pakiet zawiera podstawowe pliki programu i powinien byæ zainstalowany
-zarówno na serwerze jak i na kliencie. Pamiêtaj tak¿e o instalacji
-pakietów amanda-client i amanda-server!
+zapasowych. Umo¿liwia administratorowi sieci tworzenie kopii z wilku
+hostów na jednej maszynie wyposa¿onej w pojemny dysk lub streamer.
+Nowsze wersje programu umo¿liwiaj± zabezpieczanie zasobów Microsoft
+Windows 95/98/NT/2000 przy u¿yciu protoko³u Samba. Ten pakiet zawiera
+podstawowe pliki programu i powinien byæ zainstalowany zarówno na
+serwerze jak i na kliencie. Pamiêtaj tak¿e o instalacji pakietów
+amanda-client i amanda-server!
 
 %package libs
 Summary:	Amanda shared libraries
@@ -70,9 +71,10 @@ Prereq:		/sbin/ldconfig
 Prereq:		%{name}-libs = %{version}
 
 %description client
-The Amanda-client package should be installed on any machine that will be
-backed up by AMANDA (including the server if it also needs to be backed up).
-You will also need to install the amanda package to each AMANDA client.
+The Amanda-client package should be installed on any machine that will
+be backed up by AMANDA (including the server if it also needs to be
+backed up). You will also need to install the amanda package to each
+AMANDA client.
 
 %description -l pl client
 Ten pakiet powinien byæ zainstalowany ma maszynach, z których
@@ -94,16 +96,16 @@ Requires:	/etc/cron.d
 Prereq:		%{name}-libs = %{version}
 
 %description server
-The amanda-server package should be installed on the AMANDA server, the
-machine attached to the device (such as a tape drive) where backups will be
-written. You will also need to install the amanda package to the AMANDA
-server. And, if the server is also to be backed up, the server also needs to
-have the amanda-client package installed.
+The amanda-server package should be installed on the AMANDA server,
+the machine attached to the device (such as a tape drive) where
+backups will be written. You will also need to install the amanda
+package to the AMANDA server. And, if the server is also to be backed
+up, the server also needs to have the amanda-client package installed.
 
 %description -l pl server
-Ten pakiet powinien byæ zainstalowanych na maszynach, na których
-bêd± magazynowane kopie zapasowe (lub do których podpiête s±
-urz±dzenia typu streamer).
+Ten pakiet powinien byæ zainstalowanych na maszynach, na których bêd±
+magazynowane kopie zapasowe (lub do których podpiête s± urz±dzenia
+typu streamer).
 
 %prep
 %setup -q
@@ -133,7 +135,7 @@ make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{amanda,cron.d,sysconfig/rc-inetd} \
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
 	$RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
 
 make install \
