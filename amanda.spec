@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	6
+Release:	7
 License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -65,11 +65,17 @@ Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
 Group(pl):	Sieciowe/Narzêdzia
+Prereq:		/usr/bin/getgid
+Prereq:		/bin/id
+Prereq:		/usr/sbin/groupadd
+Prereq:		/usr/sbin/useradd
+Prereq:		/usr/sbin/groupdel
+Prereq:		/usr/sbin/userdel
 
 %description libs
 Amanda shared libraries.
 
-%description -l pl libs
+%description libs -l pl
 Biblioteki wspó³dzielone pakietu amanda.
 
 %package client
@@ -88,7 +94,7 @@ be backed up by AMANDA (including the server if it also needs to be
 backed up). You will also need to install the amanda package to each
 AMANDA client. It requires at least one of dump and GNU tar installed.
 
-%description -l pl client
+%description client -l pl
 Ten pakiet powinien byæ zainstalowany ma maszynach, z których
 zawarto¶ci bêd± tworzone kopie zapasowe. Wymaga zainstalowanego co
 najmniej jednego z pakietów dump i GNU tar.
@@ -114,7 +120,7 @@ backups will be written. You will also need to install the amanda
 package to the AMANDA server. And, if the server is also to be backed
 up, the server also needs to have the amanda-client package installed.
 
-%description -l pl server
+%description server -l pl
 Ten pakiet powinien byæ zainstalowanych na maszynach, na których bêd±
 magazynowane kopie zapasowe (lub do których podpiête s± urz±dzenia
 typu streamer).
@@ -183,8 +189,22 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/chsh -s /bin/sh amanda
 
 %pre libs
-/usr/sbin/groupadd -g 80 -r -f amanda
-/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
+if [ -n "`/usr/bin/getgid amanda`" ]; then
+	if [ "`getgid amanda`" != "80" ]; then
+		echo "Warning: group amanda haven't gid=80. Correct this before installing amanda-libs" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 80 -r -f amanda
+fi
+if [ -n "`/bin/id -u amanda 2>/dev/null`" ]; then
+	if [ "`/bin/id -u amanda`" != "80" ]; then
+		echo "Warning: user amanda haven't uid=80. Correct this before installing amanda-libs" 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 80 -r -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda 1>&2
+fi
 
 %post libs -p /sbin/ldconfig
 
