@@ -1,7 +1,7 @@
 diff -Nru amanda-2.4.2/Makefile.am amanda-2.4.2.new/Makefile.am
 --- amanda-2.4.2/Makefile.am	Wed Nov 22 14:39:10 2000
 +++ amanda-2.4.2.new/Makefile.am	Fri Jan 19 07:07:44 2001
-@@ -36,12 +36,10 @@
+@@ -36,13 +36,10 @@
  	$(PLOT_SUBDIRS) \
  	man docs example
  
@@ -12,6 +12,7 @@ diff -Nru amanda-2.4.2/Makefile.am amanda-2.4.2.new/Makefile.am
 -	COPYRIGHT-REGEX
 -
 -EXTRA_DIST = $(SNAPSHOT_STAMP) \
+-	$(pkgdata_DATA)			\
 +	COPYRIGHT-REGEX			\
  	contrib/README			\
  	contrib/dbbackup.README		\
