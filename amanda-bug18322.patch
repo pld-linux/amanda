@@ -1,0 +1,11 @@
+--- amanda-2.4.2-19991216-beta1/client-src/sendbackup-gnutar.c.bug18322	Thu Oct 12 15:15:21 2000
++++ amanda-2.4.2-19991216-beta1/client-src/sendbackup-gnutar.c	Thu Oct 12 15:16:50 2000
+@@ -99,6 +99,8 @@
+   { DMP_NORMAL, "^load_client_codepage", 1},
+ #endif
+ 
++   { DMP_NORMAL, ": socket ignored", 1},
++
+ #ifdef IGNORE_SMBCLIENT_ERRORS
+   /* This will cause amanda to ignore real errors, but that may be
+    * unavoidable when you're backing up system disks.  It seems to be
