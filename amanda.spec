@@ -138,7 +138,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
 	$RPM_BUILD_ROOT%{_localstatedir}/lib/amanda
 
-make install \
+%{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	SETUID_GROUP=`id -g`
 
