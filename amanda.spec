@@ -113,6 +113,7 @@ Requires:	crondaemon
 Requires:	/etc/cron.d
 Requires:	mt-st
 Requires:	mtx
+Obsoletes:	amanda
 
 %description server
 The amanda-server package should be installed on the AMANDA server,
