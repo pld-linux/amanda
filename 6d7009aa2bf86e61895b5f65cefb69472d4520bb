@@ -1,0 +1,45 @@
+- added using CVS keywords in %changelog (for automating them).
+
+* Sun Jun 06 1999 Jan Rêkorajski <baggins@pld.org.pl>
+  [2.4.1-1]
+- spec cleanup
+
+* Sat Jan 30 1999 Tomasz K³oczko <kloczek@rudy.mif.pg.gda.pl>
+  [2.4.1-2d]
+- added -q %setup parameter,
+- added gzipping man pages,
+- added Group(pl),
+- added LDFLAGS="-s" to ./configure enviroment,
+- changed Buildroot to /tmp/%%{name}-%%{version}-root,
+- added using %%{name} and %%{version} in Source,
+- added stripping shared libraries,
+- added %attr and %defattr macros in %files (allows build package from
+  non-root account).
+
+* Tue Oct 27 1998 Cristian Gafton <gafton@redhat.com>
+- version 2.4.1
+
+* Tue May 19 1998 Cristian Gafton <gafton@redhat.com>
+- upgraded to full 2.4.0 release
+
+* Thu Feb 19 1998 Otto Hammersmith <otto@redhat.com>
+- fixed group for -client and -server packages (Network->Networking)
+
+* Wed Feb 11 1998 Otto Hammersmith <otto@redhat.com>
+- updated to 2.4.0b6, fixes security hole among other things
+  (as well as finally got the glibc patch in the main source.)
+ 
+* Tue Jan 27 1998 Otto Hammersmith <otto@redhat.com>
+- moved versionsuffix to client package to remove dependency of amanda on amanda-client
+
+* Mon Jan 26 1998 Otto Hammersmith <otto@redhat.com>
+- fixed libexec garbage.
+
+* Wed Jan 21 1998 Otto Hammersmith <otto@redhat.com>
+- split into three packages amanda, amanda-client, and amanda-server
+
+* Fri Jan  9 1998 Otto Hammersmith <otto@redhat.com>
+- updated to latest beta... builds much cleaner now.
+
+* Thu Jan  8 1998 Otto Hammersmith <otto@redhat.com>
+- created the package
