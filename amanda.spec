@@ -7,7 +7,7 @@ Copyright:	distributable
 Group:		Networking/Utilities 
 Group(pl):	Sieciowe/Narzêdzia
 URL:		http://www.amanda.org/
-BuildRoot: 	/tmp/%{name}-%{version}-root
+BuildRoot:	/tmp/%{name}-%{version}-root
 
 %description 
 A network-capable tape backup solution.
