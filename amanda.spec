@@ -36,7 +36,7 @@ This package should be installed on the machine that has the device
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="-s" \
-./configure \
+./configure %{_target} \
 	--prefix=/usr \
 	--sysconfdir=/etc \
 	--localstatedir=/var \
