@@ -102,6 +102,8 @@ Prereq:		/sbin/ldconfig
 Requires:	gnuplot
 Requires:	crondaemon
 Requires:	/etc/cron.d
+Requires:	mt-st
+Requires:	mtx
 Prereq:		rc-inetd
 Prereq:		%{name}-libs = %{version}
 
