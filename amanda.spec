@@ -2,7 +2,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.2p2
-Release:	1
+Release:	3
 License:	BSD
 Group:		Networking/Utilities
 Group(de):	Netzwerkwesen/Werkzeuge
@@ -16,14 +16,17 @@ Source5:	%{name}.conf
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-am_fixes.patch
 Patch2:		%{name}-bug18322.patch
+Patch3:		%{name}-build_tapetype.patch
+Patch4:		%{name}-no_private_libtool.m4.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	flex
-BuildRequires:	dump
-BuildRequires:	gnuplot
-BuildRequires:	tar
 BuildRequires:	cpio
+BuildRequires:	dump
+BuildRequires:	flex
+BuildRequires:	gnuplot
+BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
+BuildRequires:	tar
 Prereq:		/sbin/ldconfig
 URL:		http://www.amanda.org/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -120,11 +123,15 @@ typu streamer).
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
+libtoolize --copy --force
 aclocal
 autoconf
 touch COPYING
+rm -f missing
 automake -a -c
 %configure \
 	--disable-static \
@@ -267,6 +274,7 @@ fi
 %attr(755,root,root) %{_sbindir}/amtape
 %attr(755,root,root) %{_sbindir}/amtoc
 %attr(755,root,root) %{_sbindir}/amverify
+%attr(755,root,root) %{_sbindir}/tapetype
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amtape.8*
