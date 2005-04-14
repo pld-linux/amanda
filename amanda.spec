@@ -1,7 +1,3 @@
-# TODO
-#  - as of setup-2.4.6-8:
-#   service/protocol combination not in /etc/services: amandaidx/tcp
-#   service/protocol combination not in /etc/services: amidxtape/tcp
 #
 # Conditional build:
 %bcond_with	xfs	# with support for xfsdump 
@@ -9,22 +5,21 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.4p2
-Release:	3
+Version:	2.4.4p4
+Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	95f772203801999bd4b96606859f8910
+# Source0-md5:	3c1d80de30b97a892b7972781c5fb557
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
 Source5:	%{name}.conf
 Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-no_private_libtool.m4.patch
-Patch2:		%{name}-ac25x.patch
-Patch3:		%{name}-chg-zd-mtx-sh.patch
-Patch4:		%{name}-tar.patch
+Patch1:		%{name}-ac25x.patch
+Patch2:		%{name}-chg-zd-mtx-sh.patch
+Patch3:		%{name}-tar.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -89,7 +84,7 @@ Biblioteki wspó³dzielone pakietu amanda.
 Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
-PreReq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}-%{release}
 PreReq:		rc-inetd
 Requires(post,postun):	/sbin/ldconfig
 Conflicts:	tar < 1.13
@@ -109,7 +104,7 @@ najmniej jednego z pakietów dump i GNU tar.
 Summary:	The server side of Amanda
 Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
-PreReq:		%{name}-libs = %{version}
+PreReq:		%{name}-libs = %{version}-%{release}
 PreReq:		rc-inetd
 Requires(post,postun):	/sbin/ldconfig
 Requires:	gnuplot
@@ -137,7 +132,10 @@ typu streamer).
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+
+# kill libtool.m4 copy
+head -n 1013 acinclude.m4 > acinc.tmp
+mv -f acinc.tmp acinclude.m4
 
 %build
 %{__libtoolize}
@@ -288,10 +286,14 @@ fi
 %attr(755,root,root) %{_libexecdir}/amtrmlog
 %attr(755,root,root) %{_libexecdir}/chg-chio
 %attr(755,root,root) %{_libexecdir}/chg-chs
+%attr(755,root,root) %{_libexecdir}/chg-disk
+%attr(755,root,root) %{_libexecdir}/chg-iomega
 %attr(755,root,root) %{_libexecdir}/chg-juke
 %attr(755,root,root) %{_libexecdir}/chg-manual
+%attr(755,root,root) %{_libexecdir}/chg-mcutil
 %attr(755,root,root) %{_libexecdir}/chg-mtx
 %attr(755,root,root) %{_libexecdir}/chg-multi
+%attr(755,root,root) %{_libexecdir}/chg-null
 %attr(755,root,root) %{_libexecdir}/chg-rait
 %attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-scsi
@@ -342,6 +344,7 @@ fi
 %attr(755,root,root) %{_libdir}/libamclient*.so
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
+%attr(755,root,root) %{_libexecdir}/amqde
 %attr(4754,root,amanda) %{_libexecdir}/calcsize
 %attr(4754,root,amanda) %{_libexecdir}/rundump
 %attr(4754,root,amanda) %{_libexecdir}/runtar
