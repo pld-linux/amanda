@@ -347,8 +347,8 @@ fi
 %attr(4754,root,amanda) %{_libexecdir}/amqde
 %attr(4754,root,amanda) %{_libexecdir}/calcsize
 %attr(4754,root,amanda) %{_libexecdir}/killpgrp
-%attr(4754,root,amanda) %{_libexecdir}/rundump
 %attr(755,root,root) %{_libexecdir}/patch-system
+%attr(4754,root,amanda) %{_libexecdir}/rundump
 %attr(4754,root,amanda) %{_libexecdir}/runtar
 %attr(4754,root,amanda) %{_libexecdir}/selfcheck
 %attr(755,root,root) %{_libexecdir}/sendbackup
