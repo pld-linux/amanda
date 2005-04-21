@@ -5,12 +5,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.4p4
+Version:	2.4.5
 Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	3c1d80de30b97a892b7972781c5fb557
+# Source0-md5:	1960b7875424e412d042bc92a1548d7f
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -134,7 +134,7 @@ typu streamer).
 %patch3 -p1
 
 # kill libtool.m4 copy
-head -n 1013 acinclude.m4 > acinc.tmp
+head -n 1039 acinclude.m4 > acinc.tmp
 mv -f acinc.tmp acinclude.m4
 
 %build
