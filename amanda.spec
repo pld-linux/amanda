@@ -29,7 +29,7 @@ BuildRequires:	flex
 BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	tar
 %{?with_xfs:BuildRequires:	xfsdump}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -192,23 +192,8 @@ rm -rf $RPM_BUILD_ROOT
 /usr/sbin/usermod -G disk amanda
 
 %pre libs
-if [ -n "`/usr/bin/getgid amanda`" ]; then
-	if [ "`/usr/bin/getgid amanda`" != 80 ]; then
-		echo "Error: group amanda doesn't have gid=80. Correct this before installing amanda-libs." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 80 amanda
-fi
-if [ -n "`/bin/id -u amanda 2>/dev/null`" ]; then
-	if [ "`/bin/id -u amanda`" != 80 ]; then
-		echo "Error: user amanda doesn't have uid=80. Correct this before installing amanda-libs." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 80 -G disk -d /var/lib/amanda -s /bin/sh \
-		-c "Amanda Backup user" -g amanda amanda 1>&2
-fi
+%groupadd -P %{name}-libs -g 80 amanda
+%useradd -P %{name}-libs -u 80 -G disk -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
 
 %post	libs -p /sbin/ldconfig
 
