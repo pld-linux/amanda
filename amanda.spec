@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with	xfs	# with support for xfsdump 
+%bcond_with	xfs	# with support for xfsdump
 #
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
@@ -325,7 +325,7 @@ fi
 %files client
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
-%attr(664,root,amanda) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/amandates
+%attr(664,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/amandates
 %attr(755,root,root) %{_libdir}/libamclient*.so
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
