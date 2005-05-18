@@ -26,7 +26,6 @@ BuildRequires:	automake
 BuildRequires:	cpio
 BuildRequires:	dump
 BuildRequires:	flex
-BuildRequires:	gnuplot
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.202
@@ -143,6 +142,7 @@ mv -f acinc.tmp acinclude.m4
 %{__autoconf}
 %{__automake}
 %configure \
+	GNUPLOT=/usr/bin/gnuplot \
 	--disable-static \
 	--enable-shared \
 	--with-index-server=localhost \
