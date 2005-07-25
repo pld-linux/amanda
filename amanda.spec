@@ -121,7 +121,7 @@ package to the AMANDA server. And, if the server is also to be backed
 up, the server also needs to have the amanda-client package installed.
 
 %description server -l pl
-Ten pakiet powinien byæ zainstalowanych na maszynach, na których bêd±
+Ten pakiet powinien byæ zainstalowany na maszynach, na których bêd±
 magazynowane kopie zapasowe (lub do których podpiête s± urz±dzenia
 typu streamer).
 
