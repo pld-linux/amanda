@@ -5,6 +5,6 @@ PORT=10083
 FLAGS=nowait
 USER=amanda
 GROUP=amanda
-SERVER=/usr/lib/amanda/amidxtaped
+SERVER=/usr/sbin/tcpd
 DAEMON=/usr/lib/amanda/amidxtaped
 FAMILY=ipv4

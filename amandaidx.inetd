@@ -5,6 +5,6 @@ PORT=10082
 FLAGS=nowait
 USER=amanda
 GROUP=amanda
-SERVER=/usr/lib/amanda/amindexd
+SERVER=/usr/sbin/tcpd
 DAEMON=/usr/lib/amanda/amindexd
 FAMILY=ipv4
