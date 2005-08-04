@@ -6,7 +6,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.5
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -179,6 +179,7 @@ install %{SOURCE4} $RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/*.ps $RPM_BUILD_ROOT%{_localstatedir}/amanda
+touch $RPM_BUILD_ROOT%{_localstatedir}/amanda/.amandahosts
 
 > $RPM_BUILD_ROOT%{_sysconfdir}/amandates
 
@@ -240,7 +241,8 @@ fi
 %attr(755,root,root) %{_libdir}/libamanda*.so
 %attr(755,root,root) %{_libdir}/libamtape*.so
 %dir %{_libexecdir}
-%attr(770,amanda,amanda) %dir %{_localstatedir}/amanda
+%attr(770,root,amanda) %dir %{_localstatedir}/amanda
+%attr(640,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_localstatedir}/amanda/.amandahosts
 
 %files server
 %defattr(644,root,root,755)
@@ -248,10 +250,10 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
-%attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
-%config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/*
+%attr(750,root,amanda) %dir %{_sysconfdir}/amanda
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/*
 
-%attr(664,amanda,amanda) %{_localstatedir}/amanda/*.ps
+%attr(664,root,amanda) %{_localstatedir}/amanda/*.ps
 
 %config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
@@ -342,7 +344,7 @@ fi
 %attr(755,root,root) %{_sbindir}/ammt
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(755,root,root) %{_sbindir}/amrestore
-%attr(770,amanda,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
+%attr(770,root,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
 %{_mandir}/man8/amdd.8*
 %{_mandir}/man8/ammt.8*
 %{_mandir}/man8/amrecover.8*
