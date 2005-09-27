@@ -5,6 +5,6 @@ PORT=10080
 FLAGS=wait
 USER=amanda
 GROUP=amanda
-SERVER=/usr/sbin/tcpd
+SERVER=tcpd
 DAEMON=/usr/lib/amanda/amandad
 FAMILY=ipv4
