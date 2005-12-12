@@ -63,13 +63,13 @@ amanda-client i amanda-server!
 Summary:	Amanda shared libraries
 Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
 Group:		Networking/Utilities
+Requires(postun):	/sbin/ldconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(postun):	/sbin/ldconfig
 Provides:	group(amanda)
 Provides:	user(amanda)
 
@@ -83,9 +83,9 @@ Biblioteki wspó³dzielone pakietu amanda.
 Summary:	The client side of Amanda
 Summary(pl):	Klient Amandy
 Group:		Networking/Utilities
-PreReq:		%{name}-libs = %{version}-%{release}
-PreReq:		rc-inetd
 Requires(post,postun):	/sbin/ldconfig
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	rc-inetd
 Conflicts:	tar < 1.13
 
 %description client
@@ -103,14 +103,14 @@ najmniej jednego z pakietów dump i GNU tar.
 Summary:	The server side of Amanda
 Summary(pl):	Serwer Amandy
 Group:		Networking/Utilities
-PreReq:		%{name}-libs = %{version}-%{release}
-PreReq:		rc-inetd
 Requires(post,postun):	/sbin/ldconfig
-Requires:	gnuplot
-Requires:	crondaemon
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/etc/cron.d
+Requires:	crondaemon
+Requires:	gnuplot
 Requires:	mt-st
 Requires:	mtx
+Requires:	rc-inetd
 Obsoletes:	amanda
 
 %description server
