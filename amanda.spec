@@ -6,7 +6,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.4.5
-Release:	3
+Release:	4
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -143,6 +143,12 @@ mv -f acinc.tmp acinclude.m4
 %{__automake}
 %configure \
 	GNUPLOT=/usr/bin/gnuplot \
+	MAILER=/bin/mail \
+	PRINT=/usr/bin/lpr \
+	DUMP=/sbin/dump \
+	RESTORE=/sbin/restore \
+	XFSDUMP=/sbin/xfsdump \
+	XFSRESTORE=/sbin/xfsrestore \
 	--disable-static \
 	--enable-shared \
 	--with-index-server=localhost \
