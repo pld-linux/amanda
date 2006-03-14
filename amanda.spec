@@ -23,13 +23,11 @@ Patch3:		%{name}-tar.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
-BuildRequires:	cpio
 BuildRequires:	dump
 BuildRequires:	flex
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.202
-BuildRequires:	tar
+BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_xfs:BuildRequires:	xfsdump}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -213,33 +211,25 @@ fi
 
 %post client
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server." 1>&2
-fi
+%service -q rc-inetd reload
 
 %postun client
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart
+if [ "$1" = 0 ]; then
+	%service -q rc-inetd reload
 fi
 
 %post server
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart 1>&2
-else
-	echo "Type \"/etc/rc.d/init.d/rc-inetd start\" to start inet server." 1>&2
-fi
+%service -q rc-inetd reload
 if [ "$1" = "1" ]; then
 	echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
 fi
 
 %postun server
 /sbin/ldconfig
-if [ -f /var/lock/subsys/rc-inetd ]; then
-	/etc/rc.d/init.d/rc-inetd restart
+if [ "$1" = 0 ]; then
+	%service -q rc-inetd reload
 fi
 
 %files libs
