@@ -1,3 +1,5 @@
+# TODO:
+# - add missing files to proper subpackages
 #
 # Conditional build:
 %bcond_with	xfs	# with support for xfsdump
@@ -5,12 +7,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.4.5
-Release:	5
+Version:	2.5.0p2
+Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
-Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	1960b7875424e412d042bc92a1548d7f
+Source0:	http://umn.dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
+# Source0-md5:	073828b8b5a5c377a08f8f19b5eccf85
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -131,7 +133,7 @@ typu streamer).
 %patch3 -p1
 
 # kill libtool.m4 copy
-head -n 1039 acinclude.m4 > acinc.tmp
+head -n 1147 acinclude.m4 > acinc.tmp
 mv -f acinc.tmp acinclude.m4
 
 %build
@@ -327,7 +329,7 @@ fi
 %attr(755,root,root) %{_libdir}/libamclient*.so
 %attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
-%attr(4754,root,amanda) %{_libexecdir}/amqde
+#%attr(4754,root,amanda) %{_libexecdir}/amqde
 %attr(4754,root,amanda) %{_libexecdir}/calcsize
 %attr(4754,root,amanda) %{_libexecdir}/killpgrp
 %attr(755,root,root) %{_libexecdir}/patch-system
