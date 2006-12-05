@@ -237,7 +237,6 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libamanda*.so
-%attr(755,root,root) %{_libdir}/libamtape*.so
 %dir %{_libexecdir}
 %attr(770,root,amanda) %dir %{_localstatedir}/amanda
 %attr(640,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_localstatedir}/amanda/.amandahosts
@@ -256,18 +255,18 @@ fi
 %config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
 %attr(755,root,root) %{_libdir}/libamserver*.so
-%attr(755,root,root) %{_libexecdir}/amindexd
-%attr(755,root,root) %{_libexecdir}/amtrmidx
-%attr(755,root,root) %{_libexecdir}/driver
-%attr(4754,root,amanda) %{_libexecdir}/dumper
-%attr(4754,root,amanda) %{_libexecdir}/planner
+%attr(755,root,root) %{_libdir}/libamtape*.so
+%attr(755,root,root) %{_libdir}/librestore*.so
+
 %attr(755,root,root) %{_libexecdir}/amcat.awk
 %attr(755,root,root) %{_libexecdir}/amcleanupdisk
 %attr(755,root,root) %{_libexecdir}/amidxtaped
+%attr(755,root,root) %{_libexecdir}/amindexd
 %attr(755,root,root) %{_libexecdir}/amlogroll
 %attr(755,root,root) %{_libexecdir}/amplot.awk
 %attr(755,root,root) %{_libexecdir}/amplot.g
 %attr(755,root,root) %{_libexecdir}/amplot.gp
+%attr(755,root,root) %{_libexecdir}/amtrmidx
 %attr(755,root,root) %{_libexecdir}/amtrmlog
 %attr(755,root,root) %{_libexecdir}/chg-chio
 %attr(755,root,root) %{_libexecdir}/chg-chs
@@ -283,18 +282,29 @@ fi
 %attr(755,root,root) %{_libexecdir}/chg-rth
 %attr(755,root,root) %{_libexecdir}/chg-scsi
 %attr(755,root,root) %{_libexecdir}/chg-zd-mtx
+%attr(755,root,root) %{_libexecdir}/chunker
+%attr(755,root,root) %{_libexecdir}/driver
+%attr(4754,root,amanda) %{_libexecdir}/dumper
+%attr(4754,root,amanda) %{_libexecdir}/planner
 %attr(755,root,root) %{_libexecdir}/taper
+
 %attr(755,root,root) %{_sbindir}/amadmin
+%attr(755,root,root) %{_sbindir}/amaespipe
 %attr(4754,root,amanda) %{_sbindir}/amcheck
 %attr(755,root,root) %{_sbindir}/amcheckdb
 %attr(755,root,root) %{_sbindir}/amcleanup
+%attr(755,root,root) %{_sbindir}/amcrypt*
+%attr(755,root,root) %{_sbindir}/amdd
 %attr(755,root,root) %{_sbindir}/amdump
+%attr(755,root,root) %{_sbindir}/amfetchdump
 %attr(755,root,root) %{_sbindir}/amflush
 %attr(755,root,root) %{_sbindir}/amgetconf
 %attr(755,root,root) %{_sbindir}/amlabel
+%attr(755,root,root) %{_sbindir}/ammt
 %attr(755,root,root) %{_sbindir}/amoverview
 %attr(755,root,root) %{_sbindir}/amplot
 %attr(755,root,root) %{_sbindir}/amreport
+%attr(755,root,root) %{_sbindir}/amrestore
 %attr(755,root,root) %{_sbindir}/amrmtape
 %attr(755,root,root) %{_sbindir}/amstatus
 %attr(755,root,root) %{_sbindir}/amtape
@@ -302,18 +312,25 @@ fi
 %attr(755,root,root) %{_sbindir}/amtoc
 %attr(755,root,root) %{_sbindir}/amverify
 %attr(755,root,root) %{_sbindir}/amverifyrun
+%{_mandir}/man5/amanda.conf.5*
 %{_mandir}/man8/amadmin.8*
+%{_mandir}/man8/amaespipe.8*
 %{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amcheck.8*
 %{_mandir}/man8/amcheckdb.8*
 %{_mandir}/man8/amcleanup.8*
+%{_mandir}/man8/amcrypt*.8*
+%{_mandir}/man8/amdd.8*
 %{_mandir}/man8/amdump.8*
+%{_mandir}/man8/amfetchdump.8*
 %{_mandir}/man8/amflush.8*
 %{_mandir}/man8/amgetconf.8*
 %{_mandir}/man8/amlabel.8*
+%{_mandir}/man8/ammt.8*
 %{_mandir}/man8/amoverview.8*
 %{_mandir}/man8/amplot.8*
 %{_mandir}/man8/amreport.8*
+%{_mandir}/man8/amrestore.8*
 %{_mandir}/man8/amrmtape.8*
 %{_mandir}/man8/amstatus.8*
 %{_mandir}/man8/amtape.8*
@@ -327,23 +344,19 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
 %attr(664,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/amandates
 %attr(755,root,root) %{_libdir}/libamclient*.so
-%attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(755,root,root) %{_libexecdir}/amandad
-#%attr(4754,root,amanda) %{_libexecdir}/amqde
+%attr(755,root,root) %{_libexecdir}/noop
+%attr(755,root,root) %{_libexecdir}/patch-system
+%attr(755,root,root) %{_libexecdir}/sendbackup
+%attr(755,root,root) %{_libexecdir}/sendsize
+%attr(755,root,root) %{_libexecdir}/versionsuffix
 %attr(4754,root,amanda) %{_libexecdir}/calcsize
 %attr(4754,root,amanda) %{_libexecdir}/killpgrp
-%attr(755,root,root) %{_libexecdir}/patch-system
 %attr(4754,root,amanda) %{_libexecdir}/rundump
 %attr(4754,root,amanda) %{_libexecdir}/runtar
 %attr(4754,root,amanda) %{_libexecdir}/selfcheck
-%attr(755,root,root) %{_libexecdir}/sendbackup
-%attr(755,root,root) %{_libexecdir}/sendsize
-%attr(755,root,root) %{_sbindir}/amdd
-%attr(755,root,root) %{_sbindir}/ammt
+%attr(755,root,root) %{_sbindir}/amoldrecover
 %attr(755,root,root) %{_sbindir}/amrecover
-%attr(755,root,root) %{_sbindir}/amrestore
 %attr(770,root,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
-%{_mandir}/man8/amdd.8*
-%{_mandir}/man8/ammt.8*
+%{_mandir}/man5/amanda-client.conf.5*
 %{_mandir}/man8/amrecover.8*
-%{_mandir}/man8/amrestore.8*
