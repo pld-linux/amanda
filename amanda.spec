@@ -7,12 +7,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.5.0p2
+Version:	2.5.1p2
 Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
-Source0:	http://umn.dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	073828b8b5a5c377a08f8f19b5eccf85
+Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
+# Source0-md5:	6811f8a296650a6c0f64766b6e6abbe1
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
