@@ -8,7 +8,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.5.1p2
-Release:	0.3
+Release:	0.7
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -196,9 +196,11 @@ touch $RPM_BUILD_ROOT%{_localstatedir}/amanda/.amandahosts
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerpostun -- %{name}-libs < 2.5.1p2-1
+%triggerpostun libs -- %{name}-libs < 2.5.1p2-1
+echo "Adding amanda to disk and backup groups"
 /usr/sbin/usermod -G disk,backup amanda
-/usr/sbin/chsh -s /bin/sh amanda
+echo "Setting amanda shell to /bin/sh"
+/usr/bin/chsh -s /bin/sh amanda
 
 %pre libs
 %groupadd -P %{name}-libs -g 80 amanda
