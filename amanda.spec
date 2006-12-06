@@ -32,6 +32,8 @@ BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_xfs:BuildRequires:	xfsdump}
+Conflicts:	shadow < 1:4.0.4.1-4
+Conflicts:	pwdutils < 3.1.2-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_localstatedir	/var/lib
