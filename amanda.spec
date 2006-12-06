@@ -1,14 +1,14 @@
-# TODO:
-# - add missing files to proper subpackages
 #
 # Conditional build:
 %bcond_with	xfs	# with support for xfsdump
+%bcond_without	client	# without client package
+%bcond_without	server	# without server package
 #
 Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.5.1p2
-Release:	0.1
+Release:	0.3
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -27,6 +27,7 @@ BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	dump
 BuildRequires:	flex
+BuildRequires:	libxslt-progs
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -147,10 +148,12 @@ mv -f acinc.tmp acinclude.m4
 	PRINT=/usr/bin/lpr \
 	DUMP=/sbin/dump \
 	RESTORE=/sbin/restore \
-	XFSDUMP=/sbin/xfsdump \
-	XFSRESTORE=/sbin/xfsrestore \
+	%{?with_xfs:XFSDUMP=/sbin/xfsdump} \
+	%{?with_xfs:XFSRESTORE=/sbin/xfsrestore} \
 	--disable-static \
 	--enable-shared \
+	%{!?with_server:--without-server} \
+	%{!?with_client:--without-client} \
 	--with-index-server=localhost \
 	--with-user=amanda \
 	--with-group=amanda \
@@ -160,6 +163,7 @@ mv -f acinc.tmp acinclude.m4
 	--with-fqdn \
 	--with-smbclient=%{_bindir}/smbclient \
 	--with-bsd-security \
+	--with-ssh-security \
 	--with-buffered-dump \
 	--with-amandahosts \
 	--with-debugging=%{_localstatedir}/amanda/debug \
@@ -192,15 +196,13 @@ touch $RPM_BUILD_ROOT%{_localstatedir}/amanda/.amandahosts
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerpostun -- amanda-libs < 2.4.2p2-3
+%triggerpostun -- %{name}-libs < 2.5.1p2-1
+/usr/sbin/usermod -G disk,backup amanda
 /usr/sbin/chsh -s /bin/sh amanda
-
-%triggerpostun -- amanda-libs < 2.4.2p2-12
-/usr/sbin/usermod -G disk amanda
 
 %pre libs
 %groupadd -P %{name}-libs -g 80 amanda
-%useradd -P %{name}-libs -u 80 -G disk -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
+%useradd -P %{name}-libs -u 80 -G disk,backup -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
 
 %post	libs -p /sbin/ldconfig
 
@@ -239,8 +241,9 @@ fi
 %attr(755,root,root) %{_libdir}/libamanda*.so
 %dir %{_libexecdir}
 %attr(770,root,amanda) %dir %{_localstatedir}/amanda
-%attr(640,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_localstatedir}/amanda/.amandahosts
+%attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_localstatedir}/amanda/.amandahosts
 
+%if %{with server}
 %files server
 %defattr(644,root,root,755)
 %doc docs/*
@@ -338,7 +341,9 @@ fi
 %{_mandir}/man8/amtoc.8*
 %{_mandir}/man8/amverify.8*
 %{_mandir}/man8/amverifyrun.8*
+%endif
 
+%if %{with client}
 %files client
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
@@ -360,3 +365,4 @@ fi
 %attr(770,root,amanda) %dir %{_localstatedir}/amanda/gnutar-lists
 %{_mandir}/man5/amanda-client.conf.5*
 %{_mandir}/man8/amrecover.8*
+%endif
