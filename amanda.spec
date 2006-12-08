@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with	xfs	# with support for xfsdump
+%bcond_without	xfs	# without (possible) support for xfsdump
 %bcond_without	client	# without client package
 %bcond_without	server	# without server package
 #
@@ -8,7 +8,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.5.1p2
-Release:	0.7
+Release:	0.8
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
