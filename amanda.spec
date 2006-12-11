@@ -204,6 +204,11 @@ echo "Adding amanda to disk and backup groups"
 /usr/sbin/usermod -G disk,backup amanda
 echo "Setting amanda shell to /bin/sh"
 /usr/bin/chsh -s /bin/sh amanda
+if [ -f %{_localstatedir}/amanda/.amandahosts ]; then
+	echo "Fixing permissions of %{_localstatedir}/amanda/.amandahosts file"
+	chown amanda.amanda %{_localstatedir}/amanda/.amandahosts
+	chmod 600 %{_localstatedir}/amanda/.amandahosts
+fi
 
 %pre libs
 %groupadd -P %{name}-libs -g 80 amanda
