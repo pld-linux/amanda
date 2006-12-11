@@ -8,3 +8,4 @@ GROUP=amanda
 SERVER=tcpd
 DAEMON=/usr/lib/amanda/amindexd
 FAMILY=ipv4
+INITGROUPS=yes
