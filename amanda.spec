@@ -5,7 +5,7 @@
 %bcond_without	server	# without server package
 #
 Summary:	A network-capable tape backup solution
-Summary(pl.UTF-8):   Sieciowo zorientowany system tworzenia kopii zapasowych
+Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.5.1p2
 Release:	0.8
@@ -64,7 +64,7 @@ amanda-client i amanda-server!
 
 %package libs
 Summary:	Amanda shared libraries
-Summary(pl.UTF-8):   Biblioteki współdzielone pakietu amanda
+Summary(pl.UTF-8):	Biblioteki współdzielone pakietu amanda
 Group:		Networking/Utilities
 Requires(postun):	/sbin/ldconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -85,7 +85,7 @@ Biblioteki współdzielone pakietu amanda.
 
 %package client
 Summary:	The client side of Amanda
-Summary(pl.UTF-8):   Klient Amandy
+Summary(pl.UTF-8):	Klient Amandy
 Group:		Networking/Utilities
 Requires(post,postun):	/sbin/ldconfig
 Requires:	%{name}-libs = %{version}-%{release}
@@ -105,7 +105,7 @@ najmniej jednego z pakietów dump i GNU tar.
 
 %package server
 Summary:	The server side of Amanda
-Summary(pl.UTF-8):   Serwer Amandy
+Summary(pl.UTF-8):	Serwer Amandy
 Group:		Networking/Utilities
 Requires(post,postun):	/sbin/ldconfig
 Requires:	%{name}-libs = %{version}-%{release}
