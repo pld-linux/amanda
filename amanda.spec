@@ -5,7 +5,7 @@
 %bcond_without	server	# without server package
 #
 Summary:	A network-capable tape backup solution
-Summary(pl):	Sieciowo zorientowany system tworzenia kopii zapasowych
+Summary(pl.UTF-8):   Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.5.1p2
 Release:	0.8
@@ -52,19 +52,19 @@ be installed on both AMANDA clients and AMANDA servers. Note that you
 will have to install the amanda-client and amanda-server packages as
 well.
 
-%description -l pl
+%description -l pl.UTF-8
 AMANDA jest sieciowo zorientowanym systemem tworzenia kopii
-zapasowych. Umo¿liwia administratorowi sieci tworzenie kopii z kilku
-hostów na jednej maszynie wyposa¿onej w pojemny dysk lub streamer.
-Nowsze wersje programu umo¿liwiaj± zabezpieczanie zasobów Microsoft
-Windows 95/98/NT/2000 przy u¿yciu protoko³u Samba. Ten pakiet zawiera
-podstawowe pliki programu i powinien byæ zainstalowany zarówno na
-serwerze jak i na kliencie. Pamiêtaj tak¿e o instalacji pakietów
+zapasowych. UmoÅ¼liwia administratorowi sieci tworzenie kopii z kilku
+hostÃ³w na jednej maszynie wyposaÅ¼onej w pojemny dysk lub streamer.
+Nowsze wersje programu umoÅ¼liwiajÄ… zabezpieczanie zasobÃ³w Microsoft
+Windows 95/98/NT/2000 przy uÅ¼yciu protokoÅ‚u Samba. Ten pakiet zawiera
+podstawowe pliki programu i powinien byÄ‡ zainstalowany zarÃ³wno na
+serwerze jak i na kliencie. PamiÄ™taj takÅ¼e o instalacji pakietÃ³w
 amanda-client i amanda-server!
 
 %package libs
 Summary:	Amanda shared libraries
-Summary(pl):	Biblioteki wspó³dzielone pakietu amanda
+Summary(pl.UTF-8):   Biblioteki wspÃ³Å‚dzielone pakietu amanda
 Group:		Networking/Utilities
 Requires(postun):	/sbin/ldconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -80,12 +80,12 @@ Provides:	user(amanda)
 %description libs
 Amanda shared libraries.
 
-%description libs -l pl
-Biblioteki wspó³dzielone pakietu amanda.
+%description libs -l pl.UTF-8
+Biblioteki wspÃ³Å‚dzielone pakietu amanda.
 
 %package client
 Summary:	The client side of Amanda
-Summary(pl):	Klient Amandy
+Summary(pl.UTF-8):   Klient Amandy
 Group:		Networking/Utilities
 Requires(post,postun):	/sbin/ldconfig
 Requires:	%{name}-libs = %{version}-%{release}
@@ -98,14 +98,14 @@ be backed up by AMANDA (including the server if it also needs to be
 backed up). You will also need to install the amanda package to each
 AMANDA client. It requires at least one of dump and GNU tar installed.
 
-%description client -l pl
-Ten pakiet powinien byæ zainstalowany ma maszynach, z których
-zawarto¶ci bêd± tworzone kopie zapasowe. Wymaga zainstalowanego co
-najmniej jednego z pakietów dump i GNU tar.
+%description client -l pl.UTF-8
+Ten pakiet powinien byÄ‡ zainstalowany ma maszynach, z ktÃ³rych
+zawartoÅ›ci bÄ™dÄ… tworzone kopie zapasowe. Wymaga zainstalowanego co
+najmniej jednego z pakietÃ³w dump i GNU tar.
 
 %package server
 Summary:	The server side of Amanda
-Summary(pl):	Serwer Amandy
+Summary(pl.UTF-8):   Serwer Amandy
 Group:		Networking/Utilities
 Requires(post,postun):	/sbin/ldconfig
 Requires:	%{name}-libs = %{version}-%{release}
@@ -124,9 +124,9 @@ backups will be written. You will also need to install the amanda
 package to the AMANDA server. And, if the server is also to be backed
 up, the server also needs to have the amanda-client package installed.
 
-%description server -l pl
-Ten pakiet powinien byæ zainstalowany na maszynach, na których bêd±
-magazynowane kopie zapasowe (lub do których podpiête s± urz±dzenia
+%description server -l pl.UTF-8
+Ten pakiet powinien byÄ‡ zainstalowany na maszynach, na ktÃ³rych bÄ™dÄ…
+magazynowane kopie zapasowe (lub do ktÃ³rych podpiÄ™te sÄ… urzÄ…dzenia
 typu streamer).
 
 %prep
