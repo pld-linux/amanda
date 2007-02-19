@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_without	xfs	# without (possible) support for xfsdump
+%bcond_without	samba	# without smbclient support
 %bcond_without	client	# without client package
 %bcond_without	server	# without server package
 #
@@ -8,7 +9,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.5.1p2
-Release:	0.8
+Release:	0.9
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -31,6 +32,7 @@ BuildRequires:	libxslt-progs
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
+%{?with_samba:BuildRequires:	samba-client}
 %{?with_xfs:BuildRequires:	xfsdump}
 Conflicts:	shadow < 1:4.0.4.1-4
 Conflicts:	pwdutils < 3.1.2-2
@@ -164,7 +166,7 @@ mv -f acinc.tmp acinclude.m4
 	--with-ftape-rawdevice=/dev/null \
 	--with-changer-device=/dev/null \
 	--with-fqdn \
-	--with-smbclient=%{_bindir}/smbclient \
+	%{?with_samba:--with-smbclient=%{_bindir}/smbclient} \
 	--with-bsd-security \
 	--with-ssh-security \
 	--with-buffered-dump \
