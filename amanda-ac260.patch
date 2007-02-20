@@ -1,0 +1,20 @@
+--- amanda-2.4.5/configure.in.orig	2007-02-20 12:04:42.000000000 +0100
++++ amanda-2.4.5/configure.in	2007-02-20 12:17:05.000000000 +0100
+@@ -1283,7 +1283,7 @@
+ 
+ AC_PATH_PROGS(GNUTAR,gtar gnutar tar,,$LOCSYSPATH)
+ if test ! -z "$GNUTAR"; then
+-  case "`\"$GNUTAR\" --version 2>&1`" in
++  case "$("$GNUTAR" --version 2>&1)" in
+    *GNU*tar* | *Free*paxutils* )
+ 		AC_DEFINE_UNQUOTED(GNUTAR,"$GNUTAR",[Define to the location of Gnu tar. ])
+ 		;;
+@@ -1299,7 +1299,7 @@
+ else SAMBA_CLIENT=
+ fi
+ if test ! -z "$SAMBA_CLIENT"; then
+-  case "`\"$SAMBA_CLIENT\" '\\\\not.a.host.name\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
++  case "$("$SAMBA_CLIENT" '\\not.a.host.name\notashare' -U nosuchuser -N -Tx /dev/null 2>&1)" in
+   *"Unknown host"*)
+ 		smbversion=1
+ 		;;
