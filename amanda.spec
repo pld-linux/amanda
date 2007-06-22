@@ -8,12 +8,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	2.5.1p3
-Release:	0.9
+Version:	2.5.2p1
+Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	7232da6d43543f2c7dac2ded21c65ee9
+# Source0-md5:	da1234b12e1e34f8535f1c6269d27788
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -21,14 +21,20 @@ Source4:	amidxtape.inetd
 Source5:	%{name}.conf
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-ac25x.patch
+# needs rewrite
 Patch2:		%{name}-chg-zd-mtx-sh.patch
 Patch3:		%{name}-tar.patch
 Patch4:		%{name}-as_needed.patch
+Patch5:		%{name}-bashizm.patch
+Patch6:		%{name}-no-static-krb5.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	dump
 BuildRequires:	flex
+BuildRequires:	krb5-devel
+# for kerberos
+BuildRequires:	libcom_err-devel
 BuildRequires:	libxslt-progs
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
@@ -136,12 +142,15 @@ typu streamer).
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+# needs rewrite
+#%patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 # kill libtool.m4 copy
-head -n 1147 acinclude.m4 > acinc.tmp
+tail -n 1291 acinclude.m4 > acinc.tmp
 mv -f acinc.tmp acinclude.m4
 
 %build
@@ -171,6 +180,8 @@ mv -f acinc.tmp acinclude.m4
 	%{?with_samba:--with-smbclient=%{_bindir}/smbclient} \
 	--with-bsd-security \
 	--with-ssh-security \
+	--with-krb5-security \
+	--without-krb4-security \
 	--with-buffered-dump \
 	--with-amandahosts \
 	--with-debugging=%{_localstatedir}/amanda/debug \
