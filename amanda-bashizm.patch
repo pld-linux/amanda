@@ -1,0 +1,37 @@
+--- amanda-2.5.2p1/configure.in~	2007-06-22 15:02:56.000000000 +0200
++++ amanda-2.5.2p1/configure.in	2007-06-22 15:12:17.000000000 +0200
+@@ -958,7 +958,7 @@
+     # now convert that to a comma-separated list of C strings
+     eval "set dummy ${SSH_OPTIONS}"; shift
+     SSH_OPTIONS=''
+-    for i in "${@}"; do SSH_OPTIONS="${SSH_OPTIONS}${SSH_OPTIONS:+, }\"${i/\"/\\\"}\""; done
++    for i in "${@}"; do SSH_OPTIONS="${SSH_OPTIONS}${SSH_OPTIONS:+, }\"`echo $i | awk '/"/ {gsub(/"/,"\\"");} {print;}'`\""; done
+     AC_MSG_RESULT($SSH_OPTIONS)
+ 
+     AC_DEFINE_UNQUOTED(SSH_OPTIONS, $SSH_OPTIONS, [Arguments to ssh])
+@@ -1181,7 +1181,6 @@
+ 	fi
+         AC_CHECK_LIB(krb5support,main)
+ 	KRB5LDFLAGS=-L$k5libdir
+-	break
+ fi
+ 
+ if test "x$KRB5LDFLAGS" = "x" ; then
+@@ -1620,7 +1620,7 @@
+ 
+ AC_PATH_PROGS(GNUTAR,gtar gnutar tar,,$LOCSYSPATH)
+ if test ! -z "$GNUTAR"; then
+-  case "`\"$GNUTAR\" --version 2>&1`" in
++  case "`$GNUTAR --version 2>&1`" in
+    *GNU*tar* | *Free*paxutils* )
+ 		AC_DEFINE_UNQUOTED(GNUTAR,"$GNUTAR",[Define to the location of Gnu tar. ])
+ 		;;
+@@ -1633,7 +1633,7 @@
+ 
+ AC_PATH_PROGS(SAMBA_CLIENT,smbclient,,$LOCSYSPATH)
+ if test ! -z "$SAMBA_CLIENT"; then
+-  case "`\"$SAMBA_CLIENT\" '\\\\not.a.host.name\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
++  case "`$SAMBA_CLIENT '\\\\not.a.host.name\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
+   *"Unknown host"*)
+ 		smbversion=1
+ 		;;
