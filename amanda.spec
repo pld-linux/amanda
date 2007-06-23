@@ -32,9 +32,7 @@ BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	dump
 BuildRequires:	flex
-BuildRequires:	krb5-devel
-# for kerberos
-BuildRequires:	libcom_err-devel
+BuildRequires:	krb5-devel >= 1.6-4
 BuildRequires:	libxslt-progs
 BuildRequires:	libtool
 BuildRequires:	readline-devel >= 4.2
@@ -301,6 +299,7 @@ fi
 %attr(755,root,root) %{_libexecdir}/chg-disk
 %attr(755,root,root) %{_libexecdir}/chg-iomega
 %attr(755,root,root) %{_libexecdir}/chg-juke
+%attr(755,root,root) %{_libexecdir}/chg-lib.sh
 %attr(755,root,root) %{_libexecdir}/chg-manual
 %attr(755,root,root) %{_libexecdir}/chg-mcutil
 %attr(755,root,root) %{_libexecdir}/chg-mtx
