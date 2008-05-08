@@ -1,0 +1,13 @@
+--- amanda-2.6.0/example/template.d/tapetypes~	2008-01-18 01:31:13.000000000 +0100
++++ amanda-2.6.0/example/template.d/tapetypes	2008-05-08 16:32:57.000000000 +0200
+@@ -306,3 +306,10 @@
+     speed 170 kbytes		# limited by the Emulex bus interface, ugh
+ }
+ 
++define tapetype LTO4 {
++    comment "LTO4 800Gb (hardware compression off)"
++    length 802816 mbytes
++    filemark 0 kbytes
++    speed 54814 kps
++}
++
