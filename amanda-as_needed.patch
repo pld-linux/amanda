@@ -1,0 +1,14 @@
+--- amanda-2.6.0/config/amanda/readline.m4~	2008-03-25 21:23:05.000000000 +0100
++++ amanda-2.6.0/config/amanda/readline.m4	2008-05-07 13:30:33.000000000 +0200
+@@ -38,9 +38,9 @@
+                 proceed="true"
+             ], [
+                 AC_CHECK_LIB(ncurses, tgetent, [
+-                    READLINE_LIBS="-lncurses"
++                    READLINE_LIBS="-lncurses -ltinfo"
+                     proceed="true"
+-                ])
++                ], [], [-ltinfo])
+             ])
+         ])
+ 
