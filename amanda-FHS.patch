@@ -1,0 +1,100 @@
+diff -ur amanda-2.6.0/common-src/conffile.c amanda-2.6.0-fhs/common-src/conffile.c
+--- amanda-2.6.0/common-src/conffile.c	2008-01-28 22:57:34.000000000 +0100
++++ amanda-2.6.0-fhs/common-src/conffile.c	2008-05-08 17:39:18.000000000 +0200
+@@ -3143,13 +3143,13 @@
+     conf_init_str(&conf_data[CNF_TAPEDEV], DEFAULT_TAPE_DEVICE);
+     conf_init_proplist(&conf_data[CNF_DEVICE_PROPERTY]);
+     conf_init_str(&conf_data[CNF_CHANGERDEV], DEFAULT_CHANGER_DEVICE);
+-    conf_init_str(&conf_data[CNF_CHANGERFILE], "/usr/adm/amanda/changer-status");
++    conf_init_str(&conf_data[CNF_CHANGERFILE], "/etc/amanda/changer-status");
+     conf_init_str   (&conf_data[CNF_LABELSTR]             , ".*");
+     conf_init_str   (&conf_data[CNF_TAPELIST]             , "tapelist");
+     conf_init_str   (&conf_data[CNF_DISKFILE]             , "disklist");
+-    conf_init_str   (&conf_data[CNF_INFOFILE]             , "/usr/adm/amanda/curinfo");
+-    conf_init_str   (&conf_data[CNF_LOGDIR]               , "/usr/adm/amanda");
+-    conf_init_str   (&conf_data[CNF_INDEXDIR]             , "/usr/adm/amanda/index");
++    conf_init_str   (&conf_data[CNF_INFOFILE]             , "/var/lib/amanda/curinfo");
++    conf_init_str   (&conf_data[CNF_LOGDIR]               , "/var/lib/amanda");
++    conf_init_str   (&conf_data[CNF_INDEXDIR]             , "/var/lib/amanda/index");
+     conf_init_ident    (&conf_data[CNF_TAPETYPE]             , "EXABYTE");
+     conf_init_int      (&conf_data[CNF_DUMPCYCLE]            , 10);
+     conf_init_int      (&conf_data[CNF_RUNSPERCYCLE]         , 0);
+diff -ur amanda-2.6.0/example/amanda.conf.in amanda-2.6.0-fhs/example/amanda.conf.in
+--- amanda-2.6.0/example/amanda.conf.in	2008-01-18 01:31:14.000000000 +0100
++++ amanda-2.6.0-fhs/example/amanda.conf.in	2008-05-08 17:42:35.000000000 +0200
+@@ -237,9 +237,9 @@
+ # Note that, although the keyword below is infofile, it is only so for
+ # historic reasons, since now it is supposed to be a directory (unless
+ # you have selected some database format other than the `text' default)
+-infofile "@CONFIG_DIR@/@DEFAULT_CONFIG@/curinfo"	# database DIRECTORY
+-logdir   "@CONFIG_DIR@/@DEFAULT_CONFIG@"		# log directory
+-indexdir "@CONFIG_DIR@/@DEFAULT_CONFIG@/index"		# index directory
++infofile "@localstatedir@/lib/amanda/@DEFAULT_CONFIG@/curinfo"	# database DIRECTORY
++logdir   "@localstatedir@/lib/amanda/@DEFAULT_CONFIG@"		# log directory
++indexdir "@localstatedir@/lib/amanda/@DEFAULT_CONFIG@/index"		# index directory
+ #tapelist "@CONFIG_DIR@/@DEFAULT_CONFIG@/tapelist"	# list of used tapes
+ # tapelist is stored, by default, in the directory that contains amanda.conf
+ 
+diff -ur amanda-2.6.0/example/template.d/advanced.conf.in amanda-2.6.0-fhs/example/template.d/advanced.conf.in
+--- amanda-2.6.0/example/template.d/advanced.conf.in	2008-01-18 01:31:13.000000000 +0100
++++ amanda-2.6.0-fhs/example/template.d/advanced.conf.in	2008-05-08 17:43:27.000000000 +0200
+@@ -97,10 +97,10 @@
+ # Note that, although the keyword below is infofile, it is only so for
+ # historic reasons, since now it is supposed to be a directory (unless
+ # you have selected some database format other than the `text' default)
+-infofile "@CONFIG_DIR@/@DEFAULT_CONFIG@/curinfo"      # database DIRECTORY
+-logdir   "@CONFIG_DIR@/@DEFAULT_CONFIG@"              # log directory
+-indexdir "@CONFIG_DIR@/@DEFAULT_CONFIG@/index"        # index directory
+-#tapelist "@CONFIG_DIR/DailySet1/tapelist"	# list of used tapes
++infofile "@localstatedir@/lib/amanda/@DEFAULT_CONFIG@/curinfo"      # database DIRECTORY
++logdir   "@localstatedir@/lib/amanda/@DEFAULT_CONFIG@"              # log directory
++indexdir "@localstatedir@/lib/amanda/@DEFAULT_CONFIG@/index"        # index directory
++#tapelist "@CONFIG_DIR@/@DEFAULT_CONFIG@/tapelist"	# list of used tapes
+ # tapelist is stored, by default, in the directory that contains amanda.conf
+ 
+ # Specify holding disks.  These are used as a temporary staging area for
+diff -ur amanda-2.6.0/server-src/amserverconfig.pl amanda-2.6.0-fhs/server-src/amserverconfig.pl
+--- amanda-2.6.0/server-src/amserverconfig.pl	2008-01-18 01:31:25.000000000 +0100
++++ amanda-2.6.0-fhs/server-src/amserverconfig.pl	2008-05-08 17:37:13.000000000 +0200
+@@ -99,16 +99,16 @@
+ 	    unlink "$confdir/$config/tapelist" || 
+ 	    print LOG "unlink $confdir/$config/tapelist failed: $!\n";
+ 	}
+-	if ( -e "$confdir/$config/curinfo" ) {
+-	    rmdir "$confdir/$config/curinfo" || 
+-	    print LOG "rmdir $confdir/$config failed: $!\n";
+-	}
+-	if ( -e "$confdir/$config/index" ) {
+-	    rmdir "$confdir/$config/index" || 
+-	    print LOG "rmdir $confdir/$config/index failed: $!\n";
++	if ( -e "$localstatedir/lib/amanda/$config/curinfo" ) {
++	    rmdir "$localstatedir/lib/amanda/$config/curinfo" || 
++	    print LOG "rmdir $localstatedir/lib/amanda/$config/curinfo failed: $!\n";
++	}
++	if ( -e "$localstatedir/lib/amanda/$config/index" ) {
++	    rmdir "$localstatedir/lib/amanda/$config/index" || 
++	    print LOG "rmdir $localstatedir/lib/amanda/$config/index failed: $!\n";
+ 	}
+ 	rmdir "$confdir/$config" || 
+-	    print LOG "rmdir $confdir/$config failed: $!\n";
++	    print LOG "rmdir $localstatedir/lib/amanda/$config failed: $!\n";
+     }
+     die $err;
+ }
+@@ -173,10 +173,12 @@
+ 
+ 
+ sub create_curinfo_index_dir {
+-    mkdir("$confdir/$config/curinfo", $def_perm) ||
+-	&log_and_die ("ERROR: mkdir: $confdir/$config/curinfo failed: $!\n", 1);
+-    mkdir("$confdir/$config/index", $def_perm) || 
+-	&log_and_die ("ERROR: mkdir: $confdir/$config/index failed: $!\n", 1);
++    mkdir("$localstatedir/lib/amanda/$config", $def_perm) ||
++	&log_and_die ("ERROR: mkdir: $localstatedir/lib/amanda/$config failed: $!\n", 1);
++    mkdir("$localstatedir/lib/amanda/$config/curinfo", $def_perm) ||
++	&log_and_die ("ERROR: mkdir: $localstatedir/lib/amanda/$config/curinfo failed: $!\n", 1);
++    mkdir("$localstatedir/lib/amanda/$config/index", $def_perm) || 
++	&log_and_die ("ERROR: mkdir: $localstatedir/lib/amanda/$config/index failed: $!\n", 1);
+     &mprint ("curinfo and index directory created\n");
+ }
+ 
