@@ -7,5 +7,4 @@ USER=amanda
 GROUP=amanda
 SERVER=tcpd
 DAEMON=/usr/lib/amanda/amandad
-FAMILY=ipv4
 INITGROUPS=yes
