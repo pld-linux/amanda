@@ -121,6 +121,9 @@ Requires:	gnuplot
 Requires:	mt-st
 Requires:	mtx
 Requires:	rc-inetd
+Requires:	tar
+Requires:	gzip
+#Suggests:	star
 Obsoletes:	amanda
 
 %description server
@@ -136,25 +139,29 @@ magazynowane kopie zapasowe (lub do których podpięte są urządzenia
 typu streamer).
 
 %package perl
-Summary:	Perl stuff
-Summary(pl.UTF-8):	Serwer Amandy
+Summary:	Perl bindings for amanda
+Summary(pl.UTF-8):	Wiązania perla dla Amandy
 Group:		Networking/Utilities
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description perl
+Perl bindings for amanda.
 
 %description perl -l pl.UTF-8
+Wiązania perla dla Amandy.
 
 %package perl-server
-Summary:	Perl stuff
-Summary(pl.UTF-8):	Serwer Amandy
+Summary:	Perl bindings for amanda server
+Summary(pl.UTF-8):	Wiązania perla dla serwera Amandy
 Group:		Networking/Utilities
 Requires:	%{name}-perl = %{version}-%{release}
 Requires:	%{name}-server = %{version}-%{release}
 
 %description perl-server
+Perl bindings for amanda server.
 
 %description perl-server -l pl.UTF-8
+Wiązania perla dla serwera Amandy.
 
 %prep
 %setup -q
@@ -170,13 +177,15 @@ Requires:	%{name}-server = %{version}-%{release}
 %{__autoconf}
 %{__automake}
 %configure \
+	DUMP=/sbin/dump \
+	GNUPLOT=/usr/bin/gnuplot \
+	GZIP=/bin/gzip \
+	MAILER=/bin/mail \
 	MT=/bin/mt \
 	MTX=/usr/sbin/mtx \
-	GNUPLOT=/usr/bin/gnuplot \
-	MAILER=/bin/mail \
 	PRINT=/usr/bin/lpr \
-	DUMP=/sbin/dump \
 	RESTORE=/sbin/restore \
+	STAR=/usr/bin/star \
 	%{?with_xfs:XFSDUMP=/sbin/xfsdump} \
 	%{?with_xfs:XFSRESTORE=/sbin/xfsrestore} \
 	--disable-static \
@@ -209,7 +218,8 @@ Requires:	%{name}-server = %{version}-%{release}
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
-	$RPM_BUILD_ROOT%{_sharedstatedir}/amanda/gnutar-lists
+	$RPM_BUILD_ROOT%{_sharedstatedir}/amanda/gnutar-lists \
+	$RPM_BUILD_ROOT%{_sharedstatedir}/amanda/debug/{amandad,client,server}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -220,6 +230,7 @@ sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE3} >$RPM_BUILD_ROOT/etc/sysconfig/rc-ine
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE4} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 
 install example/amanda.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
+install example/amanda-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.amandahosts
 
 > $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/amandates
@@ -275,6 +286,8 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
 %dir %{_libdir}/amanda
 %attr(770,root,amanda) %dir %{_sharedstatedir}/amanda
+%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug
+%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug/amandad
 %attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/.amandahosts
 
 %if %{with server}
@@ -284,11 +297,11 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
 %attr(750,root,amanda) %dir %{_sysconfdir}/amanda
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/*
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda.conf
 
-#%attr(664,root,amanda) %{_sharedstatedir}/amanda/*.ps
 %{_sharedstatedir}/amanda/example
 %{_sharedstatedir}/amanda/template.d
+%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug/server
 
 %config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
@@ -301,6 +314,7 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/libamtape*.so
 %attr(755,root,root) %{_libdir}/amanda/librestore*.so
 
+%{_libdir}/amanda/amanda-sh-lib.sh
 %attr(755,root,root) %{_libdir}/amanda/amcat.awk
 %attr(755,root,root) %{_libdir}/amanda/amcleanupdisk
 %attr(755,root,root) %{_libdir}/amanda/amidxtaped
@@ -329,20 +343,25 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/chunker
 %attr(755,root,root) %{_libdir}/amanda/driver
 %attr(4750,root,amanda) %{_libdir}/amanda/dumper
+%attr(755,root,root) %{_libdir}/amanda/patch-system
 %attr(4750,root,amanda) %{_libdir}/amanda/planner
 %attr(755,root,root) %{_libdir}/amanda/taper
 
+%attr(755,root,root) %{_sbindir}/amaddclient
 %attr(755,root,root) %{_sbindir}/amadmin
 %attr(755,root,root) %{_sbindir}/amaespipe
 %attr(4750,root,amanda) %{_sbindir}/amcheck
 %attr(755,root,root) %{_sbindir}/amcheckdb
+%attr(755,root,root) %{_sbindir}/amcheckdump
 %attr(755,root,root) %{_sbindir}/amcleanup
 %attr(755,root,root) %{_sbindir}/amcrypt*
 %attr(755,root,root) %{_sbindir}/amdd
+%attr(755,root,root) %{_sbindir}/amdevcheck
 %attr(755,root,root) %{_sbindir}/amdump
 %attr(755,root,root) %{_sbindir}/amfetchdump
 %attr(755,root,root) %{_sbindir}/amflush
 %attr(755,root,root) %{_sbindir}/amgetconf
+%attr(755,root,root) %{_sbindir}/amgpgcrypt
 %attr(755,root,root) %{_sbindir}/amlabel
 %attr(755,root,root) %{_sbindir}/ammt
 %attr(755,root,root) %{_sbindir}/amoverview
@@ -350,6 +369,7 @@ fi
 %attr(755,root,root) %{_sbindir}/amreport
 %attr(755,root,root) %{_sbindir}/amrestore
 %attr(755,root,root) %{_sbindir}/amrmtape
+%attr(755,root,root) %{_sbindir}/amserverconfig
 %attr(755,root,root) %{_sbindir}/amstatus
 %attr(755,root,root) %{_sbindir}/amtape
 %attr(755,root,root) %{_sbindir}/amtapetype
@@ -357,18 +377,22 @@ fi
 %attr(755,root,root) %{_sbindir}/amverify
 %attr(755,root,root) %{_sbindir}/amverifyrun
 %{_mandir}/man5/amanda.conf.5*
+%{_mandir}/man8/amaddclient.8*
 %{_mandir}/man8/amadmin.8*
 %{_mandir}/man8/amaespipe.8*
 %{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amcheck.8*
 %{_mandir}/man8/amcheckdb.8*
+%{_mandir}/man8/amcheckdump.8*
 %{_mandir}/man8/amcleanup.8*
 %{_mandir}/man8/amcrypt*.8*
 %{_mandir}/man8/amdd.8*
+%{_mandir}/man8/amdevcheck.8*
 %{_mandir}/man8/amdump.8*
 %{_mandir}/man8/amfetchdump.8*
 %{_mandir}/man8/amflush.8*
 %{_mandir}/man8/amgetconf.8*
+%{_mandir}/man8/amgpgcrypt.8*
 %{_mandir}/man8/amlabel.8*
 %{_mandir}/man8/ammt.8*
 %{_mandir}/man8/amoverview.8*
@@ -376,6 +400,7 @@ fi
 %{_mandir}/man8/amreport.8*
 %{_mandir}/man8/amrestore.8*
 %{_mandir}/man8/amrmtape.8*
+%{_mandir}/man8/amserverconfig.8*
 %{_mandir}/man8/amstatus.8*
 %{_mandir}/man8/amtape.8*
 %{_mandir}/man8/amtapetype.8*
@@ -388,11 +413,11 @@ fi
 %files client
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
+%config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda-client.conf
 %attr(664,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 %attr(755,root,root) %{_libdir}/amanda/libamclient*.so
 %attr(755,root,root) %{_libdir}/amanda/amandad
 %attr(755,root,root) %{_libdir}/amanda/noop
-%attr(755,root,root) %{_libdir}/amanda/patch-system
 %attr(755,root,root) %{_libdir}/amanda/sendbackup
 %attr(755,root,root) %{_libdir}/amanda/sendsize
 %attr(755,root,root) %{_libdir}/amanda/versionsuffix
@@ -404,6 +429,7 @@ fi
 %attr(755,root,root) %{_sbindir}/amoldrecover
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/gnutar-lists
+%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug/client
 %{_mandir}/man5/amanda-client.conf.5*
 %{_mandir}/man8/amrecover.8*
 %endif
