@@ -39,7 +39,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssh-clients
 BuildRequires:	openssl-devel
 BuildRequires:	perl-devel
-BuildRequires:	pkg-config
+BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
 %{?with_samba:BuildRequires:	samba-client}
