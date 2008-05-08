@@ -23,6 +23,8 @@ Patch1:		%{name}-chg-zd-mtx-sh.patch
 Patch2:		%{name}-tar.patch
 Patch3:		%{name}-bashizm.patch
 Patch4:		%{name}-as_needed.patch
+Patch5:		%{name}-tapetypes.patch
+Patch6:		%{name}-FHS.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -171,6 +173,8 @@ Wiązania perla dla serwera Amandy.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 %{__libtoolize}
@@ -207,6 +211,7 @@ Wiązania perla dla serwera Amandy.
 	--without-krb4-security \
 	--with-buffered-dump \
 	--with-amandahosts \
+	--with-configdir=%{_sysconfdir}/amanda \
 	--with-gnutar-listdir=%{_sharedstatedir}/gnutar-lists \
 	--with-amandates=%{_sharedstatedir}/amanda/amandates \
 	--with-debugging=%{_sharedstatedir}/amanda/debug \
@@ -286,9 +291,9 @@ fi
 %doc AUTHORS COPYRIGHT ChangeLog NEWS README ReleaseNotes UPGRADING
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
 %dir %{_libdir}/amanda
-%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda
-%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug
-%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug/amandad
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/amandad
 %attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/.amandahosts
 
 %if %{with server}
@@ -297,12 +302,16 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
-%attr(750,root,amanda) %dir %{_sysconfdir}/amanda
-%config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda.conf
+%attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
+%config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/amanda.conf
 
-%{_sharedstatedir}/amanda/example
-%{_sharedstatedir}/amanda/template.d
-%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug/server
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example/label-templates
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/template.d
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/server
+%attr(640,amanda,amanda) %{_sharedstatedir}/amanda/example/*amanda*
+%attr(640,amanda,amanda) %{_sharedstatedir}/amanda/example/label-templates/*.ps
+%attr(640,amanda,amanda) %{_sharedstatedir}/amanda/template.d/*
 
 %config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
@@ -415,7 +424,7 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda-client.conf
-%attr(664,root,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
+%attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 %attr(755,root,root) %{_libdir}/amanda/libamclient*.so
 %attr(755,root,root) %{_libdir}/amanda/amandad
 %attr(755,root,root) %{_libdir}/amanda/noop
@@ -429,8 +438,8 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/selfcheck
 %attr(755,root,root) %{_sbindir}/amoldrecover
 %attr(755,root,root) %{_sbindir}/amrecover
-%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/gnutar-lists
-%attr(770,root,amanda) %dir %{_sharedstatedir}/amanda/debug/client
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/gnutar-lists
+%attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/client
 %{_mandir}/man5/amanda-client.conf.5*
 %{_mandir}/man8/amrecover.8*
 %endif
