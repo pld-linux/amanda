@@ -344,7 +344,8 @@ fi
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/amandad
 %attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/.amandahosts
-%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/authorized_keys
+# Commented out so it won't get removed on uninstall
+#%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/authorized_keys
 
 %if %{with server}
 %files server
@@ -354,8 +355,9 @@ fi
 
 %config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/amanda.conf
 
-%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/client_authorized_keys
-%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amdump*
+# Commented out so it won't get removed on uninstall
+#%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/client_authorized_keys
+#%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amdump*
 
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example/label-templates
@@ -476,7 +478,8 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda-client.conf
-%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover*
+# Commented out so it won't get removed on uninstall
+#%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover*
 %attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 %attr(755,root,root) %{_libdir}/amanda/libamclient*.so
 %attr(755,root,root) %{_libdir}/amanda/amandad
