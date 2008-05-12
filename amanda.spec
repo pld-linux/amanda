@@ -51,6 +51,8 @@ Conflicts:	shadow < 1:4.0.4.1-4
 Conflicts:	pwdutils < 3.1.2-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_ulibdir	%{_prefix}/lib
+
 %description
 AMANDA, the Advanced Maryland Automatic Network Disk Archiver, is a
 backup system that allows the administrator of a LAN to set up a
@@ -98,6 +100,8 @@ Biblioteki współdzielone pakietu amanda.
 Summary:	The client side of Amanda
 Summary(pl.UTF-8):	Klient Amandy
 Group:		Networking/Utilities
+Requires(post):	/bin/hostname
+Requires(post):	/usr/bin/ssh-keygen
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-inetd
 Suggests:	openssh-clients
@@ -122,6 +126,8 @@ najmniej jednego z pakietów dump i GNU tar.
 Summary:	The server side of Amanda
 Summary(pl.UTF-8):	Serwer Amandy
 Group:		Networking/Utilities
+Requires(post):	/bin/hostname
+Requires(post):	/usr/bin/ssh-keygen
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	/etc/cron.d
 Requires:	crondaemon
@@ -249,6 +255,13 @@ touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
 
 > $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/amandates
 
+# Amanda tools generate ssh keys with embeded commands pointing to /usr/lib
+# Tools can't be "fixed" because keys generated on server are to be used on client
+if [ "%{_lib}" != "lib" ] ; then
+	install -d $RPM_BUILD_ROOT%{_ulibdir}
+	ln -s %{_libdir}/amanda $RPM_BUILD_ROOT%{_ulibdir}/amanda
+fi
+
 find $RPM_BUILD_ROOT -name \*.la | xargs rm -f
 
 %clean
@@ -277,8 +290,8 @@ fi
 
 %post client
 %service -q rc-inetd reload
-if [ -x /usr/bin/ssh-keygen -a ! -e /var/lib/amanda/.ssh/id_rsa_amrecover ] ; then
-	HOST="`hostname`"
+if [ ! -e /var/lib/amanda/.ssh/id_rsa_amrecover ] ; then
+	HOST="`/bin/hostname`"
 	if [ -z "$HOST" ] ; then
 		COMMENT="root@client"
 	else
@@ -296,8 +309,8 @@ fi
 
 %post server
 %service -q rc-inetd reload
-if [ -x /usr/bin/ssh-keygen -a ! -e /var/lib/amanda/.ssh/id_rsa_amdump ] ; then
-	HOST="`hostname`"
+if [ ! -e /var/lib/amanda/.ssh/id_rsa_amdump ] ; then
+	HOST="`/bin/hostname`"
 	if [ -z "$HOST" ] ; then
 		COMMENT="amanda@server"
 	else
@@ -322,6 +335,9 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %dir %{_libdir}/amanda
+%if %{_lib} != "lib"
+%{_ulibdir}/amanda
+%endif
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda
 %attr(700,amanda,amanda) %dir %{_sharedstatedir}/amanda/.ssh
 %attr(700,amanda,amanda) %dir %{_sharedstatedir}/amanda/.gnupg
