@@ -290,6 +290,7 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS COPYRIGHT ChangeLog NEWS README ReleaseNotes UPGRADING
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
+%attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %dir %{_libdir}/amanda
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug
@@ -302,7 +303,6 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amidxtape
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
-%attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/amanda.conf
 
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example
