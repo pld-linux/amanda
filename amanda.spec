@@ -222,7 +222,7 @@ Wiązania perla dla serwera Amandy.
 	--with-buffered-dump \
 	--with-amandahosts \
 	--with-configdir=%{_sysconfdir}/amanda \
-	--with-gnutar-listdir=%{_sharedstatedir}/gnutar-lists \
+	--with-gnutar-listdir=%{_sharedstatedir}/amanda/gnutar-lists \
 	--with-amandates=%{_sharedstatedir}/amanda/amandates \
 	--with-debugging=%{_sharedstatedir}/amanda/debug \
 	--with-tmpdir=/var/tmp \
