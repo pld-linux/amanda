@@ -28,7 +28,7 @@ Patch6:		%{name}-FHS.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
-BuildRequires:	curl-devel
+BuildRequires:	curl-devel >= 7.10.0
 BuildRequires:	dump
 BuildRequires:	flex
 BuildRequires:	glib2-devel
@@ -40,7 +40,7 @@ BuildRequires:	libxslt-progs
 BuildRequires:	ncurses-devel
 BuildRequires:	openssh-clients
 BuildRequires:	openssl-devel
-BuildRequires:	perl-devel
+BuildRequires:	perl-devel >= 5.6.0
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -100,7 +100,12 @@ Summary(pl.UTF-8):	Klient Amandy
 Group:		Networking/Utilities
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-inetd
-Conflicts:	tar < 1.13
+Suggests:	openssh-clients
+Suggests:	openssh-server
+Suggests:	tar
+Suggests:	gzip
+Suggests:	star
+Conflicts:	tar < 1.15
 
 %description client
 The Amanda-client package should be installed on any machine that will
@@ -124,9 +129,8 @@ Requires:	gnuplot
 Requires:	mt-st
 Requires:	mtx
 Requires:	rc-inetd
-Requires:	tar
-Requires:	gzip
-#Suggests:	star
+Suggests:	openssh-clients
+Suggests:	openssh-server
 Obsoletes:	amanda
 
 %description server
@@ -224,7 +228,7 @@ Wiązania perla dla serwera Amandy.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
-	$RPM_BUILD_ROOT%{_sharedstatedir}/amanda/gnutar-lists \
+	$RPM_BUILD_ROOT%{_sharedstatedir}/amanda/{.gnupg,.ssh,gnutar-lists} \
 	$RPM_BUILD_ROOT%{_sharedstatedir}/amanda/debug/{amandad,client,server}
 
 %{__make} install \
@@ -238,6 +242,10 @@ sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE4} >$RPM_BUILD_ROOT/etc/sysconfig/rc-ine
 install example/amanda.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/amanda-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.amandahosts
+
+touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
+touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
+touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
 
 > $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/amandates
 
@@ -269,6 +277,17 @@ fi
 
 %post client
 %service -q rc-inetd reload
+if [ -x /usr/bin/ssh-keygen -a ! -e /var/lib/amanda/.ssh/id_rsa_amrecover ] ; then
+	HOST="`hostname`"
+	if [ -z "$HOST" ] ; then
+		COMMENT="root@client"
+	else
+		COMMENT="root@$HOST"
+	fi
+	/usr/bin/ssh-keygen -t rsa -C $COMMENT -f /var/lib/amanda/.ssh/id_rsa_amrecover -N "" || :
+	chown amanda:amanda /var/lib/amanda/.ssh/id_rsa_amrecover{,.pub} || :
+	chmod 600 /var/lib/amanda/.ssh/id_rsa_amrecover{,.pub} || :
+fi
 
 %postun client
 if [ "$1" = 0 ]; then
@@ -277,6 +296,17 @@ fi
 
 %post server
 %service -q rc-inetd reload
+if [ -x /usr/bin/ssh-keygen -a ! -e /var/lib/amanda/.ssh/id_rsa_amdump ] ; then
+	HOST="`hostname`"
+	if [ -z "$HOST" ] ; then
+		COMMENT="amanda@server"
+	else
+		COMMENT="amanda@$HOST"
+	fi
+	/usr/bin/ssh-keygen -t rsa -C $COMMENT -f /var/lib/amanda/.ssh/id_rsa_amdump -N "" || :
+	chown amanda:amanda /var/lib/amanda/.ssh/id_rsa_amdump{,.pub} || :
+	chmod 600 /var/lib/amanda/.ssh/id_rsa_amdump{,.pub} || :
+fi
 if [ "$1" = "1" ]; then
 	echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
 fi
@@ -293,9 +323,12 @@ fi
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %dir %{_libdir}/amanda
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda
+%attr(700,amanda,amanda) %dir %{_sharedstatedir}/amanda/.ssh
+%attr(700,amanda,amanda) %dir %{_sharedstatedir}/amanda/.gnupg
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/amandad
 %attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/.amandahosts
+%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/authorized_keys
 
 %if %{with server}
 %files server
@@ -304,6 +337,9 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
 %config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/amanda.conf
+
+%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/client_authorized_keys
+%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
 
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/example/label-templates
@@ -424,6 +460,7 @@ fi
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda-client.conf
+%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
 %attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 %attr(755,root,root) %{_libdir}/amanda/libamclient*.so
 %attr(755,root,root) %{_libdir}/amanda/amandad
