@@ -1,0 +1,11 @@
+--- amanda-2.6.0/config/amanda/krb5-security.m4~	2008-01-18 01:31:33.000000000 +0100
++++ amanda-2.6.0/config/amanda/krb5-security.m4	2008-05-13 11:41:28.000000000 +0200
+@@ -69,6 +69,8 @@
+                 AMANDA_ADD_LIBS([-lgssapi_krb5 -lkrb5 $K5CRYPTO $K5SUPPORT -lcom_err])
+                 break
+             elif test \( -f ${k5libdir}/libkrb5.a -o -f ${k5libdir}/libkrb5.so \) -a \( -f ${k5libdir}/libasn1.a -o -f ${k5libdir}/libasn1.so \) -a \( -f ${k5libdir}/libgssapi.a -o -f ${k5libdir}/libgssapi.so \); then
++                KRB5_DIR_FOUND=$dir
++                KRB5_LIBDIR_FOUND=$k5libdir
+                 AMANDA_ADD_LIBS([-lgssapi -lkrb5 -lasn1])
+                 AMANDA_ADD_CPPFLAGS([-DKRB5_HEIMDAL_INCLUDES])
+                 break

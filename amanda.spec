@@ -26,6 +26,7 @@ Patch4:		%{name}-as_needed.patch
 Patch5:		%{name}-tapetypes.patch
 Patch6:		%{name}-FHS.patch
 Patch7:		%{name}-no-buildtime-ipv6.patch
+Patch8:		%{name}-heimdal.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -187,6 +188,7 @@ Wiązania perla dla serwera Amandy.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %build
 %{__libtoolize}
