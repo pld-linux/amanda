@@ -1,0 +1,36 @@
+--- amanda-2.6.0/config/amanda/ipv6.m4~	2008-01-28 19:12:25.000000000 +0100
++++ amanda-2.6.0/config/amanda/ipv6.m4	2008-05-13 11:34:36.000000000 +0200
+@@ -70,32 +70,7 @@
+ 	[
+ 	    case "$target" in
+ 		*-pc-cygwin) amanda_cv_working_ipv6=no;;
+-		*)
+-		    AC_RUN_IFELSE([AC_LANG_SOURCE([[
+-#include <sys/types.h>
+-#ifdef HAVE_SYS_SOCKET_H
+-#include <sys/socket.h>
+-#endif
+-#ifdef HAVE_NETINET_IN_H
+-#include <netinet/in.h>
+-#endif
+-#ifdef HAVE_WINSOCK2_H
+-#include <winsock2.h>
+-#endif
+-#include <sys/socket.h>
+-#include <errno.h>
+-
+-main()
+-{
+-   int aa;
+-   aa = socket(AF_INET6, SOCK_STREAM, 0);
+-   if (aa > 0) return 0;
+-   return aa;
+-}]])],
+-    [ amanda_cv_working_ipv6=yes ],
+-    [ amanda_cv_working_ipv6=no ],
+-    [ amanda_cv_working_ipv6=yes ]
+-		)
++		*) amanda_cv_working_ipv6=yes;;
+ 	    esac
+ 	])
+ 
