@@ -9,7 +9,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.6.0
-Release:	1
+Release:	2
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -25,6 +25,7 @@ Patch3:		%{name}-bashizm.patch
 Patch4:		%{name}-as_needed.patch
 Patch5:		%{name}-tapetypes.patch
 Patch6:		%{name}-FHS.patch
+Patch7:		%{name}-no-buildtime-ipv6.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -185,6 +186,7 @@ Wiązania perla dla serwera Amandy.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 %{__libtoolize}
@@ -227,6 +229,7 @@ Wiązania perla dla serwera Amandy.
 	--with-debugging=%{_sharedstatedir}/amanda/debug \
 	--with-tmpdir=/var/tmp \
 	--with-amperldir=%{perl_vendorarch} \
+	--with-ipv6 \
 	--disable-installperms
 
 %{__make}
