@@ -382,10 +382,6 @@ fi
 
 %config(noreplace) %attr(640,root,root) /etc/cron.d/amanda-srv
 
-%dir %{_libdir}/amanda/application
-%attr(755,root,root) %{_libdir}/amanda/application/amgtar
-%attr(644,root,root) %{_libdir}/amanda/application/generic-dumper
-
 %attr(755,root,root) %{_libdir}/amanda/libamdevice*.so
 %attr(755,root,root) %{_libdir}/amanda/libamserver*.so
 %attr(755,root,root) %{_libdir}/amanda/libamtape*.so
@@ -494,6 +490,11 @@ fi
 # Commented out so it won't get removed on uninstall
 #%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover*
 %attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
+
+%dir %{_libdir}/amanda/application
+%attr(755,root,root) %{_libdir}/amanda/application/amgtar
+%attr(644,root,root) %{_libdir}/amanda/application/generic-dumper
+
 %attr(755,root,root) %{_libdir}/amanda/libamclient*.so
 %attr(755,root,root) %{_libdir}/amanda/amandad
 %attr(755,root,root) %{_libdir}/amanda/noop
