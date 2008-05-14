@@ -9,7 +9,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.6.0
-Release:	2
+Release:	3
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -297,6 +297,7 @@ fi
 %service -q rc-inetd reload
 if [ ! -e /var/lib/amanda/.ssh/id_rsa_amrecover ] ; then
 	HOST="`/bin/hostname`"
+	FQDNHOST="`/bin/hostname -f`"
 	if [ -z "$HOST" ] ; then
 		COMMENT="root@client"
 	else
@@ -305,6 +306,13 @@ if [ ! -e /var/lib/amanda/.ssh/id_rsa_amrecover ] ; then
 	/usr/bin/ssh-keygen -t rsa -C $COMMENT -f /var/lib/amanda/.ssh/id_rsa_amrecover -N "" || :
 	chown amanda:amanda /var/lib/amanda/.ssh/id_rsa_amrecover{,.pub} || :
 	chmod 600 /var/lib/amanda/.ssh/id_rsa_amrecover{,.pub} || :
+	if [ -n "$FQDNHOST" ]; then
+		echo -n "from=\"$FQDNHOST\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,command=\"%{_ulibdir}/amanda/amandad -auth=ssh amindexd amidxtaped\" " >/var/lib/amanda/.ssh/server_authorized_keys
+		cat /var/lib/amanda/.ssh/id_rsa_amrecover.pub >>/var/lib/amanda/.ssh/server_authorized_keys
+
+		echo "Remember to copy the contents of /var/lib/amanda/.ssh/server_authorized_keys to"
+		echo "/var/lib/amanda/.ssh/authorized_keys on amanda server"
+	fi
 fi
 
 %postun client
