@@ -9,7 +9,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.6.0
-Release:	3
+Release:	4
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -164,19 +164,6 @@ Perl bindings for amanda.
 
 %description perl -l pl.UTF-8
 Wiązania perla dla Amandy.
-
-%package perl-server
-Summary:	Perl bindings for amanda server
-Summary(pl.UTF-8):	Wiązania perla dla serwera Amandy
-Group:		Networking/Utilities
-Requires:	%{name}-perl = %{version}-%{release}
-Requires:	%{name}-server = %{version}-%{release}
-
-%description perl-server
-Perl bindings for amanda server.
-
-%description perl-server -l pl.UTF-8
-Wiązania perla dla serwera Amandy.
 
 %prep
 %setup -q
@@ -480,6 +467,20 @@ fi
 %{_mandir}/man8/amtoc.8*
 %{_mandir}/man8/amverify.8*
 %{_mandir}/man8/amverifyrun.8*
+
+%{perl_vendorarch}/Amanda/Changer.pm
+%{perl_vendorarch}/Amanda/Cmdline.pm
+%{perl_vendorarch}/Amanda/Device.pm
+%{perl_vendorarch}/Amanda/Logfile.pm
+%{perl_vendorarch}/Amanda/Tapefile.pm
+%dir %{perl_vendorarch}/auto/Amanda/Cmdline
+%dir %{perl_vendorarch}/auto/Amanda/Device
+%dir %{perl_vendorarch}/auto/Amanda/Logfile
+%dir %{perl_vendorarch}/auto/Amanda/Tapefile
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Cmdline/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Device/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Logfile/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Tapefile/*.so
 %endif
 
 %if %{with client}
@@ -532,19 +533,3 @@ fi
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Debug/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Types/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Util/*.so
-
-%files perl-server
-%defattr(644,root,root,755)
-%{perl_vendorarch}/Amanda/Changer.pm
-%{perl_vendorarch}/Amanda/Cmdline.pm
-%{perl_vendorarch}/Amanda/Device.pm
-%{perl_vendorarch}/Amanda/Logfile.pm
-%{perl_vendorarch}/Amanda/Tapefile.pm
-%dir %{perl_vendorarch}/auto/Amanda/Cmdline
-%dir %{perl_vendorarch}/auto/Amanda/Device
-%dir %{perl_vendorarch}/auto/Amanda/Logfile
-%dir %{perl_vendorarch}/auto/Amanda/Tapefile
-%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Cmdline/*.so
-%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Device/*.so
-%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Logfile/*.so
-%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Tapefile/*.so
