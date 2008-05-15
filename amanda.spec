@@ -131,6 +131,7 @@ Group:		Networking/Utilities
 Requires(post):	/bin/hostname
 Requires(post):	/usr/bin/ssh-keygen
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-perl = %{version}-%{release}
 Requires:	/etc/cron.d
 Requires:	crondaemon
 Requires:	gnuplot
