@@ -5,6 +5,7 @@
 %bcond_without	client	# without client package
 %bcond_without	server	# without server package
 #
+%include	/usr/lib/rpm/macros.perl
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
