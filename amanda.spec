@@ -142,6 +142,7 @@ Requires:	rc-inetd
 Suggests:	openssh-clients
 Suggests:	openssh-server
 Obsoletes:	amanda
+Obsoletes:	amanda-perl-server
 
 %description server
 The amanda-server package should be installed on the AMANDA server,
