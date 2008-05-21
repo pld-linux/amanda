@@ -29,3 +29,14 @@
      if ! test -f "${MTX}"; then
  	Exit 2 \
  	    `_ '<none>'` \
+--- amanda-2.6.0/server-src/amcleanup.sh~	2008-01-18 01:31:25.000000000 +0100
++++ amanda-2.6.0/server-src/amcleanup.sh	2008-05-21 13:45:10.000000000 +0200
+@@ -75,7 +75,7 @@
+ #   after receiving SIGTERM,  if yes send SIGKILL  
+ #
+ 
+-function killpid() {
++killpid() {
+ 
+ killPID=$1
+ SIGTERM=15
