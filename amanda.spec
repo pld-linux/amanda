@@ -181,7 +181,6 @@ Wiązania perla dla Amandy.
 %patch8 -p1
 
 %build
-%{__libtoolize}
 %{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive
 %{__autoconf}
 %{__automake}
