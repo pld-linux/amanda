@@ -1,14 +1,14 @@
 --- amanda-2.6.0/config/amanda/dumpers.m4~	2008-03-03 14:50:51.000000000 +0100
 +++ amanda-2.6.0/config/amanda/dumpers.m4	2008-05-07 11:13:49.000000000 +0200
 @@ -41,7 +41,7 @@
-     fi
- 
-     if test ! -z "$GNUTAR"; then
--      case "`\"$GNUTAR\" --version 2>&1`" in
-+      case "`$GNUTAR --version 2>&1`" in
-        *GNU*tar* | *Free*paxutils* ) : # OK, it is GNU tar
- 		    ;;
-        *)
+ 	for gnutar_name in gtar gnutar tar; do
+ 	    AC_PATH_PROGS(GNUTAR, $gnutar_name, , $LOCSYSPATH)
+ 	    if test -n "$GNUTAR"; then
+-	      case "`\"$GNUTAR\" --version 2>&1`" in
++	      case "`$GNUTAR --version 2>&1`" in
+ 	       *GNU*tar* | *Free*paxutils* )
+ 			    # OK, it is GNU tar
+ 			    break
 @@ -103,7 +103,7 @@
        AC_PATH_PROG(SAMBA_CLIENT,smbclient,,$LOCSYSPATH)
        smbversion=0
