@@ -211,6 +211,7 @@ Wiązania perla dla Amandy.
 	--with-fqdn \
 	%{?with_samba:--with-smbclient=%{_bindir}/smbclient} \
 	--with-bsd-security \
+	--with-bsdtcp-security \ # needed to talk to ZWC windows clients
 	--with-ssh-security \
 	--with-krb5-security \
 	--without-krb4-security \
