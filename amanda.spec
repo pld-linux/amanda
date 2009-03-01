@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.6.0p2
-Release:	2
+Release:	3
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -91,6 +91,7 @@ Requires(pre):	/usr/bin/chsh
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	setup >= 2.6.1-1
 Provides:	group(amanda)
 Provides:	user(amanda)
 
@@ -264,9 +265,9 @@ find $RPM_BUILD_ROOT -name \*.la | xargs rm -f
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerpostun libs -- %{name}-libs < 2.5.1p2-1
-echo "Adding amanda to disk and backup groups"
-/usr/sbin/usermod -G disk,backup amanda
+%triggerpostun libs -- %{name}-libs < 2.6.0p2-3
+echo "Adding amanda to disk and tape groups"
+/usr/sbin/usermod -G disk,tape amanda
 echo "Setting amanda shell to /bin/sh"
 /usr/bin/chsh -s /bin/sh amanda
 if [ -f %{_sharedstatedir}/amanda/.amandahosts ]; then
@@ -277,7 +278,7 @@ fi
 
 %pre libs
 %groupadd -P %{name}-libs -g 80 amanda
-%useradd -P %{name}-libs -u 80 -G disk,backup -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
+%useradd -P %{name}-libs -u 80 -G disk,tape -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
 
 %postun libs
 if [ "$1" = "0" ]; then
