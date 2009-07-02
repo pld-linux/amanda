@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	2.6.0p2
-Release:	3
+Release:	4
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -38,7 +38,7 @@ BuildRequires:	flex
 BuildRequires:	glib2-devel
 # curl is broken, see curl-config --libs
 BuildRequires:	keyutils-devel
-BuildRequires:	krb5-devel >= 1.6-4
+BuildRequires:	heimdal-devel
 BuildRequires:	libtool
 BuildRequires:	libxslt-progs
 BuildRequires:	ncurses-devel
