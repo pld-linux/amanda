@@ -1,6 +1,7 @@
---- amanda-2.6.0/changer-src/chg-zd-mtx.sh.orig	2008-01-18 01:31:16.000000000 +0100
-+++ amanda-2.6.0/changer-src/chg-zd-mtx.sh	2008-05-07 13:00:14.000000000 +0200
-@@ -361,7 +361,7 @@
+diff -ur amanda-2.6.1p1/changer-src/chg-zd-mtx.sh amanda-2.6.1p1-sh/changer-src/chg-zd-mtx.sh
+--- amanda-2.6.1p1/changer-src/chg-zd-mtx.sh	2008-12-16 21:46:41.000000000 +0100
++++ amanda-2.6.1p1-sh/changer-src/chg-zd-mtx.sh	2009-07-03 21:00:25.379617588 +0200
+@@ -364,7 +364,7 @@
  
  internal_call=0
  Exit() {
@@ -9,7 +10,7 @@
  		call_type=Return
  	else
  		call_type=Exit
-@@ -373,7 +373,7 @@
+@@ -376,7 +376,7 @@
  	exit_answer="$@"
  	Log $call_type "($code) -> $exit_slot $@"
  	echo "$exit_slot" "$@"
@@ -17,8 +18,8 @@
 +	if [ "$call_type" = "Return" ]; then
  		return $code
  	fi
- 	amgetconf dbclose.$argv0:$DBGFILE > /dev/null 2>&1
-@@ -390,12 +390,12 @@
+ 	amgetconf dbclose.$myname:$DBGFILE > /dev/null 2>&1
+@@ -393,12 +393,12 @@
  	"$@" > $stdout 2> $stderr
  	exitcode=$?
  	Log `_ 'Exit code: %s' "$exitcode"`
@@ -33,7 +34,7 @@
  	then
  		LogAppend Stderr:
  		cat $stderr >> $DBGFILE
-@@ -422,13 +422,13 @@
+@@ -425,13 +425,13 @@
  mtx_status_valid=0
  get_mtx_status() {
  	test -n "$DEBUG" && set -x
@@ -48,8 +49,8 @@
 +	if [ "$status" -eq 0 ]; then
  		mtx_status_valid=1
  	fi
- 	return $status
-@@ -489,7 +489,7 @@
+ 
+@@ -503,7 +503,7 @@
  	fi
  
  	#Use the current slot if it's empty and we don't know which slot is loaded'
@@ -58,7 +59,7 @@
  		set x `sed -n '
  {
      /^.*Storage Element '$currentslot':Empty/ {
-@@ -512,13 +512,13 @@
+@@ -526,13 +526,13 @@
  ' < $mtx_status 2>& 1`
  		shift				# get rid of the "x"
  		loadedslotx=$1
@@ -74,7 +75,7 @@
  		set x `sed -n '
  {
      /^.*Storage Element \([0-9][0-9]*\):Empty/ {
-@@ -586,27 +586,27 @@
+@@ -606,27 +606,27 @@
  }
  ' < $mtx_status 2>&1 | grep -v "^${cleanslot}\$" | sort -n`
  	slot_list=`echo $slot_list`		# remove the newlines
@@ -108,7 +109,7 @@
  			Exit 2 \
  			     `_ '<none>'` \
  			     `_ 'cannot determine last slot'`
-@@ -615,7 +615,7 @@
+@@ -635,7 +635,7 @@
  	fi
  	amanda_slot_list=
  	for slot in $slot_list; do
@@ -117,7 +118,16 @@
  			amanda_slot_list="$amanda_slot_list $slot"
  		fi
  	done
-@@ -652,7 +652,7 @@
+@@ -671,7 +671,7 @@
+ 			     `_ 'Line %s malformed in %s: %s %s %s' "$line" "$labelfile" "$lbl" "$bc" "$junk"`
+ 			return $?		# in case we are internal
+ 		fi
+-		if [ $lbl = "$lbl_search" -o $bc = "$bc_search" ]; then
++		if [ "$lbl" = "$lbl_search" -o "$bc" = "$bc_search" ]; then
+ 			if [ $labelfile_entry_found -ne 0 ]; then
+ 				Log       `_ 'ERROR    -> Duplicate entries: %s line %s' "$labelfile" "$line"`
+ 				LogAppend `_ '         -> Remove %s and run "%s %s update"' "$labelfile" "$sbindir/amtape" "$config"`
+@@ -860,7 +860,7 @@
          Exit 2 \
               ` _ '<none>'` \
               "tapedev $rawtape is not a tape device."
@@ -126,7 +136,7 @@
  	Exit 2 \
  	     `_ '<none>'` \
  	     "tapedev ($tape) may not be the null device"
-@@ -663,7 +663,7 @@
+@@ -871,7 +871,7 @@
  	Exit 2 \
  	     `_ '<none>'` \
  	     "changerdev may not be empty"
@@ -135,7 +145,7 @@
  	Exit 2 \
  	     `_ '<none>'` \
  	     "changerdev ($TAPE) may not be the null device"
-@@ -676,19 +676,19 @@
+@@ -884,19 +884,19 @@
  #### Set up the various config files.
  
  conf_match=`expr "$changerfile" : .\*\.conf\$`
@@ -158,10 +168,10 @@
  	Exit 2 \
  	     `_ '<none>'` \
  	     "configuration file \"$configfile\" is not a file"
-@@ -698,10 +698,10 @@
- accessfile=$changerfile-access
+@@ -907,10 +907,10 @@
  slotfile=$changerfile-slot
  labelfile=$changerfile-barcodes
+ slotinfofile=""
 -[ ! -s $cleanfile ] && echo 0 > $cleanfile
 -[ ! -s $accessfile ] && echo 0 > $accessfile
 -[ ! -s $slotfile ] && echo -1 > $slotfile
@@ -173,7 +183,7 @@
  cleancount=`cat $cleanfile`
  accesscount=`cat $accessfile`
  
-@@ -747,7 +747,7 @@
+@@ -957,7 +957,7 @@
  
  # Get DBGFILE set if it is not already.
  
@@ -182,7 +192,7 @@
  	if [ -d "$DBGDIR" ]; then
  		DBGFILE=$DBGDIR/changer.debug.drive$driveslot
  	else
-@@ -827,9 +827,9 @@
+@@ -1037,9 +1037,9 @@
  
  Log `_ "Config info:"`
  for var in $varlist; do
@@ -192,9 +202,9 @@
 -	elif [ $var = "AUTOCLEAN" ]; then
 +	elif [ "$var" = "AUTOCLEAN" ]; then
  		continue			# old name
- 	fi
- 	eval val=\"'$'$var\"
-@@ -850,12 +850,12 @@
+ 	elif [ $var = "slotinfofile" ]; then
+ 		continue			# not numeric
+@@ -1062,12 +1062,12 @@
  
  # Run the rest of the config file sanity checks.
  
@@ -209,7 +219,7 @@
  	Exit 2 \
  	     `_ '<none>'` \
  	     `_ 'autoclean set but cleanslot not valid (%s)' "$cleanslot"`
-@@ -865,10 +865,10 @@
+@@ -1077,10 +1077,10 @@
  
  currentslot=`cat $slotfile`
  if IsNumeric "$currentslot" ; then
@@ -222,7 +232,7 @@
  		Log `_ 'SETUP    -> current slot %s greater than %s ... resetting to %s' "$currentslot" "$lastslot" "$lastslot"`
  		currentslot=$lastslot
  	fi
-@@ -881,19 +881,19 @@
+@@ -1093,19 +1093,19 @@
  first_slot_in_list=-1
  next_slot_after_current=-1
  for slot in $slot_list; do
@@ -247,7 +257,7 @@
  		new_currentslot=$first_slot_in_list
  	else
  		new_currentslot=$next_slot_after_current
-@@ -912,9 +912,9 @@
+@@ -1124,9 +1124,9 @@
  	test -n "$DEBUG" && set -x
  	Log `_ 'EJECT    -> ejecting tape from %s' "$tape"`
  	get_loaded_info 
@@ -259,7 +269,7 @@
                          Run try_eject_device $tape
  		fi
  		sleep $unloadpause
-@@ -922,7 +922,7 @@
+@@ -1134,7 +1134,7 @@
  		status=$?
  		Log `_ '         -> status %s, result "%s"' "$status" "$result"`
  		mtx_status_valid=0
@@ -268,7 +278,7 @@
  			answer="$result"
  			code=2
  		else
-@@ -1001,7 +1001,7 @@
+@@ -1213,7 +1213,7 @@
  	prev_slot=$1
  	shift
  	while [ $# -gt 0 ]; do
@@ -277,7 +287,7 @@
  			break
  		fi
  		prev_slot=$1
-@@ -1030,15 +1030,15 @@
+@@ -1242,15 +1242,15 @@
  	# If the desired slot is already loaded, we are done.  Only update
  	# current slot if this is not the cleaning slot.
  	get_loaded_info
@@ -296,7 +306,7 @@
  		Exit 0 "$loadedslot" "$rawtape"
  		return $?			# in case we are internal
          fi
-@@ -1046,20 +1046,20 @@
+@@ -1258,20 +1258,20 @@
  	# If we are loading the cleaning tape, bump the cleaning count
  	# and reset the access count.  Otherwise, bump the access count
  	# and see if it is time to do a cleaning.
@@ -320,7 +330,7 @@
  				Exit $status "$loadslot" "$exit_answer"
  				return $?	# in case we are internal
  			fi
-@@ -1079,14 +1079,14 @@
+@@ -1291,14 +1291,14 @@
  	eject > /dev/null 2>&1
  	status=$?
  	internal_call=`expr $internal_call - 1`
@@ -338,7 +348,7 @@
  			rm -f $slotfile
  			echo $loadslot > $slotfile
  		fi
-@@ -1100,7 +1100,7 @@
+@@ -1312,7 +1312,7 @@
  	status=$?
  	Log `_ '         -> status %s, result "%s"' "$status" "$result"`
  	mtx_status_valid=0
@@ -347,7 +357,7 @@
  		Exit 2 "$loadslot" "$result"
  		return $?			# in case we are internal
  	fi
-@@ -1110,7 +1110,7 @@
+@@ -1322,7 +1322,7 @@
  	# for "long enough" (as determined empirically by the user),
  	# then return success.
  	###
@@ -356,7 +366,7 @@
  		Run sleep $cleancycle
  		Exit 0 "$loadslot" "$rawtape"
  		return $?			# in case we are internal
-@@ -1122,7 +1122,7 @@
+@@ -1334,7 +1334,7 @@
  	waittime=0
  	ready=0
  	sleep $initial_poll_delay
@@ -365,13 +375,13 @@
                  amdevcheck_status $tape
  		if [ $? -eq 0 ]; then
  			ready=1
-@@ -1131,12 +1131,12 @@
+@@ -1343,12 +1343,12 @@
  		sleep $poll_drive_ready
  		waittime=`expr $waittime + $poll_drive_ready`
  	done
 -	if [ $ready -eq 0 ]; then
 +	if [ "$ready" -eq 0 ]; then
- 		Exit 2 "$loadslot" `_ 'Drive not ready after %s seconds, rewind said "%s"' "$max_drive_wait" "$result"`
+ 		Exit 2 "$loadslot" `_ 'Drive not ready after %s seconds: %s' "$max_drive_wait" "$amdevcheck_message"`
  		return $?			# in case we are internal
  	fi
  
@@ -380,7 +390,7 @@
  		rm -f $slotfile
  		echo $loadslot > $slotfile
  	fi
-@@ -1167,11 +1167,11 @@
+@@ -1379,11 +1379,11 @@
  	# can search based on barcodes.
  	###
  	reader=
@@ -394,31 +404,22 @@
  		currentslot=$firstslot		# what "current" will get
  	fi
  	numslots=`expr $lastslot - $firstslot + 1`
-@@ -1202,7 +1202,7 @@
- 			     `_ 'Line %s malformed in %s: %s %s %s' "$line" "$labelfile" "$lbl" "$bc" "$junk"`
- 			return $?		# in case we are internal
- 		fi
--		if [ $lbl = "$lbl_search" -o $bc = "$bc_search" ]; then
-+		if [ "$lbl" = "$lbl_search" -o "$bc" = "$bc_search" ]; then
- 			if [ $labelfile_entry_found -ne 0 ]; then
- 				Log       `_ 'ERROR    -> Duplicate entries: %s line %s' "$labelfile" "$line"`
- 				LogAppend `_ '         -> Remove %s and run "%s %s update"' "$labelfile" "$sbindir/amtape" "$config"`
-@@ -1230,12 +1230,12 @@
- 		return $?			# in case we are internal
+@@ -1404,12 +1404,12 @@
  	fi
          tapelabel=$1
--	if [ $havereader -eq 0 ]; then
-+	if [ "$havereader" -eq 0 ]; then
- 		Exit 2 `_ '<none>'` `_ 'Not configured with barcode reader'`
- 		return $?			# in case we are internal
- 	fi
          get_loaded_info
 -	if [ $loadedslot -lt 0 ]; then
 +	if [ "$loadedslot" -lt 0 ]; then
  		Exit 1 `_ '<none>'` `_ 'No tape currently loaded'`
  		return $?			# in case we are internal
  	fi
-@@ -1245,7 +1245,7 @@
+ 	record_label_in_slot "$tapelabel" "$loadedslot"
+-	if [ $havereader -eq 0 ]; then
++	if [ "$havereader" -eq 0 ]; then
+ 		Exit 0 "$loadedslot" "$rawtape"	# that's all we needed
+ 		return $?			# in case we are internal
+ 	fi
+@@ -1419,7 +1419,7 @@
  	fi
  	Log       `_ 'LABEL    -> Adding label "%s" with barcode "%s" for slot %s into %s' "$tapelabel" "$loadedbarcode" "$loadedslot" "$labelfile"`
  	read_labelfile "$tapelabel" "$loadedbarcode" < $labelfile
@@ -427,7 +428,7 @@
  		lf_val=
  		if [ "$labelfile_barcode" != "$loadedbarcode" ]; then
  			lf_type=label
-@@ -1289,13 +1289,13 @@
+@@ -1465,13 +1465,13 @@
  		return $?			# in case we are internal
  	fi
          tapelabel=$1

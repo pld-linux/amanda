@@ -13,30 +13,8 @@
        AC_PATH_PROG(SAMBA_CLIENT,smbclient,,$LOCSYSPATH)
        smbversion=0
        if test ! -z "$SAMBA_CLIENT"; then
--        case "`\"$SAMBA_CLIENT\" '\\\\not.a.host.name\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
-+        case "`$SAMBA_CLIENT '\\\\not.a.host.name\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
+-        case "`\"$SAMBA_CLIENT\" '\\\\nosuchhost.amanda.org\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
++        case "`$SAMBA_CLIENT '\\\\nosuchhost.amanda.org\\notashare' -U nosuchuser -N -Tx /dev/null 2>&1`" in
          *"Unknown host"*)
  		      smbversion=1
  		      ;;
---- amanda-2.6.0/changer-src/chg-zd-mtx.sh~	2008-05-14 17:36:20.000000000 +0200
-+++ amanda-2.6.0/changer-src/chg-zd-mtx.sh	2008-05-15 15:03:59.000000000 +0200
-@@ -797,7 +797,7 @@
- max_drive_wait=${max_drive_wait:-'120'}			# default: two minutes
- 
- # check MT and MTX for sanity
--if test "${MTX:0:1}" = "/"; then
-+if test "${MTX#/}" != "$MTX"; then
-     if ! test -f "${MTX}"; then
- 	Exit 2 \
- 	    `_ '<none>'` \
---- amanda-2.6.0/server-src/amcleanup.sh~	2008-01-18 01:31:25.000000000 +0100
-+++ amanda-2.6.0/server-src/amcleanup.sh	2008-05-21 13:45:10.000000000 +0200
-@@ -75,7 +75,7 @@
- #   after receiving SIGTERM,  if yes send SIGKILL  
- #
- 
--function killpid() {
-+killpid() {
- 
- killPID=$1
- SIGTERM=15
