@@ -40,3 +40,17 @@
  #  endif
  #  include <krb5.h>
  #endif
+--- amanda-2.6.1p1/common-src/security-util.h~	2009-12-09 15:20:43.091037399 +0100
++++ amanda-2.6.1p1/common-src/security-util.h	2009-12-09 15:21:33.612974357 +0100
+@@ -47,10 +47,10 @@
+ 
+ 
+ #ifdef KRB5_SECURITY
+-#  define KRB5_DEPRECATED 1
+ #  ifndef KRB5_HEIMDAL_INCLUDES
++#    define KRB5_DEPRECATED 1
+ #    include <gssapi/gssapi_generic.h>
+ #  else
+ #    include <gssapi.h>
+ #  endif
+ #  include <krb5.h>
