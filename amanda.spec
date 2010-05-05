@@ -193,7 +193,7 @@ typu streamer).
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p1
+%patch9 -p2
 
 %build
 %{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive
