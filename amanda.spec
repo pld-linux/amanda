@@ -19,16 +19,18 @@ Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
+# http://amanda.svn.sourceforge.net/viewvc/amanda/amanda/branches/3_2/contrib/convert-zd-mtx-to-robot.sh
+Source5:	convert-zd-mtx-to-robot.sh
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-chg-zd-mtx-sh.patch
 Patch2:		%{name}-tar.patch
-Patch3:		%{name}-bashizm.patch
+Patch3:		%{name}-common.patch
 Patch4:		%{name}-as_needed.patch
 Patch5:		%{name}-tapetypes.patch
 Patch6:		%{name}-FHS.patch
 Patch7:		%{name}-no-buildtime-ipv6.patch
 Patch8:		%{name}-heimdal.patch
-Patch9:		%{name}-glib2.24.patch
+Patch9:		%{name}-ac.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -193,7 +195,7 @@ typu streamer).
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
-%patch9 -p2
+%patch9 -p1
 
 %build
 %{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive
@@ -201,14 +203,12 @@ typu streamer).
 %{__automake}
 %configure \
 	DUMP=/sbin/dump \
-	GNUPLOT=/usr/bin/gnuplot \
 	GZIP=/bin/gzip \
 	MAILER=/bin/mail \
 	MT=/bin/mt \
 	MTX=/usr/sbin/mtx \
 	PRINT=/usr/bin/lpr \
 	RESTORE=/sbin/restore \
-	STAR=/usr/bin/star \
 	%{?with_xfs:XFSDUMP=/sbin/xfsdump} \
 	%{?with_xfs:XFSRESTORE=/sbin/xfsrestore} \
 	--disable-static \
@@ -219,23 +219,24 @@ typu streamer).
 	--with-user=amanda \
 	--with-group=amanda \
 	--with-tape-device=/dev/null \
-	--with-changer-device=/dev/null \
 	--with-fqdn \
 	%{?with_samba:--with-smbclient=%{_bindir}/smbclient} \
+	--with-star=%{_bindir}/star \
+	--with-gnuplot=%{_bindir}/gnuplot \
 	--with-bsd-security \
 	--with-bsdtcp-security \
 	--with-ssh-security \
 	--with-krb5-security \
-	--without-krb4-security \
 	--with-buffered-dump \
 	--with-amandahosts \
 	--with-configdir=%{_sysconfdir}/amanda \
 	--with-gnutar-listdir=%{_sharedstatedir}/amanda/gnutar-lists \
 	--with-amandates=%{_sharedstatedir}/amanda/amandates \
 	--with-debugging=%{_sharedstatedir}/amanda/debug \
-	--with-tmpdir=/var/tmp \
+	--with-tmpdir=/var/tmp/amanda \
 	--with-amperldir=%{perl_vendorarch} \
 	--with-ipv6 \
+	--with-readline \
 	--disable-installperms
 
 %{__make}
@@ -258,6 +259,8 @@ install example/amanda.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/amanda-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.amandahosts
 
+install %{SOURCE5} $RPM_BUILD_ROOT%{_sbindir}/amconvert-zd-mtx-to-robot.sh
+
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
@@ -272,6 +275,9 @@ if [ "%{_lib}" != "lib" ] ; then
 fi
 
 find $RPM_BUILD_ROOT -name \*.la | xargs rm -f
+
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/amanda/{COPYRIGHT,ChangeLog,NEWS,ReleaseNotes}
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/amanda/example/{chg-multi,chg-scsi}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -351,17 +357,28 @@ fi
 %doc AUTHORS COPYRIGHT ChangeLog NEWS README ReleaseNotes UPGRADING
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
 %attr(755,root,root) %{_libdir}/amanda/libamar*.so
+%attr(755,root,root) %{_libdir}/amanda/libamxfer*.so
 %attr(755,root,root) %{_libdir}/amanda/libamglue*.so
+%attr(755,root,root) %{_libdir}/amanda/libndmjob*.so
+%attr(755,root,root) %{_libdir}/amanda/libndmlib*.so
+%attr(755,root,root) %{_libdir}/amanda/amndmjob
+%attr(755,root,root) %{_libdir}/amanda/ndmjob
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %dir %{_libdir}/amanda
 %if %{_lib} != "lib"
 %{_ulibdir}/amanda
 %endif
+%{_libdir}/amanda/amanda-sh-lib.sh
+%attr(755,root,root) %{_sbindir}/amaespipe
 %attr(755,root,root) %{_sbindir}/amarchiver
+%attr(755,root,root) %{_sbindir}/amcrypt*
+%attr(755,root,root) %{_sbindir}/amgetconf
+%attr(755,root,root) %{_sbindir}/amgpgcrypt
 %attr(750,amanda,amanda) %dir %{_datadir}/amanda
 %attr(750,amanda,amanda) %dir %{_datadir}/amanda/example
 %attr(750,amanda,amanda) %dir %{_datadir}/amanda/example/label-templates
 %attr(640,amanda,amanda) %{_datadir}/amanda/example/*amanda*
+%attr(640,amanda,amanda) %{_datadir}/amanda/example/disklist
 %attr(640,amanda,amanda) %{_datadir}/amanda/example/label-templates/*.ps
 %attr(750,amanda,amanda) %dir %{_datadir}/amanda/template.d
 %attr(640,amanda,amanda) %{_datadir}/amanda/template.d/*
@@ -375,38 +392,63 @@ fi
 #%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/authorized_keys
 %{_mandir}/man5/amanda-archive-format.5*
 %{_mandir}/man7/amanda-auth.7*
+%{_mandir}/man7/amanda-match.7*
 %{_mandir}/man7/amanda-scripts.7*
-%{_mandir}/man8/script-email.8*
+%{_mandir}/man8/amaespipe.8*
+%{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amarchiver.8*
+%{_mandir}/man8/amcrypt*.8*
+%{_mandir}/man8/amgetconf.8*
+%{_mandir}/man8/amgpgcrypt.8*
+%{_mandir}/man8/script-email.8*
 
 %dir %{perl_vendorarch}/Amanda
+%dir %{perl_vendorarch}/Amanda/Config
+%dir %{perl_vendorarch}/Amanda/IPC
 %{perl_vendorarch}/Amanda/Archive.pm
 %{perl_vendorarch}/Amanda/BigIntCompat.pm
+%{perl_vendorarch}/Amanda/ClientService.pm
 %{perl_vendorarch}/Amanda/Config.pm
+%{perl_vendorarch}/Amanda/Config/FoldingHash.pm
 %{perl_vendorarch}/Amanda/Constants.pm
 %{perl_vendorarch}/Amanda/Debug.pm
+%{perl_vendorarch}/Amanda/Feature.pm
+%{perl_vendorarch}/Amanda/Header.pm
+%{perl_vendorarch}/Amanda/IPC/Binary.pm
+%{perl_vendorarch}/Amanda/IPC/LineProtocol.pm
 %{perl_vendorarch}/Amanda/MainLoop.pm
+%{perl_vendorarch}/Amanda/NDMP.pm
 %{perl_vendorarch}/Amanda/Paths.pm
+%{perl_vendorarch}/Amanda/Process.pm
 %{perl_vendorarch}/Amanda/Script.pm
 %{perl_vendorarch}/Amanda/Script_App.pm
 %{perl_vendorarch}/Amanda/Tests.pm
-%{perl_vendorarch}/Amanda/Types.pm
 %{perl_vendorarch}/Amanda/Util.pm
+%{perl_vendorarch}/Amanda/Xfer.pm
 %dir %{perl_vendorarch}/auto/Amanda
 %dir %{perl_vendorarch}/auto/Amanda/Archive
 %dir %{perl_vendorarch}/auto/Amanda/Config
 %dir %{perl_vendorarch}/auto/Amanda/Debug
+%dir %{perl_vendorarch}/auto/Amanda/Feature
+%dir %{perl_vendorarch}/auto/Amanda/Header
+%dir %{perl_vendorarch}/auto/Amanda/IPC
+%dir %{perl_vendorarch}/auto/Amanda/IPC/Binary
 %dir %{perl_vendorarch}/auto/Amanda/MainLoop
+%dir %{perl_vendorarch}/auto/Amanda/NDMP
 %dir %{perl_vendorarch}/auto/Amanda/Tests
-%dir %{perl_vendorarch}/auto/Amanda/Types
 %dir %{perl_vendorarch}/auto/Amanda/Util
+%dir %{perl_vendorarch}/auto/Amanda/Xfer
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Archive/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Config/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Feature/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Header/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/IPC/Binary/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Debug/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/MainLoop/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/NDMP/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Tests/*.so
-%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Types/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Util/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Xfer/*.so
 
 %if %{with server}
 %files server
@@ -426,12 +468,10 @@ fi
 
 %attr(755,root,root) %{_libdir}/amanda/libamdevice*.so
 %attr(755,root,root) %{_libdir}/amanda/libamserver*.so
-%attr(755,root,root) %{_libdir}/amanda/libamxfer*.so
-%attr(755,root,root) %{_libdir}/amanda/librestore*.so
 
-%{_libdir}/amanda/amanda-sh-lib.sh
 %attr(755,root,root) %{_libdir}/amanda/amcat.awk
 %attr(755,root,root) %{_libdir}/amanda/amcleanupdisk
+%attr(755,root,root) %{_libdir}/amanda/amcheck-device
 %attr(755,root,root) %{_libdir}/amanda/amidxtaped
 %attr(755,root,root) %{_libdir}/amanda/amindexd
 %attr(755,root,root) %{_libdir}/amanda/amlogroll
@@ -440,21 +480,10 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/amplot.gp
 %attr(755,root,root) %{_libdir}/amanda/amtrmidx
 %attr(755,root,root) %{_libdir}/amanda/amtrmlog
-%attr(755,root,root) %{_libdir}/amanda/chg-chio
-%attr(755,root,root) %{_libdir}/amanda/chg-chs
 %attr(755,root,root) %{_libdir}/amanda/chg-disk
-%attr(755,root,root) %{_libdir}/amanda/chg-glue
-%attr(755,root,root) %{_libdir}/amanda/chg-iomega
-%attr(755,root,root) %{_libdir}/amanda/chg-juke
 %attr(755,root,root) %{_libdir}/amanda/chg-lib.sh
 %attr(755,root,root) %{_libdir}/amanda/chg-manual
-%attr(755,root,root) %{_libdir}/amanda/chg-mcutil
-%attr(755,root,root) %{_libdir}/amanda/chg-mtx
 %attr(755,root,root) %{_libdir}/amanda/chg-multi
-%attr(755,root,root) %{_libdir}/amanda/chg-null
-%attr(755,root,root) %{_libdir}/amanda/chg-rait
-%attr(755,root,root) %{_libdir}/amanda/chg-rth
-%attr(755,root,root) %{_libdir}/amanda/chg-scsi
 %attr(755,root,root) %{_libdir}/amanda/chg-zd-mtx
 %attr(755,root,root) %{_libdir}/amanda/chunker
 %attr(755,root,root) %{_libdir}/amanda/driver
@@ -465,18 +494,15 @@ fi
 %attr(755,root,root) %{_sbindir}/activate-devpay
 %attr(755,root,root) %{_sbindir}/amaddclient
 %attr(755,root,root) %{_sbindir}/amadmin
-%attr(755,root,root) %{_sbindir}/amaespipe
 %attr(4750,root,amanda) %{_sbindir}/amcheck
 %attr(755,root,root) %{_sbindir}/amcheckdb
 %attr(755,root,root) %{_sbindir}/amcheckdump
 %attr(755,root,root) %{_sbindir}/amcleanup
-%attr(755,root,root) %{_sbindir}/amcrypt*
+%attr(755,root,root) %{_sbindir}/amconvert-zd-mtx-to-robot.sh
 %attr(755,root,root) %{_sbindir}/amdevcheck
 %attr(755,root,root) %{_sbindir}/amdump
 %attr(755,root,root) %{_sbindir}/amfetchdump
 %attr(755,root,root) %{_sbindir}/amflush
-%attr(755,root,root) %{_sbindir}/amgetconf
-%attr(755,root,root) %{_sbindir}/amgpgcrypt
 %attr(755,root,root) %{_sbindir}/amlabel
 %attr(755,root,root) %{_sbindir}/amoverview
 %attr(755,root,root) %{_sbindir}/amplot
@@ -494,22 +520,19 @@ fi
 %{_mandir}/man5/disklist.5*
 %{_mandir}/man5/tapelist.5*
 %{_mandir}/man7/amanda-changers.7*
+%{_mandir}/man7/amanda-compatibility.7*
 %{_mandir}/man7/amanda-devices.7*
+%{_mandir}/man7/amanda-taperscan.7*
 %{_mandir}/man8/amaddclient.8*
 %{_mandir}/man8/amadmin.8*
-%{_mandir}/man8/amaespipe.8*
-%{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amcheck.8*
 %{_mandir}/man8/amcheckdb.8*
 %{_mandir}/man8/amcheckdump.8*
 %{_mandir}/man8/amcleanup.8*
-%{_mandir}/man8/amcrypt*.8*
 %{_mandir}/man8/amdevcheck.8*
 %{_mandir}/man8/amdump.8*
 %{_mandir}/man8/amfetchdump.8*
 %{_mandir}/man8/amflush.8*
-%{_mandir}/man8/amgetconf.8*
-%{_mandir}/man8/amgpgcrypt.8*
 %{_mandir}/man8/amlabel.8*
 %{_mandir}/man8/amoverview.8*
 %{_mandir}/man8/amplot.8*
@@ -528,23 +551,41 @@ fi
 %dir %{perl_vendorarch}/Amanda/Changer
 %{perl_vendorarch}/Amanda/Changer/*.pm
 %{perl_vendorarch}/Amanda/Cmdline.pm
+%{perl_vendorarch}/Amanda/Curinfo.pm
+%dir %{perl_vendorarch}/Amanda/Curinfo
+%{perl_vendorarch}/Amanda/Curinfo/*.pm
 %dir %{perl_vendorarch}/Amanda/DB
 %{perl_vendorarch}/Amanda/DB/*.pm
 %{perl_vendorarch}/Amanda/Device.pm
+%{perl_vendorarch}/Amanda/Disklist.pm
+%{perl_vendorarch}/Amanda/Holding.pm
+%{perl_vendorarch}/Amanda/Interactive.pm
+%dir %{perl_vendorarch}/Amanda/Interactive
+%{perl_vendorarch}/Amanda/Interactive/*.pm
 %{perl_vendorarch}/Amanda/Logfile.pm
-%{perl_vendorarch}/Amanda/Process.pm
+%dir %{perl_vendorarch}/Amanda/Recovery
+%{perl_vendorarch}/Amanda/Recovery/*.pm
+%{perl_vendorarch}/Amanda/Report.pm
+%dir %{perl_vendorarch}/Amanda/Report
+%{perl_vendorarch}/Amanda/Report/*.pm
 %{perl_vendorarch}/Amanda/Tapelist.pm
-%{perl_vendorarch}/Amanda/Xfer.pm
+%dir %{perl_vendorarch}/Amanda/Taper
+%{perl_vendorarch}/Amanda/Taper/*.pm
+%dir %{perl_vendorarch}/Amanda/Taper/Scan
+%{perl_vendorarch}/Amanda/Taper/Scan/*.pm
+%{perl_vendorarch}/Amanda/XferServer.pm
 %dir %{perl_vendorarch}/auto/Amanda/Cmdline
 %dir %{perl_vendorarch}/auto/Amanda/Device
+%dir %{perl_vendorarch}/auto/Amanda/Disklist
 %dir %{perl_vendorarch}/auto/Amanda/Logfile
 %dir %{perl_vendorarch}/auto/Amanda/Tapelist
-%dir %{perl_vendorarch}/auto/Amanda/Xfer
+%dir %{perl_vendorarch}/auto/Amanda/XferServer
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Cmdline/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Device/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Disklist/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Logfile/*.so
 %attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Tapelist/*.so
-%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/Xfer/*.so
+%attr(755,root,root) %{perl_vendorarch}/auto/Amanda/XferServer/*.so
 %endif
 
 %if %{with client}
@@ -559,8 +600,11 @@ fi
 %dir %{_libdir}/amanda/application
 %attr(755,root,root) %{_libdir}/amanda/application/amgtar*
 %attr(755,root,root) %{_libdir}/amanda/application/amlog-script
+%attr(755,root,root) %{_libdir}/amanda/application/ampgsql
+%attr(755,root,root) %{_libdir}/amanda/application/amraw
 %attr(755,root,root) %{_libdir}/amanda/application/amsamba
 %attr(755,root,root) %{_libdir}/amanda/application/amstar
+%attr(755,root,root) %{_libdir}/amanda/application/amsuntar
 %attr(755,root,root) %{_libdir}/amanda/application/amzfs*
 %attr(755,root,root) %{_libdir}/amanda/application/script-email
 
@@ -571,7 +615,6 @@ fi
 %attr(755,root,root) %{_libdir}/amanda/sendbackup
 %attr(755,root,root) %{_libdir}/amanda/sendsize
 %attr(755,root,root) %{_libdir}/amanda/teecount
-%attr(755,root,root) %{_libdir}/amanda/versionsuffix
 %attr(4750,root,amanda) %{_libdir}/amanda/calcsize
 %attr(4750,root,amanda) %{_libdir}/amanda/killpgrp
 %attr(4750,root,amanda) %{_libdir}/amanda/rundump
@@ -583,10 +626,13 @@ fi
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/client
 %{_mandir}/man7/amanda-applications.7*
 %{_mandir}/man5/amanda-client.conf.5*
-%{_mandir}/man8/amrecover.8*
 %{_mandir}/man8/amgtar.8*
-%{_mandir}/man8/amsamba.**
+%{_mandir}/man8/ampgsql.8*
+%{_mandir}/man8/amrecover.8*
+%{_mandir}/man8/amraw.8*
+%{_mandir}/man8/amsamba.8*
 %{_mandir}/man8/amstar.8*
+%{_mandir}/man8/amsuntar.8*
 %{_mandir}/man8/amzfs*.8*
 
 %{perl_vendorarch}/Amanda/Application.pm
