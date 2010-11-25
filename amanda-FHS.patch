@@ -1,12 +1,7 @@
 diff -ur amanda-2.6.0/common-src/conffile.c amanda-2.6.0-fhs/common-src/conffile.c
 --- amanda-2.6.0/common-src/conffile.c	2008-01-28 22:57:34.000000000 +0100
 +++ amanda-2.6.0-fhs/common-src/conffile.c	2008-05-08 17:39:18.000000000 +0200
-@@ -3143,13 +3143,13 @@
-     conf_init_str(&conf_data[CNF_TAPEDEV], DEFAULT_TAPE_DEVICE);
-     conf_init_proplist(&conf_data[CNF_DEVICE_PROPERTY]);
-     conf_init_str(&conf_data[CNF_CHANGERDEV], DEFAULT_CHANGER_DEVICE);
--    conf_init_str(&conf_data[CNF_CHANGERFILE], "/usr/adm/amanda/changer-status");
-+    conf_init_str(&conf_data[CNF_CHANGERFILE], "/etc/amanda/changer-status");
+@@ -3143,9 +3143,9 @@
      conf_init_str   (&conf_data[CNF_LABELSTR]             , ".*");
      conf_init_str   (&conf_data[CNF_TAPELIST]             , "tapelist");
      conf_init_str   (&conf_data[CNF_DISKFILE]             , "disklist");
@@ -16,9 +11,9 @@ diff -ur amanda-2.6.0/common-src/conffile.c amanda-2.6.0-fhs/common-src/conffile
 +    conf_init_str   (&conf_data[CNF_INFOFILE]             , "/var/lib/amanda/curinfo");
 +    conf_init_str   (&conf_data[CNF_LOGDIR]               , "/var/lib/amanda");
 +    conf_init_str   (&conf_data[CNF_INDEXDIR]             , "/var/lib/amanda/index");
-     conf_init_ident    (&conf_data[CNF_TAPETYPE]             , "EXABYTE");
+     conf_init_ident    (&conf_data[CNF_TAPETYPE]             , "DEFAULT_TAPE");
+     conf_init_identlist(&conf_data[CNF_HOLDINGDISK]          , NULL);
      conf_init_int      (&conf_data[CNF_DUMPCYCLE]            , 10);
-     conf_init_int      (&conf_data[CNF_RUNSPERCYCLE]         , 0);
 diff -ur amanda-2.6.0/example/amanda.conf.in amanda-2.6.0-fhs/example/amanda.conf.in
 --- amanda-2.6.0/example/amanda.conf.in	2008-01-18 01:31:14.000000000 +0100
 +++ amanda-2.6.0-fhs/example/amanda.conf.in	2008-05-08 17:42:35.000000000 +0200
@@ -85,16 +80,16 @@ diff -ur amanda-2.6.0/server-src/amserverconfig.pl amanda-2.6.0-fhs/server-src/a
  
  
  sub create_curinfo_index_dir {
--    mkdir("$confdir/$config/curinfo", $def_perm) ||
--	&log_and_die ("ERROR: mkdir: $confdir/$config/curinfo failed: $!\n", 1);
--    mkdir("$confdir/$config/index", $def_perm) || 
--	&log_and_die ("ERROR: mkdir: $confdir/$config/index failed: $!\n", 1);
-+    mkdir("$localstatedir/lib/amanda/$config", $def_perm) ||
-+	&log_and_die ("ERROR: mkdir: $localstatedir/lib/amanda/$config failed: $!\n", 1);
-+    mkdir("$localstatedir/lib/amanda/$config/curinfo", $def_perm) ||
-+	&log_and_die ("ERROR: mkdir: $localstatedir/lib/amanda/$config/curinfo failed: $!\n", 1);
-+    mkdir("$localstatedir/lib/amanda/$config/index", $def_perm) || 
-+	&log_and_die ("ERROR: mkdir: $localstatedir/lib/amanda/$config/index failed: $!\n", 1);
+-    mkpath("$confdir/$config/curinfo", $def_perm) ||
+-	&log_and_die ("ERROR: mkpath: $confdir/$config/curinfo failed: $!\n", 1);
+-    mkpath("$confdir/$config/index", $def_perm) || 
+-	&log_and_die ("ERROR: mkpath: $confdir/$config/index failed: $!\n", 1);
++    mkpath("$localstatedir/lib/amanda/$config", $def_perm) ||
++	&log_and_die ("ERROR: mkpath: $localstatedir/lib/amanda/$config failed: $!\n", 1);
++    mkpath("$localstatedir/lib/amanda/$config/curinfo", $def_perm) ||
++	&log_and_die ("ERROR: mkpath: $localstatedir/lib/amanda/$config/curinfo failed: $!\n", 1);
++    mkpath("$localstatedir/lib/amanda/$config/index", $def_perm) || 
++	&log_and_die ("ERROR: mkpath: $localstatedir/lib/amanda/$config/index failed: $!\n", 1);
      &mprint ("curinfo and index directory created\n");
  }
  
