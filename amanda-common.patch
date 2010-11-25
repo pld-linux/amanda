@@ -1,0 +1,37 @@
+--- amanda-3.2.0/man/Makefile.am~	2010-10-06 18:36:29.000000000 +0200
++++ amanda-3.2.0/man/Makefile.am	2010-11-25 13:40:20.848191192 +0100
+@@ -14,6 +14,13 @@
+ 		    amanda-auth.7 \
+ 		    amanda-match.7 \
+ 		    amarchiver.8 \
++		    amaespipe.8 \
++		    amcrypt-ossl-asym.8 \
++		    amcrypt-ossl.8   \
++		    amcrypt.8 \
++		    amcryptsimple.8  \
++		    amgetconf.8 \
++		    amgpgcrypt.8 \
+ 		    script-email.8
+ 
+ CLIENT_MAN_PAGES = \
+@@ -34,20 +40,13 @@
+     amanda-taperscan.7 \
+     amaddclient.8    \
+     amadmin.8 \
+-    amaespipe.8 \
+     amcheck.8 \
+     amcheckdb.8 \
+     amcheckdump.8 \
+     amcleanup.8 \
+-    amcrypt-ossl-asym.8 \
+-    amcrypt-ossl.8   \
+-    amcrypt.8 \
+-    amcryptsimple.8  \
+     amdevcheck.8 \
+     amdump.8 \
+     amflush.8 \
+-    amgetconf.8 \
+-    amgpgcrypt.8 \
+     amlabel.8 \
+     amoverview.8 \
+     amreport.8 \
