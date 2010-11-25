@@ -1,0 +1,10 @@
+--- amanda-3.2.0/config/amanda/dumpers.m4~	2010-10-06 18:36:43.000000000 +0200
++++ amanda-3.2.0/config/amanda/dumpers.m4	2010-11-25 13:56:01.105191193 +0100
+@@ -110,7 +110,6 @@
+ 	    case `"$STAR" --version 2>/dev/null` in
+ 	     *star*)
+ 		    # OK, it is star
+-		    break
+ 		    ;;
+ 	     *)
+ 		    if test -n "$OLD_STAR"; then
