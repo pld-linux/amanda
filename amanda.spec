@@ -350,6 +350,13 @@ fi
 if [ "$1" = "1" ]; then
 	echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
 fi
+%banner %{name} -e << EOF
+Warning: Tape changer configuration has chaged, please read
+%{_docdir}/%{name}-server-%{version}/ReleaseNotes.gz
+and %{_docdir}/%{name}-server-%{version}/NEWS.gz for details.
+You can use %{_sbindir}/amconvert-zd-mtx-to-robot.sh script
+to upgrade to chg-robot.
+EOF
 
 %postun server
 if [ "$1" = 0 ]; then
