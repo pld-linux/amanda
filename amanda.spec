@@ -611,12 +611,12 @@ EOF
 %attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 
 %dir %{_libdir}/amanda/application
-%attr(755,root,root) %{_libdir}/amanda/application/amgtar*
+%attr(4750,root,amanda) %{_libdir}/amanda/application/amgtar
 %attr(755,root,root) %{_libdir}/amanda/application/amlog-script
 %attr(755,root,root) %{_libdir}/amanda/application/ampgsql
 %attr(755,root,root) %{_libdir}/amanda/application/amraw
 %attr(755,root,root) %{_libdir}/amanda/application/amsamba
-%attr(755,root,root) %{_libdir}/amanda/application/amstar
+%attr(4750,root,amanda) %{_libdir}/amanda/application/amstar
 %attr(755,root,root) %{_libdir}/amanda/application/amsuntar
 %attr(755,root,root) %{_libdir}/amanda/application/amzfs*
 %attr(755,root,root) %{_libdir}/amanda/application/script-email
