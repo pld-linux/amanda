@@ -50,7 +50,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl-devel >= 5.6.0
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.559
 BuildRequires:	rpm-perlprov
 %{?with_samba:BuildRequires:	samba-client}
 BuildRequires:	swig
