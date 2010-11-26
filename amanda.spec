@@ -59,6 +59,9 @@ Conflicts:	shadow < 1:4.0.4.1-4
 Conflicts:	pwdutils < 3.1.2-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# for some unknown reason those get detected in R but not in P (Tie::StdHash comes from perl)
+%define		_noautoreq	'perl(Tie::StdHash)' 'perl(Amanda::Recovery::Clerk::Feedback)' 'perl(Amanda::Taper::Scribe::Feedback)'
+
 %define		_ulibdir	%{_prefix}/lib
 
 %description
@@ -95,6 +98,7 @@ Requires(pre):	/usr/bin/chsh
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+%requires_ge	glib2
 Requires:	setup >= 2.6.1-1
 Provides:	group(amanda)
 Provides:	user(amanda)
