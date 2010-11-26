@@ -19,7 +19,7 @@ Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
-Source5:	k5%{name}.inetd
+Source5:	k5%{name}.inet
 # http://amanda.svn.sourceforge.net/viewvc/amanda/amanda/branches/3_2/contrib/convert-zd-mtx-to-robot.sh
 Source6:	convert-zd-mtx-to-robot.sh
 Patch0:		%{name}-no_libnsl.patch
