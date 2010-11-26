@@ -1,0 +1,11 @@
+SERVICE_NAME=k5amanda
+SOCK_TYPE=stream
+PROTOCOL=tcp
+PORT=10082
+FLAGS=nowait
+USER=root
+GROUP=amanda
+SERVER=tcpd
+DAEMON=/usr/lib/amanda/amandad
+DAEMONARGS="-auth=krb5"
+INITGROUPS=yes

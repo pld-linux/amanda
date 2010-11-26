@@ -19,8 +19,9 @@ Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
 Source4:	amidxtape.inetd
+Source5:	k5%{name}.inetd
 # http://amanda.svn.sourceforge.net/viewvc/amanda/amanda/branches/3_2/contrib/convert-zd-mtx-to-robot.sh
-Source5:	convert-zd-mtx-to-robot.sh
+Source6:	convert-zd-mtx-to-robot.sh
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-chg-zd-mtx-sh.patch
 Patch2:		%{name}-tar.patch
@@ -258,12 +259,13 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amanda-srv
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE2} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amanda
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE3} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amandaidx
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE4} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
+sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE5} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/k5amanda
 
 install example/amanda.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 install example/amanda-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.amandahosts
 
-install %{SOURCE5} $RPM_BUILD_ROOT%{_sbindir}/amconvert-zd-mtx-to-robot.sh
+install %{SOURCE6} $RPM_BUILD_ROOT%{_sbindir}/amconvert-zd-mtx-to-robot.sh
 
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
@@ -605,6 +607,7 @@ EOF
 %files client
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amanda
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/k5amanda
 %config(noreplace) %verify(not md5 mtime size) %attr(640,root,amanda) %{_sysconfdir}/amanda/amanda-client.conf
 # Commented out so it won't get removed on uninstall
 #%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover*
