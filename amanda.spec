@@ -32,6 +32,7 @@ Patch6:		%{name}-FHS.patch
 Patch7:		%{name}-no-buildtime-ipv6.patch
 Patch8:		%{name}-heimdal.patch
 Patch9:		%{name}-ac.patch
+Patch10:	%{name}-amstar-exclude.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -201,6 +202,7 @@ typu streamer).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p2
 
 %build
 %{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive

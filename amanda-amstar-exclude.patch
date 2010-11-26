@@ -1,0 +1,135 @@
+--- amanda/trunk/application-src/amstar.c	2010/09/24 21:46:25	3449
++++ amanda/trunk/application-src/amstar.c	2010/11/10 11:22:58	3609
+@@ -40,7 +40,8 @@
+  * IGNORE
+  * STRANGE
+  * INCLUDE-LIST		(for restore only)
+- * EXCLUDE-LIST		(for restore only)
++ * EXCLUDE-FILE
++ * EXCLUDE-LIST
+  * DIRECTORY
+  */
+ 
+@@ -159,6 +160,7 @@
+     {"exclude-list"    , 1, NULL, 20},
+     {"directory"       , 1, NULL, 21},
+     {"command-options" , 1, NULL, 22},
++    {"exclude-file"    , 1, NULL, 23},
+     { NULL, 0, NULL, 0}
+ };
+ 
+@@ -320,6 +322,10 @@
+ 	case 22: argument.command_options =
+ 			g_slist_append(argument.command_options,
+ 				       stralloc(optarg));
++	case 23: if (optarg)
++		     argument.dle.exclude_file =
++			 append_sl(argument.dle.exclude_file, optarg);
++		 break;
+ 	case ':':
+ 	case '?':
+ 		break;
+@@ -417,10 +423,6 @@
+ 	argument->dle.include_list->nb_element >= 0) {
+ 	fprintf(stdout, "ERROR include-list not supported for backup\n");
+     }
+-    if (argument->dle.exclude_list &&
+-	argument->dle.exclude_list->nb_element >= 0) {
+-	fprintf(stdout, "ERROR exclude-list not supported for backup\n");
+-    }
+ 
+     if (!star_path) {
+ 	fprintf(stdout, "ERROR STAR-PATH not defined\n");
+@@ -486,10 +488,6 @@
+ 	argument->dle.include_list->nb_element >= 0) {
+ 	fprintf(stderr, "ERROR include-list not supported for backup\n");
+     }
+-    if (argument->dle.exclude_list &&
+-	argument->dle.exclude_list->nb_element >= 0) {
+-	fprintf(stderr, "ERROR exclude-list not supported for backup\n");
+-    }
+ 
+     if (check_device(argument) == 0) {
+ 	return;
+@@ -675,10 +673,6 @@
+ 	argument->dle.include_list->nb_element >= 0) {
+ 	fprintf(mesgstream, "? include-list not supported for backup\n");
+     }
+-    if (argument->dle.exclude_list &&
+-	argument->dle.exclude_list->nb_element >= 0) {
+-	fprintf(mesgstream, "? exclude-list not supported for backup\n");
+-    }
+ 
+     level = GPOINTER_TO_INT(argument->level->data);
+ 
+@@ -951,6 +945,7 @@
+ 	g_ptr_array_add(argv_ptr, stralloc("-"));
+     }
+     g_ptr_array_add(argv_ptr, stralloc("-C"));
++
+ #if defined(__CYGWIN__)
+     {
+ 	char tmppath[PATH_MAX];
+@@ -969,6 +964,7 @@
+     g_ptr_array_add(argv_ptr, stralloc2("tardumps=", tardumpfile));
+     if (command == CMD_BACKUP)
+ 	g_ptr_array_add(argv_ptr, stralloc("-wtardumps"));
++
+     g_ptr_array_add(argv_ptr, stralloc("-xattr"));
+     g_ptr_array_add(argv_ptr, stralloc("-acl"));
+     g_ptr_array_add(argv_ptr, stralloc("H=exustar"));
+@@ -984,6 +980,54 @@
+     if (command == CMD_BACKUP && argument->dle.create_index)
+ 	g_ptr_array_add(argv_ptr, stralloc("-v"));
+ 
++    if ((argument->dle.exclude_file &&
++	 argument->dle.exclude_file->nb_element >= 1) ||
++	(argument->dle.exclude_list &&
++	 argument->dle.exclude_list->nb_element >= 1)) {
++	g_ptr_array_add(argv_ptr, stralloc("-match-tree"));
++	g_ptr_array_add(argv_ptr, stralloc("-not"));
++    }
++    if (argument->dle.exclude_file &&
++	argument->dle.exclude_file->nb_element >= 1) {
++	sle_t *excl;
++	for (excl = argument->dle.exclude_file->first; excl != NULL;
++	     excl = excl->next) {
++	    char *ex;
++	    if (strcmp(excl->name, "./") == 0) {
++		ex = g_strdup_printf("pat=%s", excl->name+2);
++	    } else {
++		ex = g_strdup_printf("pat=%s", excl->name);
++	    }
++	    g_ptr_array_add(argv_ptr, ex);
++	}
++    }
++    if (argument->dle.exclude_list &&
++	argument->dle.exclude_list->nb_element >= 1) {
++	sle_t *excl;
++	for (excl = argument->dle.exclude_list->first; excl != NULL;
++	     excl = excl->next) {
++	    char *exclname = fixup_relative(excl->name, argument->dle.device);
++	    FILE *exclude;
++	    char *aexc;
++	    if ((exclude = fopen(exclname, "r")) != NULL) {
++		while ((aexc = agets(exclude)) != NULL) {
++		    if (aexc[0] != '\0') {
++			char *ex;
++			if (strcmp(aexc, "./") == 0) {
++			    ex = g_strdup_printf("pat=%s", aexc+2);
++			} else {
++			    ex = g_strdup_printf("pat=%s", aexc);
++			}
++			g_ptr_array_add(argv_ptr, ex);
++		    }
++		    amfree(aexc);
++		}
++	    }
++	    amfree(exclname);
++	    fclose(exclude);
++	}
++    }
++
+     g_ptr_array_add(argv_ptr, stralloc("."));
+ 
+     g_ptr_array_add(argv_ptr, NULL);
