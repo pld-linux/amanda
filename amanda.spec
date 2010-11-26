@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.2.0
-Release:	0.1
+Release:	0.2
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -350,6 +350,13 @@ fi
 if [ "$1" = "1" ]; then
 	echo "Don't forget to edit /etc/cron.d/amanda-srv." 1>&2
 fi
+
+%postun server
+if [ "$1" = 0 ]; then
+	%service -q rc-inetd reload
+fi
+
+%triggerpostun server -- amanda-server < 3.2.0
 %banner %{name} -e << EOF
 Warning: Tape changer configuration has chaged, please read
 %{_docdir}/%{name}-server-%{version}/ReleaseNotes.gz
@@ -357,11 +364,6 @@ and %{_docdir}/%{name}-server-%{version}/NEWS.gz for details.
 You can use %{_sbindir}/amconvert-zd-mtx-to-robot.sh script
 to upgrade to chg-robot.
 EOF
-
-%postun server
-if [ "$1" = 0 ]; then
-	%service -q rc-inetd reload
-fi
 
 %files common
 %defattr(644,root,root,755)
