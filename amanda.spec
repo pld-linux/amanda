@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.2.0
-Release:	0.2
+Release:	0.16
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -33,6 +33,8 @@ Patch7:		%{name}-no-buildtime-ipv6.patch
 Patch8:		%{name}-heimdal.patch
 Patch9:		%{name}-ac.patch
 Patch10:	%{name}-amstar-exclude.patch
+Patch11:	%{name}-amstar-exclude-fix.patch
+Patch12:	%{name}-krb5-auth.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -203,6 +205,8 @@ typu streamer).
 %patch8 -p1
 %patch9 -p1
 %patch10 -p2
+%patch11 -p1
+%patch12 -p1
 
 %build
 %{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive
