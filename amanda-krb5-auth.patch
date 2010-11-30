@@ -1,0 +1,55 @@
+--- amanda-3.2.0/amandad-src/amandad.c~	2010-10-06 18:36:28.000000000 +0200
++++ amanda-3.2.0/amandad-src/amandad.c	2010-11-29 14:23:20.580165324 +0100
+@@ -440,6 +440,11 @@
+ 	exit_on_qlength = 1;
+     }
+ 
++    /* krb5 require the euid to be 0 */
++    if (strcasecmp(auth, "krb5") == 0) {
++	seteuid((uid_t)0);
++    }
++
+ #ifndef SINGLE_USERID
+     if (geteuid() == 0) {
+ 	if (strcasecmp(auth, "krb5") != 0) {
+@@ -474,11 +479,6 @@
+ 	dbprintf(_("WARNING: argv[0] not defined: check inetd.conf\n"));
+     }
+ 
+-    /* krb5 require the euid to be 0 */
+-    if (strcasecmp(auth, "krb5") == 0) {
+-	seteuid((uid_t)0);
+-    }
+-
+     /*
+      * Schedule to call protocol_accept() when new security handles
+      * are created on stdin.
+--- amanda-3.2.0/common-src/krb5-security.c~	2010-11-29 14:24:29.826165323 +0100
++++ amanda-3.2.0/common-src/krb5-security.c	2010-11-29 14:45:41.683165324 +0100
+@@ -46,7 +46,7 @@
+ #include "et/com_err.h"
+ #endif
+ 
+-#define BROKEN_MEMORY_CCACHE
++#undef BROKEN_MEMORY_CCACHE
+ 
+ #ifdef BROKEN_MEMORY_CCACHE
+ /*
+@@ -712,7 +712,7 @@
+     beenhere = 1;
+ 
+ #ifndef BROKEN_MEMORY_CCACHE
+-    putenv(stralloc("KRB5_ENV_CCNAME=MEMORY:amanda_ccache"));
++    putenv(stralloc(KRB5_ENV_CCNAME"=MEMORY:amanda_ccache"));
+ #else
+     /*
+      * MEMORY ccaches seem buggy and cause a lot of internal heap
+@@ -727,7 +727,7 @@
+ 	char *ccache;
+ 	ccache = malloc(128);
+ 	g_snprintf(ccache, SIZEOF(ccache),
+-		 "KRB5_ENV_CCNAME=FILE:/tmp/amanda_ccache.%ld.%ld",
++		 KRB5_ENV_CCNAME"=FILE:/tmp/amanda_ccache.%ld.%ld",
+ 		 (long)geteuid(), (long)getpid());
+ 	putenv(ccache);
+     }
