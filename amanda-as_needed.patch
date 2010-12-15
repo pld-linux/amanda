@@ -1,14 +1,16 @@
---- amanda-2.6.0/config/amanda/readline.m4~	2008-03-25 21:23:05.000000000 +0100
-+++ amanda-2.6.0/config/amanda/readline.m4	2008-05-07 13:30:33.000000000 +0200
-@@ -38,9 +38,9 @@
-                 proceed="true"
-             ], [
-                 AC_CHECK_LIB(ncurses, tgetent, [
--                    READLINE_LIBS="-lncurses"
-+                    READLINE_LIBS="-lncurses -ltinfo"
-                     proceed="true"
--                ])
-+                ], [], [-ltinfo])
-             ])
-         ])
- 
+--- amanda-3.2.1/config/amanda/readline.m4~	2008-03-25 21:23:05.000000000 +0100
++++ amanda-3.2.1/config/amanda/readline.m4	2008-05-07 13:30:33.000000000 +0200
+@@ -96,11 +96,11 @@
+                    ax_cv_lib_readline, [
+       ORIG_LIBS="$LIBS"
+       for readline_lib in readline edit editline; do
+-        for termcap_lib in "" termcap curses ncurses; do
++        for termcap_lib in "" ncurses curses termcap; do
+           if test -z "$termcap_lib"; then
+             TRY_LIB="-l$readline_lib"
+           else
+-            TRY_LIB="-l$readline_lib -l$termcap_lib"
++            TRY_LIB="-l$readline_lib -l$termcap_lib -ltinfo"
+           fi
+           LIBS="$ORIG_LIBS $TRY_LIB"
+           AC_TRY_LINK_FUNC(readline, ax_cv_lib_readline="$TRY_LIB")
