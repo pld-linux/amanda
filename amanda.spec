@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.2.1
-Release:	1
+Release:	2
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -22,6 +22,7 @@ Source4:	amidxtape.inetd
 Source5:	k5%{name}.inet
 # http://amanda.svn.sourceforge.net/viewvc/amanda/amanda/branches/3_2/contrib/convert-zd-mtx-to-robot.sh
 Source6:	convert-zd-mtx-to-robot.sh
+Source7:	%{name}-ssh_config
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-chg-zd-mtx-sh.patch
 Patch2:		%{name}-tar.patch
@@ -273,6 +274,7 @@ touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.amandahosts
 
 install %{SOURCE6} $RPM_BUILD_ROOT%{_sbindir}/amconvert-zd-mtx-to-robot.sh
 
+install %{SOURCE7} $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/config
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
@@ -409,6 +411,7 @@ EOF
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/amandad
 %attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/.amandahosts
+%attr(600,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/.ssh/config
 # Commented out so it won't get removed on uninstall
 #%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/authorized_keys
 %{_mandir}/man5/amanda-archive-format.5*
