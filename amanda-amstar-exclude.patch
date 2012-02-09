@@ -15,9 +15,9 @@
      {"directory"       , 1, NULL, 21},
      {"command-options" , 1, NULL, 22},
 +    {"exclude-file"    , 1, NULL, 23},
+     {"acl"             , 1, NULL, 24},
      { NULL, 0, NULL, 0}
  };
- 
 @@ -320,6 +322,10 @@
  	case 22: argument.command_options =
  			g_slist_append(argument.command_options,
@@ -26,9 +26,9 @@
 +		     argument.dle.exclude_file =
 +			 append_sl(argument.dle.exclude_file, optarg);
 +		 break;
- 	case ':':
- 	case '?':
- 		break;
+ 	case 24: if (optarg && strcasecmp(optarg, "NO") == 0)
+ 		     star_acl = 0;
+ 		 else if (optarg && strcasecmp(optarg, "YES") == 0)
 @@ -417,10 +423,6 @@
  	argument->dle.include_list->nb_element >= 0) {
  	fprintf(stdout, "ERROR include-list not supported for backup\n");
