@@ -13,7 +13,7 @@ Version:	3.2.3
 Release:	2
 License:	BSD
 Group:		Networking/Utilities
-Source0:	http://dl.sourceforge.net/amanda/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
 # Source0-md5:	d01944e068f3446ef0078ec208a43cd6
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
