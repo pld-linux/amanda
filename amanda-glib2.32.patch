@@ -28,3 +28,16 @@
  void g_ptr_array_free_full(GPtrArray * array);
  
  /* g_value_compare() does what you expect. It returns TRUE if and
+--- amanda-3.2.3.old/common-src/glib-util.c	2012/03/10 13:43:52
++++ amanda-3.2.3/common-src/glib-util.c	2012/05/07 17:25:35
+@@ -42,7 +42,9 @@
+      * is initialized) */
+ #ifdef HAVE_LIBCURL
+ # ifdef G_THREADS_ENABLED
++#  if (GLIB_MAJOR_VERSION < 2 || (GLIB_MAJOR_VERSION == 2 && GLIB_MINOR_VERSION < 32))
+     g_assert(!g_thread_supported()); /* assert threads aren't initialized yet */
++#  endif
+ # endif
+     g_assert(curl_global_init(CURL_GLOBAL_ALL) == 0);
+ #endif
+
