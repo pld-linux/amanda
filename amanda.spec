@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.2.3
-Release:	5
+Release:	6
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -23,6 +23,10 @@ Source5:	k5%{name}.inet
 # http://amanda.svn.sourceforge.net/viewvc/amanda/amanda/branches/3_2/contrib/convert-zd-mtx-to-robot.sh
 Source6:	convert-zd-mtx-to-robot.sh
 Source7:	%{name}-ssh_config
+# https://github.com/janekr/amlvm-snapshot
+Source8:	amlvm-snapshot.conf
+Source9:	amlvm-snapshot.pl
+Source10:	amlvm-snapshot.README
 Patch0:		%{name}-no_libnsl.patch
 Patch1:		%{name}-chg-zd-mtx-sh.patch
 Patch2:		%{name}-tar.patch
@@ -37,6 +41,7 @@ Patch10:	%{name}-amstar-exclude.patch
 Patch11:	%{name}-amstar-exclude-fix.patch
 Patch12:	%{name}-krb5-auth.patch
 Patch13:	%{name}-glib2.32.patch
+Patch14:	%{name}-amstar-device.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -210,6 +215,8 @@ typu streamer).
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
+%patch14 -p1
+cp -a %{SOURCE10} .
 
 %build
 %{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive
@@ -280,6 +287,9 @@ install %{SOURCE7} $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/config
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
+
+install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/amanda/lvm-snapshot.conf
+sed -e 's|@@PERL_VENDORARCH@@|%{perl_vendorarch}|' %{SOURCE9} >$RPM_BUILD_ROOT%{_libdir}/amanda/application/amlvm-snapshot
 
 > $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/amandates
 
@@ -379,7 +389,7 @@ EOF
 
 %files common
 %defattr(644,root,root,755)
-%doc AUTHORS COPYRIGHT ChangeLog NEWS README ReleaseNotes UPGRADING
+%doc AUTHORS COPYRIGHT ChangeLog NEWS README ReleaseNotes UPGRADING amlvm-snapshot.README
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
 %attr(755,root,root) %{_libdir}/amanda/libamar*.so
 %attr(755,root,root) %{_libdir}/amanda/libamxfer*.so
@@ -483,6 +493,7 @@ EOF
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/rc-inetd/amandaidx
 
 %config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/amanda.conf
+%config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/lvm-snapshot.conf
 
 # Commented out so it won't get removed on uninstall
 #%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/client_authorized_keys
@@ -627,6 +638,7 @@ EOF
 %dir %{_libdir}/amanda/application
 %attr(4750,root,amanda) %{_libdir}/amanda/application/amgtar
 %attr(755,root,root) %{_libdir}/amanda/application/amlog-script
+%attr(755,root,root) %{_libdir}/amanda/application/amlvm-snapshot
 %attr(755,root,root) %{_libdir}/amanda/application/ampgsql
 %attr(755,root,root) %{_libdir}/amanda/application/amraw
 %attr(755,root,root) %{_libdir}/amanda/application/amsamba
