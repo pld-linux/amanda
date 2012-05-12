@@ -9,12 +9,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	3.2.3
-Release:	6
+Version:	3.3.1
+Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	d01944e068f3446ef0078ec208a43cd6
+# Source0-md5:	dae7631b4abcf7eac874df6e3740e75b
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -37,7 +37,6 @@ Patch6:		%{name}-FHS.patch
 Patch7:		%{name}-no-buildtime-ipv6.patch
 Patch8:		%{name}-heimdal.patch
 Patch9:		%{name}-ac.patch
-Patch10:	%{name}-amstar-exclude.patch
 Patch11:	%{name}-amstar-exclude-fix.patch
 Patch12:	%{name}-krb5-auth.patch
 Patch13:	%{name}-glib2.32.patch
@@ -211,7 +210,6 @@ typu streamer).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch10 -p2
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
@@ -288,8 +286,13 @@ touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
 
+%if %{with server}
 install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/amanda/lvm-snapshot.conf
+%endif
+
+%if %{with client}
 sed -e 's|@@PERL_VENDORARCH@@|%{perl_vendorarch}|' %{SOURCE9} >$RPM_BUILD_ROOT%{_libdir}/amanda/application/amlvm-snapshot
+%endif
 
 > $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/amandates
 
@@ -319,6 +322,18 @@ if [ -f %{_sharedstatedir}/amanda/.amandahosts ]; then
 	chmod 600 %{_sharedstatedir}/amanda/.amandahosts
 fi
 
+%triggerpostun common -- amanda-common < 3.3
+%banner %{name}-common -e << EOF
+In amanda 3.3 the default auth has changed to "bsdtcp",
+if you are using the default "bsd" then you must add it
+to your configuration:
+
+ *   in amanda.conf
+ *   in amanda-client.conf
+ *   in dumptype/disklist
+ *   in inetd (if no '-auth' argument to amandad)
+EOF
+		
 %pre common
 %groupadd -P %{name}-common -g 80 amanda
 %useradd -P %{name}-common -u 80 -G disk,tape -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
@@ -507,8 +522,8 @@ EOF
 %attr(755,root,root) %{_libdir}/amanda/libamserver*.so
 
 %attr(755,root,root) %{_libdir}/amanda/amcat.awk
-%attr(755,root,root) %{_libdir}/amanda/amcleanupdisk
 %attr(755,root,root) %{_libdir}/amanda/amcheck-device
+%attr(755,root,root) %{_libdir}/amanda/amdumpd
 %attr(755,root,root) %{_libdir}/amanda/amidxtaped
 %attr(755,root,root) %{_libdir}/amanda/amindexd
 %attr(755,root,root) %{_libdir}/amanda/amlogroll
@@ -535,6 +550,7 @@ EOF
 %attr(755,root,root) %{_sbindir}/amcheckdb
 %attr(755,root,root) %{_sbindir}/amcheckdump
 %attr(755,root,root) %{_sbindir}/amcleanup
+%attr(755,root,root) %{_sbindir}/amcleanupdisk
 %attr(755,root,root) %{_sbindir}/amconvert-zd-mtx-to-robot.sh
 %attr(755,root,root) %{_sbindir}/amdevcheck
 %attr(755,root,root) %{_sbindir}/amdump
@@ -559,6 +575,7 @@ EOF
 %{_mandir}/man7/amanda-changers.7*
 %{_mandir}/man7/amanda-compatibility.7*
 %{_mandir}/man7/amanda-devices.7*
+%{_mandir}/man7/amanda-interactivity.7*
 %{_mandir}/man7/amanda-taperscan.7*
 %{_mandir}/man8/amaddclient.8*
 %{_mandir}/man8/amadmin.8*
@@ -566,6 +583,7 @@ EOF
 %{_mandir}/man8/amcheckdb.8*
 %{_mandir}/man8/amcheckdump.8*
 %{_mandir}/man8/amcleanup.8*
+%{_mandir}/man8/amcleanupdisk.8*
 %{_mandir}/man8/amdevcheck.8*
 %{_mandir}/man8/amdump.8*
 %{_mandir}/man8/amfetchdump.8*
@@ -596,15 +614,16 @@ EOF
 %{perl_vendorarch}/Amanda/Device.pm
 %{perl_vendorarch}/Amanda/Disklist.pm
 %{perl_vendorarch}/Amanda/Holding.pm
-%{perl_vendorarch}/Amanda/Interactive.pm
-%dir %{perl_vendorarch}/Amanda/Interactive
-%{perl_vendorarch}/Amanda/Interactive/*.pm
+%{perl_vendorarch}/Amanda/Interactivity.pm
+%dir %{perl_vendorarch}/Amanda/Interactivity
+%{perl_vendorarch}/Amanda/Interactivity/*.pm
 %{perl_vendorarch}/Amanda/Logfile.pm
 %dir %{perl_vendorarch}/Amanda/Recovery
 %{perl_vendorarch}/Amanda/Recovery/*.pm
 %{perl_vendorarch}/Amanda/Report.pm
 %dir %{perl_vendorarch}/Amanda/Report
 %{perl_vendorarch}/Amanda/Report/*.pm
+%{perl_vendorarch}/Amanda/ScanInventory.pm
 %{perl_vendorarch}/Amanda/Tapelist.pm
 %dir %{perl_vendorarch}/Amanda/Taper
 %{perl_vendorarch}/Amanda/Taper/*.pm
@@ -659,12 +678,14 @@ EOF
 %attr(4750,root,amanda) %{_libdir}/amanda/rundump
 %attr(4750,root,amanda) %{_libdir}/amanda/runtar
 %attr(755,root,root) %{_libdir}/amanda/selfcheck
+%attr(755,root,root) %{_sbindir}/amdump_client
 %attr(755,root,root) %{_sbindir}/amoldrecover
 %attr(755,root,root) %{_sbindir}/amrecover
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/gnutar-lists
 %attr(750,amanda,amanda) %dir %{_sharedstatedir}/amanda/debug/client
 %{_mandir}/man7/amanda-applications.7*
 %{_mandir}/man5/amanda-client.conf.5*
+%{_mandir}/man8/amdump_client.8*
 %{_mandir}/man8/amgtar.8*
 %{_mandir}/man8/ampgsql.8*
 %{_mandir}/man8/amrecover.8*

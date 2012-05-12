@@ -11,10 +11,10 @@
 +		    amcryptsimple.8  \
 +		    amgetconf.8 \
 +		    amgpgcrypt.8 \
+		    amservice.8 \
  		    script-email.8
  
- CLIENT_MAN_PAGES = \
-@@ -34,20 +40,13 @@
+@@ -34,21 +40,14 @@
      amanda-taperscan.7 \
      amaddclient.8    \
      amadmin.8 \
@@ -23,6 +23,7 @@
      amcheckdb.8 \
      amcheckdump.8 \
      amcleanup.8 \
+     amcleanupdisk.8 \
 -    amcrypt-ossl-asym.8 \
 -    amcrypt-ossl.8   \
 -    amcrypt.8 \
