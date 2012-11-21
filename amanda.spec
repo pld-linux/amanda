@@ -4,7 +4,7 @@
 %bcond_without	samba	# without smbclient support
 %bcond_without	client	# without client package
 %bcond_without	server	# without server package
-#
+
 %include	/usr/lib/rpm/macros.perl
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
@@ -49,9 +49,10 @@ BuildRequires:	dump
 BuildRequires:	flex
 BuildRequires:	glib2-devel
 BuildRequires:	gnuplot
+BuildRequires:	rpmbuild(macros) >= 1.654
 # curl is broken, see curl-config --libs
-BuildRequires:	keyutils-devel
 BuildRequires:	heimdal-devel
+BuildRequires:	keyutils-devel
 BuildRequires:	libtool
 BuildRequires:	libxslt-progs
 BuildRequires:	ncurses-devel
@@ -60,17 +61,17 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl-devel >= 5.6.0
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	rpm-perlprov
+BuildRequires:	rpmbuild(macros) >= 1.654
 %{?with_samba:BuildRequires:	samba-client}
 BuildRequires:	swig
 %{?with_xfs:BuildRequires:	xfsdump}
-Conflicts:	shadow < 1:4.0.4.1-4
 Conflicts:	pwdutils < 3.1.2-2
+Conflicts:	shadow < 1:4.0.4.1-4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # for some unknown reason those get detected in R but not in P (Tie::StdHash comes from perl)
-%define		_noautoreq	'perl\\(Tie::StdHash\\)' 'perl\\(Amanda::Recovery::Clerk::Feedback\\)' 'perl\\(Amanda::Taper::Scribe::Feedback\\)'
+%define		_noautoreq_perl	Tie::StdHash Amanda::Recovery::Clerk::Feedback Amanda::Taper::Scribe::Feedback
 
 %define		_ulibdir	%{_prefix}/lib
 
@@ -150,11 +151,11 @@ Requires(post):	/bin/hostname
 Requires(post):	/usr/bin/ssh-keygen
 Requires:	%{name}-common = %{version}-%{release}
 Requires:	rc-inetd
+Suggests:	gzip
 Suggests:	openssh-clients
 Suggests:	openssh-server
-Suggests:	tar
-Suggests:	gzip
 Suggests:	star
+Suggests:	tar
 Conflicts:	tar < 1.15
 
 %description client
@@ -333,7 +334,7 @@ to your configuration:
  *   in dumptype/disklist
  *   in inetd (if no '-auth' argument to amandad)
 EOF
-		
+
 %pre common
 %groupadd -P %{name}-common -g 80 amanda
 %useradd -P %{name}-common -u 80 -G disk,tape -d /var/lib/amanda -s /bin/sh -c "Amanda Backup user" -g amanda amanda
