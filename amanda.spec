@@ -39,6 +39,7 @@ Patch8:		%{name}-heimdal.patch
 Patch9:		%{name}-ac.patch
 Patch11:	%{name}-amstar-exclude-fix.patch
 Patch12:	%{name}-krb5-auth.patch
+Patch13:	%{name}-stdio.patch
 Patch14:	%{name}-amstar-device.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
@@ -211,6 +212,7 @@ typu streamer).
 %patch9 -p1
 %patch11 -p1
 %patch12 -p1
+%patch13 -p1
 %patch14 -p1
 cp -a %{SOURCE10} .
 
