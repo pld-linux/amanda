@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.3.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -60,7 +60,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl-devel >= 5.6.0
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
-BuildRequires:	rpmbuild(macros) >= 1.559
+BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	rpm-perlprov
 %{?with_samba:BuildRequires:	samba-client}
 BuildRequires:	swig
@@ -70,7 +70,7 @@ Conflicts:	pwdutils < 3.1.2-2
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # for some unknown reason those get detected in R but not in P (Tie::StdHash comes from perl)
-%define		_noautoreq	'perl(Tie::StdHash)' 'perl(Amanda::Recovery::Clerk::Feedback)' 'perl(Amanda::Taper::Scribe::Feedback)'
+%define		_noautoreq_perl	'perl(Tie::StdHash)' 'perl(Amanda::Recovery::Clerk::Feedback)' 'perl(Amanda::Taper::Scribe::Feedback)'
 
 %define		_ulibdir	%{_prefix}/lib
 
