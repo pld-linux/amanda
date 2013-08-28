@@ -9,12 +9,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	3.3.2
-Release:	5
+Version:	3.3.4
+Release:	1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	1a6cfe47eaee121f22540ac5fa58c366
+# Source0-md5:	ba59b170d554789bfc59d5a27ec7307e
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -39,8 +39,7 @@ Patch8:		%{name}-heimdal.patch
 Patch9:		%{name}-ac.patch
 Patch11:	%{name}-amstar-exclude-fix.patch
 Patch12:	%{name}-krb5-auth.patch
-Patch13:	%{name}-stdio.patch
-Patch14:	%{name}-amstar-device.patch
+Patch13:	%{name}-amstar-device.patch
 URL:		http://www.amanda.org/
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
@@ -63,7 +62,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.654
-%{?with_samba:BuildRequires:	samba-client}
+%{?with_samba:BuildRequires:	/usr/bin/smbclient}
 BuildRequires:	swig
 %{?with_xfs:BuildRequires:	xfsdump}
 Conflicts:	pwdutils < 3.1.2-2
@@ -214,7 +213,6 @@ typu streamer).
 %patch11 -p1
 %patch12 -p1
 %patch13 -p1
-%patch14 -p1
 cp -a %{SOURCE10} .
 
 %build
@@ -613,6 +611,7 @@ EOF
 %dir %{perl_vendorarch}/Amanda/DB
 %{perl_vendorarch}/Amanda/DB/*.pm
 %{perl_vendorarch}/Amanda/Device.pm
+%{perl_vendorarch}/Amanda/Extract.pm
 %{perl_vendorarch}/Amanda/Disklist.pm
 %{perl_vendorarch}/Amanda/Holding.pm
 %{perl_vendorarch}/Amanda/Interactivity.pm

@@ -6,7 +6,7 @@
  
 +    /* krb5 require the euid to be 0 */
 +    if (strcasecmp(auth, "krb5") == 0) {
-+	seteuid((uid_t)0);
++	if(seteuid((uid_t)0) != 0) { error("Can't set euid to 0"); };
 +    }
 +
  #ifndef SINGLE_USERID
@@ -18,7 +18,7 @@
  
 -    /* krb5 require the euid to be 0 */
 -    if (strcasecmp(auth, "krb5") == 0) {
--	seteuid((uid_t)0);
+-	if(seteuid((uid_t)0) != 0) { error("Can't set euid to 0"); };
 -    }
 -
      /*
