@@ -281,7 +281,7 @@ sub resolve_device {
         my $real_device = $self->readlink($device);
         chomp($real_device);
 
-        if ($real_device eq $mnt_device) {
+        if (($device eq $mnt_device) || ($real_device eq $mnt_device)) {
             $self->{device} = $device;
             $self->{volume_group} = $group;
             $self->{fs_type} = $fs_type;
