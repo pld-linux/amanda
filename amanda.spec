@@ -9,12 +9,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	3.3.4
-Release:	2
+Version:	3.3.5
+Release:	1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	ba59b170d554789bfc59d5a27ec7307e
+# Source0-md5:	fd545874dff334c424337ca9d7683ff6
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -41,6 +41,7 @@ Patch11:	%{name}-amstar-exclude-fix.patch
 Patch12:	%{name}-krb5-auth.patch
 Patch13:	%{name}-amstar-device.patch
 URL:		http://www.amanda.org/
+%{?with_samba:BuildRequires:	/usr/bin/smbclient}
 BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	curl-devel >= 7.10.0
@@ -48,9 +49,9 @@ BuildRequires:	dump
 BuildRequires:	flex
 BuildRequires:	glib2-devel
 BuildRequires:	gnuplot
-BuildRequires:	rpmbuild(macros) >= 1.654
-# curl is broken, see curl-config --libs
 BuildRequires:	heimdal-devel
+BuildRequires:	rpmbuild(macros) >= 1.654
+# curl is broken, see curl-config --libs (c8cba693)
 BuildRequires:	keyutils-devel
 BuildRequires:	libtool
 BuildRequires:	libxslt-progs
@@ -62,7 +63,6 @@ BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.654
-%{?with_samba:BuildRequires:	/usr/bin/smbclient}
 BuildRequires:	swig
 %{?with_xfs:BuildRequires:	xfsdump}
 Conflicts:	pwdutils < 3.1.2-2
@@ -108,7 +108,7 @@ Requires(pre):	/usr/bin/chsh
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-%requires_ge	glib2
+%requires_ge glib2
 Requires:	setup >= 2.6.1-1
 Provides:	group(amanda)
 Provides:	user(amanda)
@@ -268,25 +268,25 @@ install -d $RPM_BUILD_ROOT%{_sysconfdir}/{amanda,cron.d,sysconfig/rc-inetd} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amanda-srv
+cp -p %{SOURCE1} $RPM_BUILD_ROOT/etc/cron.d/amanda-srv
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE2} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amanda
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE3} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amandaidx
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE4} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/amidxtape
 sed -e 's|/usr/lib|%{_libdir}|' %{SOURCE5} >$RPM_BUILD_ROOT/etc/sysconfig/rc-inetd/k5amanda
 
-install example/amanda.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
-install example/amanda-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
+cp -p example/amanda.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
+cp -p example/amanda-client.conf $RPM_BUILD_ROOT%{_sysconfdir}/amanda
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.amandahosts
 
-install %{SOURCE6} $RPM_BUILD_ROOT%{_sbindir}/amconvert-zd-mtx-to-robot.sh
+install -p %{SOURCE6} $RPM_BUILD_ROOT%{_sbindir}/amconvert-zd-mtx-to-robot.sh
 
-install %{SOURCE7} $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/config
+cp -p %{SOURCE7} $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/config
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/{,client_}authorized_keys
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amdump{,.pub}
 touch $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover{,.pub}
 
 %if %{with server}
-install -p %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/amanda/lvm-snapshot.conf
+cp -p %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/amanda/lvm-snapshot.conf
 %endif
 
 %if %{with client}
