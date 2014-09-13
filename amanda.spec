@@ -657,6 +657,7 @@ EOF
 %attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 
 %dir %{_libdir}/amanda/application
+%attr(4750,root,amanda) %{_libdir}/amanda/application/ambsdtar
 %attr(4750,root,amanda) %{_libdir}/amanda/application/amgtar
 %attr(755,root,root) %{_libdir}/amanda/application/amlog-script
 %attr(755,root,root) %{_libdir}/amanda/application/amlvm-snapshot
@@ -688,6 +689,7 @@ EOF
 %{_mandir}/man7/amanda-applications.7*
 %{_mandir}/man5/amanda-client.conf.5*
 %{_mandir}/man8/amdump_client.8*
+%{_mandir}/man8/ambsdtar.8*
 %{_mandir}/man8/amgtar.8*
 %{_mandir}/man8/ampgsql.8*
 %{_mandir}/man8/amrecover.8*
