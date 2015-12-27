@@ -1,0 +1,35 @@
+--- amanda-3.3.6/config/amanda/krb5-security.m4~	2015-12-27 12:57:37.000000000 +0100
++++ amanda-3.3.6/config/amanda/krb5-security.m4	2015-12-27 13:01:46.912103153 +0100
+@@ -40,9 +40,7 @@
+         # in autoconf at this time. -kashmir
+         AC_MSG_CHECKING(for Kerberos V libraries)
+         KRB5_DIR_FOUND=""
+-        for dir in $KRB5_SPOTS; do
+-          for lib in lib lib64; do
+-            k5libdir=${dir}/${lib}
++            k5libdir=$libdir
+             if test \( -f ${k5libdir}/libkrb5.a -o -f ${k5libdir}/libkrb5.so \) -a \( -f ${k5libdir}/libgssapi_krb5.so -o -f ${k5libdir}/libgssapi_krb5.a \) -a \( -f ${k5libdir}/libcom_err.a -o -f ${k5libdir}/libcom_err.so \); then
+                 if test -f ${k5libdir}/libk5crypto.a -o -f ${k5libdir}/libk5crypto.so; then
+                     K5CRYPTO=-lk5crypto
+@@ -54,19 +54,15 @@
+                 else
+                     K5SUPPORT=""
+                 fi
+-                KRB5_DIR_FOUND=$dir
++                KRB5_DIR_FOUND=$prefix
+                 KRB5_LIBDIR_FOUND=$k5libdir
+                 AMANDA_ADD_LIBS([-lgssapi_krb5 -lkrb5 $K5CRYPTO $K5SUPPORT -lcom_err])
+-                break
+             elif test \( -f ${k5libdir}/libkrb5.a -o -f ${k5libdir}/libkrb5.so \) -a \( -f ${k5libdir}/libasn1.a -o -f ${k5libdir}/libasn1.so \) -a \( -f ${k5libdir}/libgssapi.a -o -f ${k5libdir}/libgssapi.so \); then
+-                KRB5_DIR_FOUND=$dir
++                KRB5_DIR_FOUND=$prefix
+                 KRB5_LIBDIR_FOUND=$k5libdir
+                 AMANDA_ADD_LIBS([-lgssapi -lkrb5 -lasn1])
+                 AMANDA_ADD_CPPFLAGS([-DKRB5_HEIMDAL_INCLUDES])
+-                break
+             fi
+-          done
+-        done
+ 
+         if test "$KRB5_DIR_FOUND"; then
+             AC_MSG_RESULT(found in $KRB5_DIR_FOUND)
