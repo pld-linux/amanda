@@ -1,0 +1,19 @@
+--- amanda-3.3.6/perl/Amanda/Xfer.swg.orig	2015-12-27 11:44:42.539670320 +0100
++++ amanda-3.3.6/perl/Amanda/Xfer.swg	2015-12-27 11:47:02.104286963 +0100
+@@ -533,8 +533,6 @@
+ %perlcode {
+ sub new { 
+     my $pkg = shift;
+-    # The C function adds the proper blessing -- this function
+-    # just gets $pkg out of the way.
+     C_CONSTRUCTOR(@_);
+ }
+ }
+@@ -543,7 +543,6 @@
+ %define OVERLOAD_REPR()
+ %perlcode {
+ use overload '""' => sub { $_[0]->repr(); };
+-# overload comparison, so users can ask if one obj == another
+ use overload '==' => sub {     Amanda::Xfer::same_elements($_[0], $_[1]); };
+ use overload '!=' => sub { not Amanda::Xfer::same_elements($_[0], $_[1]); };
+ }
