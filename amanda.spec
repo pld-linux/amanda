@@ -10,7 +10,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.3.6
-Release:	11
+Release:	12
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -297,7 +297,7 @@ cp -p %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/amanda/lvm-snapshot.conf
 %endif
 
 %if %{with client}
-sed -e 's|@@PERL_VENDORARCH@@|%{perl_vendorarch}|' %{SOURCE9} >$RPM_BUILD_ROOT%{_libdir}/amanda/application/amlvm-snapshot
+sed -e 's|@@PERL_VENDORARCH@@|%{perl_vendorarch}|' %{SOURCE9} >$RPM_BUILD_ROOT%{_libexecdir}/amanda/application/amlvm-snapshot
 %endif
 
 > $RPM_BUILD_ROOT%{_sharedstatedir}/amanda/amandates
@@ -417,14 +417,15 @@ EOF
 %attr(755,root,root) %{_libdir}/amanda/libamglue*.so
 %attr(755,root,root) %{_libdir}/amanda/libndmjob*.so
 %attr(755,root,root) %{_libdir}/amanda/libndmlib*.so
-%attr(755,root,root) %{_libdir}/amanda/amndmjob
-%attr(755,root,root) %{_libdir}/amanda/ndmjob
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %dir %{_libdir}/amanda
 %if %{_lib} != "lib"
 %{_ulibdir}/amanda
 %endif
-%{_libdir}/amanda/amanda-sh-lib.sh
+%dir %{_libexecdir}/amanda
+%{_libexecdir}/amanda/amanda-sh-lib.sh
+%attr(755,root,root) %{_libexecdir}/amanda/amndmjob
+%attr(755,root,root) %{_libexecdir}/amanda/ndmjob
 %attr(755,root,root) %{_sbindir}/amaespipe
 %attr(755,root,root) %{_sbindir}/amarchiver
 %attr(755,root,root) %{_sbindir}/amcrypt*
@@ -527,27 +528,27 @@ EOF
 %attr(755,root,root) %{_libdir}/amanda/libamdevice*.so
 %attr(755,root,root) %{_libdir}/amanda/libamserver*.so
 
-%attr(755,root,root) %{_libdir}/amanda/amcat.awk
-%attr(755,root,root) %{_libdir}/amanda/amcheck-device
-%attr(755,root,root) %{_libdir}/amanda/amdumpd
-%attr(755,root,root) %{_libdir}/amanda/amidxtaped
-%attr(755,root,root) %{_libdir}/amanda/amindexd
-%attr(755,root,root) %{_libdir}/amanda/amlogroll
-%attr(755,root,root) %{_libdir}/amanda/amplot.awk
-%attr(755,root,root) %{_libdir}/amanda/amplot.g
-%attr(755,root,root) %{_libdir}/amanda/amplot.gp
-%attr(755,root,root) %{_libdir}/amanda/amtrmidx
-%attr(755,root,root) %{_libdir}/amanda/amtrmlog
-%attr(755,root,root) %{_libdir}/amanda/chg-disk
-%attr(755,root,root) %{_libdir}/amanda/chg-lib.sh
-%attr(755,root,root) %{_libdir}/amanda/chg-manual
-%attr(755,root,root) %{_libdir}/amanda/chg-multi
-%attr(755,root,root) %{_libdir}/amanda/chg-zd-mtx
-%attr(755,root,root) %{_libdir}/amanda/chunker
-%attr(755,root,root) %{_libdir}/amanda/driver
-%attr(4750,root,amanda) %{_libdir}/amanda/dumper
-%attr(4750,root,amanda) %{_libdir}/amanda/planner
-%attr(755,root,root) %{_libdir}/amanda/taper
+%attr(755,root,root) %{_libexecdir}/amanda/amcat.awk
+%attr(755,root,root) %{_libexecdir}/amanda/amcheck-device
+%attr(755,root,root) %{_libexecdir}/amanda/amdumpd
+%attr(755,root,root) %{_libexecdir}/amanda/amidxtaped
+%attr(755,root,root) %{_libexecdir}/amanda/amindexd
+%attr(755,root,root) %{_libexecdir}/amanda/amlogroll
+%attr(755,root,root) %{_libexecdir}/amanda/amplot.awk
+%attr(755,root,root) %{_libexecdir}/amanda/amplot.g
+%attr(755,root,root) %{_libexecdir}/amanda/amplot.gp
+%attr(755,root,root) %{_libexecdir}/amanda/amtrmidx
+%attr(755,root,root) %{_libexecdir}/amanda/amtrmlog
+%attr(755,root,root) %{_libexecdir}/amanda/chg-disk
+%attr(755,root,root) %{_libexecdir}/amanda/chg-lib.sh
+%attr(755,root,root) %{_libexecdir}/amanda/chg-manual
+%attr(755,root,root) %{_libexecdir}/amanda/chg-multi
+%attr(755,root,root) %{_libexecdir}/amanda/chg-zd-mtx
+%attr(755,root,root) %{_libexecdir}/amanda/chunker
+%attr(755,root,root) %{_libexecdir}/amanda/driver
+%attr(4750,root,amanda) %{_libexecdir}/amanda/dumper
+%attr(4750,root,amanda) %{_libexecdir}/amanda/planner
+%attr(755,root,root) %{_libexecdir}/amanda/taper
 
 %attr(755,root,root) %{_sbindir}/activate-devpay
 %attr(755,root,root) %{_sbindir}/amaddclient
@@ -661,31 +662,31 @@ EOF
 #%attr(600,amanda,amanda) %ghost %{_sharedstatedir}/amanda/.ssh/id_rsa_amrecover*
 %attr(640,amanda,amanda) %config(noreplace) %verify(not md5 mtime size) %{_sharedstatedir}/amanda/amandates
 
-%dir %{_libdir}/amanda/application
-%attr(4750,root,amanda) %{_libdir}/amanda/application/ambsdtar
-%attr(4750,root,amanda) %{_libdir}/amanda/application/amgtar
-%attr(755,root,root) %{_libdir}/amanda/application/amlog-script
-%attr(755,root,root) %{_libdir}/amanda/application/amlvm-snapshot
-%attr(755,root,root) %{_libdir}/amanda/application/ampgsql
-%attr(755,root,root) %{_libdir}/amanda/application/amraw
-%attr(755,root,root) %{_libdir}/amanda/application/amsamba
-%attr(4750,root,amanda) %{_libdir}/amanda/application/amstar
-%attr(755,root,root) %{_libdir}/amanda/application/amsuntar
-%attr(755,root,root) %{_libdir}/amanda/application/amzfs*
-%attr(755,root,root) %{_libdir}/amanda/application/script-email
+%dir %{_libexecdir}/amanda/application
+%attr(4750,root,amanda) %{_libexecdir}/amanda/application/ambsdtar
+%attr(4750,root,amanda) %{_libexecdir}/amanda/application/amgtar
+%attr(755,root,root) %{_libexecdir}/amanda/application/amlog-script
+%attr(755,root,root) %{_libexecdir}/amanda/application/amlvm-snapshot
+%attr(755,root,root) %{_libexecdir}/amanda/application/ampgsql
+%attr(755,root,root) %{_libexecdir}/amanda/application/amraw
+%attr(755,root,root) %{_libexecdir}/amanda/application/amsamba
+%attr(4750,root,amanda) %{_libexecdir}/amanda/application/amstar
+%attr(755,root,root) %{_libexecdir}/amanda/application/amsuntar
+%attr(755,root,root) %{_libexecdir}/amanda/application/amzfs*
+%attr(755,root,root) %{_libexecdir}/amanda/application/script-email
 
 %attr(755,root,root) %{_libdir}/amanda/libamclient*.so
-%attr(755,root,root) %{_libdir}/amanda/amandad
-%attr(755,root,root) %{_libdir}/amanda/noop
-%attr(755,root,root) %{_libdir}/amanda/patch-system
-%attr(755,root,root) %{_libdir}/amanda/sendbackup
-%attr(755,root,root) %{_libdir}/amanda/sendsize
-%attr(755,root,root) %{_libdir}/amanda/teecount
-%attr(4750,root,amanda) %{_libdir}/amanda/calcsize
-%attr(4750,root,amanda) %{_libdir}/amanda/killpgrp
-%attr(4750,root,amanda) %{_libdir}/amanda/rundump
-%attr(4750,root,amanda) %{_libdir}/amanda/runtar
-%attr(755,root,root) %{_libdir}/amanda/selfcheck
+%attr(755,root,root) %{_libexecdir}/amanda/amandad
+%attr(755,root,root) %{_libexecdir}/amanda/noop
+%attr(755,root,root) %{_libexecdir}/amanda/patch-system
+%attr(755,root,root) %{_libexecdir}/amanda/sendbackup
+%attr(755,root,root) %{_libexecdir}/amanda/sendsize
+%attr(755,root,root) %{_libexecdir}/amanda/teecount
+%attr(4750,root,amanda) %{_libexecdir}/amanda/calcsize
+%attr(4750,root,amanda) %{_libexecdir}/amanda/killpgrp
+%attr(4750,root,amanda) %{_libexecdir}/amanda/rundump
+%attr(4750,root,amanda) %{_libexecdir}/amanda/runtar
+%attr(755,root,root) %{_libexecdir}/amanda/selfcheck
 %attr(755,root,root) %{_sbindir}/amdump_client
 %attr(755,root,root) %{_sbindir}/amoldrecover
 %attr(755,root,root) %{_sbindir}/amrecover
