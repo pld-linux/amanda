@@ -9,12 +9,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	3.3.6
-Release:	13
+Version:	3.5.1
+Release:	0.1
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	99559bd84b358701cf943fcc347d8914
+# Source0-md5:	f57307959f79e722b1dcb3f985ebb0d0
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -28,7 +28,7 @@ Source8:	amlvm-snapshot.conf
 Source9:	amlvm-snapshot.pl
 Source10:	amlvm-snapshot.README
 Patch0:		%{name}-no_libnsl.patch
-Patch1:		%{name}-chg-zd-mtx-sh.patch
+
 Patch2:		%{name}-tar.patch
 Patch3:		%{name}-common.patch
 Patch4:		%{name}-as_needed.patch
@@ -37,9 +37,9 @@ Patch6:		%{name}-FHS.patch
 Patch7:		%{name}-no-buildtime-ipv6.patch
 Patch8:		%{name}-heimdal.patch
 Patch9:		%{name}-ac.patch
-Patch11:	%{name}-amstar-exclude-fix.patch
+
 Patch12:	%{name}-krb5-auth.patch
-Patch13:	%{name}-amstar-device.patch
+
 Patch14:	swig.patch
 Patch15:	krb5-ac.patch
 URL:		http://www.amanda.org/
@@ -203,7 +203,7 @@ typu streamer).
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
+
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -212,9 +212,9 @@ typu streamer).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%patch11 -p1
+
 %patch12 -p1
-%patch13 -p1
+
 %patch14 -p1
 %patch15 -p1
 cp -a %{SOURCE10} .
@@ -539,11 +539,6 @@ EOF
 %attr(755,root,root) %{_libexecdir}/amanda/amplot.gp
 %attr(755,root,root) %{_libexecdir}/amanda/amtrmidx
 %attr(755,root,root) %{_libexecdir}/amanda/amtrmlog
-%attr(755,root,root) %{_libexecdir}/amanda/chg-disk
-%attr(755,root,root) %{_libexecdir}/amanda/chg-lib.sh
-%attr(755,root,root) %{_libexecdir}/amanda/chg-manual
-%attr(755,root,root) %{_libexecdir}/amanda/chg-multi
-%attr(755,root,root) %{_libexecdir}/amanda/chg-zd-mtx
 %attr(755,root,root) %{_libexecdir}/amanda/chunker
 %attr(755,root,root) %{_libexecdir}/amanda/driver
 %attr(4750,root,amanda) %{_libexecdir}/amanda/dumper

@@ -1,26 +1,18 @@
---- amanda-3.2.0/man/Makefile.am~	2010-10-06 18:36:29.000000000 +0200
-+++ amanda-3.2.0/man/Makefile.am	2010-11-25 13:40:20.848191192 +0100
-@@ -14,6 +14,13 @@
- 		    amanda-auth.7 \
- 		    amanda-match.7 \
- 		    amarchiver.8 \
-+		    amaespipe.8 \
+--- amanda-3.5.1/man/Makefile.am~	2017-12-01 14:26:28.000000000 +0100
++++ amanda-3.5.1/man/Makefile.am	2018-09-20 08:56:14.538624065 +0200
+@@ -19,6 +19,11 @@ COMMON_MAN_PAGES =  amanda.8 \
+ 		    amgetconf.8 \
+ 		    amservice.8 \
+ 		    amssl.8 \
 +		    amcrypt-ossl-asym.8 \
 +		    amcrypt-ossl.8   \
 +		    amcrypt.8 \
 +		    amcryptsimple.8  \
-+		    amgetconf.8 \
 +		    amgpgcrypt.8 \
-		    amservice.8 \
  		    script-email.8
  
-@@ -34,21 +40,14 @@
-     amanda-taperscan.7 \
-     amaddclient.8    \
-     amadmin.8 \
--    amaespipe.8 \
-     amcheck.8 \
-     amcheckdb.8 \
+ CLIENT_MAN_PAGES = \
+@@ -49,14 +54,9 @@ SERVER_MAN_PAGES =  \
      amcheckdump.8 \
      amcleanup.8 \
      amcleanupdisk.8 \
@@ -31,8 +23,7 @@
      amdevcheck.8 \
      amdump.8 \
      amflush.8 \
--    amgetconf.8 \
 -    amgpgcrypt.8 \
      amlabel.8 \
      amoverview.8 \
-     amreport.8 \
+     amreindex.8 \
