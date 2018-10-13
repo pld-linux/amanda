@@ -1,3 +1,123 @@
+# TODO:
+#
+# CLIENT warning: Installed (but unpackaged) file(s) found:
+#	/etc/amanda/amanda-security.conf
+#	/etc/amanda/amanda.conf
+#	/etc/cron.d/amanda-srv
+#	/etc/sysconfig/rc-inetd/amandaidx
+#	/etc/sysconfig/rc-inetd/amidxtape
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Amservice.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Extract.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump/Application.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump/ClientApplication.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump/Local.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Message.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Recovery/Clerk.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Recovery/Planner.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Recovery/Scan.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Restore.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Service.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Service/Restore.pm
+#	/usr/libexec/amanda/ambind
+#	/usr/libexec/amanda/amcat.awk
+#	/usr/libexec/amanda/amplot.awk
+#	/usr/libexec/amanda/amplot.g
+#	/usr/libexec/amanda/amplot.gp
+#	/usr/libexec/amanda/application/amrandom
+#	/usr/libexec/amanda/application/script-fail
+#	/usr/libexec/amanda/restore
+#	/usr/libexec/amanda/senddiscover
+#	/usr/sbin/amaespipe
+#	/usr/sbin/ambackup
+#	/usr/sbin/amconvert-zd-mtx-to-robot.sh
+#	/usr/sbin/amplot
+#	/usr/sbin/amservice
+#	/usr/sbin/amssl
+#	/usr/share/man/man5/amanda-security.conf.5.gz
+#	/usr/share/man/man5/amanda.conf.5.gz
+#	/usr/share/man/man7/amanda-auth-ssl.7.gz
+#	/usr/share/man/man8/ambackup.8.gz
+#	/usr/share/man/man8/amplot.8.gz
+#	/usr/share/man/man8/amservice.8.gz
+#	/usr/share/man/man8/amssl.8.gz
+#
+# SERVER warning: Installed (but unpackaged) file(s) found:
+#	/etc/amanda/amanda-client.conf
+#	/etc/amanda/amanda-security.conf
+#	/etc/sysconfig/rc-inetd/amanda
+#	/etc/sysconfig/rc-inetd/k5amanda
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Amdump.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Amflush.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Amservice.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/CheckDump.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Chunker/Controller.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Chunker/Protocol.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Chunker/Scribe.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Cleanup.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Cmdfile.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/DB.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump/Application.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump/ClientApplication.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/FetchDump/Local.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Index.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Label.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Message.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Policy.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Recovery.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Amcheck.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Configs.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Dles.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Dumps.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Labels.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Report.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Runs.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Services.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Status.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Storages.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Storages/Labels.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Rest/Version.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Restore.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Service.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Service/Amidxtaped.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Status.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Storage.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/Amanda/Vault.pm
+#	/usr/lib64/perl5/vendor_perl/5.28.0/x86_64-pld-linux-thread-multi/auto/Amanda/Cmdfile/libCmdfile.so
+#	/usr/libexec/amanda/amadmin_perl
+#	/usr/libexec/amanda/amandad
+#	/usr/libexec/amanda/ambackupd
+#	/usr/libexec/amanda/ambind
+#	/usr/libexec/amanda/rest-server/bin/app-dancer2.pl
+#	/usr/libexec/amanda/rest-server/bin/app.pl
+#	/usr/libexec/amanda/rest-server/config-dancer/config.yml
+#	/usr/libexec/amanda/rest-server/config.yml
+#	/usr/libexec/amanda/rest-server/environments/development.yml
+#	/usr/libexec/amanda/rest-server/environments/production.yml
+#	/usr/libexec/amanda/rest-server/lib/Amanda/Rest.pm
+#	/usr/libexec/amanda/rest-server/public/404.html
+#	/usr/libexec/amanda/rest-server/public/500.html
+#	/usr/libexec/amanda/rest-server/public/css/error.css
+#	/usr/libexec/amanda/rest-server/public/css/style.css
+#	/usr/libexec/amanda/rest-server/public/dispatch.cgi
+#	/usr/libexec/amanda/rest-server/public/dispatch.fcgi
+#	/usr/libexec/amanda/rest-server/public/favicon.ico
+#	/usr/libexec/amanda/rest-server/public/images/perldancer-bg.jpg
+#	/usr/libexec/amanda/rest-server/public/images/perldancer.jpg
+#	/usr/libexec/amanda/rest-server/public/javascripts/jquery.js
+#	/usr/libexec/amanda/rest-server/views/index.tt
+#	/usr/libexec/amanda/rest-server/views/layout/main.tt
+#	/usr/sbin/amanda-rest-server
+#	/usr/sbin/amreindex
+#	/usr/sbin/amssl
+#	/usr/share/man/man5/amanda-client.conf.5.gz
+#	/usr/share/man/man5/amanda-command-file.5.gz
+#	/usr/share/man/man5/amanda-security.conf.5.gz
+#	/usr/share/man/man7/amanda-auth-ssl.7.gz
+#	/usr/share/man/man8/amanda-rest-server.8.gz
+#	/usr/share/man/man8/amreindex.8.gz
+#	/usr/share/man/man8/amssl.8.gz
 #
 # Conditional build:
 %bcond_without	xfs	# without (possible) support for xfsdump
@@ -426,7 +546,6 @@ EOF
 %{_libexecdir}/amanda/amanda-sh-lib.sh
 %attr(755,root,root) %{_libexecdir}/amanda/amndmjob
 %attr(755,root,root) %{_libexecdir}/amanda/ndmjob
-%attr(755,root,root) %{_sbindir}/amaespipe
 %attr(755,root,root) %{_sbindir}/amarchiver
 %attr(755,root,root) %{_sbindir}/amcrypt*
 %attr(755,root,root) %{_sbindir}/amgetconf
@@ -452,7 +571,6 @@ EOF
 %{_mandir}/man7/amanda-auth.7*
 %{_mandir}/man7/amanda-match.7*
 %{_mandir}/man7/amanda-scripts.7*
-%{_mandir}/man8/amaespipe.8*
 %{_mandir}/man8/amanda.8*
 %{_mandir}/man8/amarchiver.8*
 %{_mandir}/man8/amcrypt*.8*
@@ -547,6 +665,7 @@ EOF
 
 %attr(755,root,root) %{_sbindir}/activate-devpay
 %attr(755,root,root) %{_sbindir}/amaddclient
+%attr(755,root,root) %{_sbindir}/amaespipe
 %attr(755,root,root) %{_sbindir}/amadmin
 %attr(4750,root,amanda) %{_sbindir}/amcheck
 %attr(755,root,root) %{_sbindir}/amcheckdb
@@ -581,6 +700,7 @@ EOF
 %{_mandir}/man7/amanda-taperscan.7*
 %{_mandir}/man8/amaddclient.8*
 %{_mandir}/man8/amadmin.8*
+%{_mandir}/man8/amaespipe.8*
 %{_mandir}/man8/amcheck.8*
 %{_mandir}/man8/amcheckdb.8*
 %{_mandir}/man8/amcheckdump.8*
