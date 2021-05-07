@@ -424,7 +424,7 @@ EOF
 %attr(750,amanda,amanda) %dir %{_sysconfdir}/amanda
 %config(noreplace) %verify(not md5 mtime size) %attr(640,amanda,amanda) %{_sysconfdir}/amanda/amanda-security.conf
 %dir %{_libdir}/amanda
-%if %{_lib} != "lib"
+%if "%{_lib}" != "lib"
 %{_ulibdir}/amanda
 %endif
 %dir %{_libexecdir}/amanda
