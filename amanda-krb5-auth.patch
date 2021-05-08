@@ -1,6 +1,7 @@
---- amanda-3.2.0/amandad-src/amandad.c~	2010-10-06 18:36:28.000000000 +0200
-+++ amanda-3.2.0/amandad-src/amandad.c	2010-11-29 14:23:20.580165324 +0100
-@@ -440,6 +440,11 @@
+diff -urNp -x '*.orig' amanda-3.5.1.org/amandad-src/amandad.c amanda-3.5.1/amandad-src/amandad.c
+--- amanda-3.5.1.org/amandad-src/amandad.c	2017-12-01 14:26:32.000000000 +0100
++++ amanda-3.5.1/amandad-src/amandad.c	2021-05-08 10:23:15.193461026 +0200
+@@ -476,6 +476,11 @@ main(
  	exit_on_qlength = 1;
      }
  
@@ -10,9 +11,9 @@
 +    }
 +
  #ifndef SINGLE_USERID
-     if (geteuid() == 0) {
+     if (getuid() == 0) {
  	if (strcasecmp(auth, "krb5") != 0) {
-@@ -474,11 +479,6 @@
+@@ -510,11 +515,6 @@ main(
  	dbprintf(_("WARNING: argv[0] not defined: check inetd.conf\n"));
      }
  

@@ -1,8 +1,8 @@
-diff -ur amanda-2.6.0/common-src/conffile.c amanda-2.6.0-fhs/common-src/conffile.c
---- amanda-2.6.0/common-src/conffile.c	2008-01-28 22:57:34.000000000 +0100
-+++ amanda-2.6.0-fhs/common-src/conffile.c	2008-05-08 17:39:18.000000000 +0200
-@@ -3143,9 +3143,9 @@
-     conf_init_str   (&conf_data[CNF_LABELSTR]             , ".*");
+diff -urNp -x '*.orig' amanda-3.5.1.org/common-src/conffile.c amanda-3.5.1/common-src/conffile.c
+--- amanda-3.5.1.org/common-src/conffile.c	2017-12-01 14:26:28.000000000 +0100
++++ amanda-3.5.1/common-src/conffile.c	2021-05-08 10:23:13.673469863 +0200
+@@ -6422,9 +6422,9 @@ init_defaults(
+     conf_init_str(&conf_data[CNF_CHANGERFILE]             , "changer");
      conf_init_str   (&conf_data[CNF_TAPELIST]             , "tapelist");
      conf_init_str   (&conf_data[CNF_DISKFILE]             , "disklist");
 -    conf_init_str   (&conf_data[CNF_INFOFILE]             , "/usr/adm/amanda/curinfo");
@@ -13,11 +13,11 @@ diff -ur amanda-2.6.0/common-src/conffile.c amanda-2.6.0-fhs/common-src/conffile
 +    conf_init_str   (&conf_data[CNF_INDEXDIR]             , "/var/lib/amanda/index");
      conf_init_ident    (&conf_data[CNF_TAPETYPE]             , "DEFAULT_TAPE");
      conf_init_identlist(&conf_data[CNF_HOLDINGDISK]          , NULL);
-     conf_init_int      (&conf_data[CNF_DUMPCYCLE]            , 10);
-diff -ur amanda-2.6.0/example/amanda.conf.in amanda-2.6.0-fhs/example/amanda.conf.in
---- amanda-2.6.0/example/amanda.conf.in	2008-01-18 01:31:14.000000000 +0100
-+++ amanda-2.6.0-fhs/example/amanda.conf.in	2008-05-08 17:42:35.000000000 +0200
-@@ -237,9 +237,9 @@
+     conf_init_int      (&conf_data[CNF_DUMPCYCLE]            , CONF_UNIT_NONE, 10);
+diff -urNp -x '*.orig' amanda-3.5.1.org/example/amanda.conf.in amanda-3.5.1/example/amanda.conf.in
+--- amanda-3.5.1.org/example/amanda.conf.in	2017-12-01 14:26:34.000000000 +0100
++++ amanda-3.5.1/example/amanda.conf.in	2021-05-08 10:23:13.673469863 +0200
+@@ -215,9 +215,9 @@ holdingdisk hd1 {
  # Note that, although the keyword below is infofile, it is only so for
  # historic reasons, since now it is supposed to be a directory (unless
  # you have selected some database format other than the `text' default)
@@ -30,10 +30,10 @@ diff -ur amanda-2.6.0/example/amanda.conf.in amanda-2.6.0-fhs/example/amanda.con
  #tapelist "@CONFIG_DIR@/@DEFAULT_CONFIG@/tapelist"	# list of used tapes
  # tapelist is stored, by default, in the directory that contains amanda.conf
  
-diff -ur amanda-2.6.0/example/template.d/advanced.conf.in amanda-2.6.0-fhs/example/template.d/advanced.conf.in
---- amanda-2.6.0/example/template.d/advanced.conf.in	2008-01-18 01:31:13.000000000 +0100
-+++ amanda-2.6.0-fhs/example/template.d/advanced.conf.in	2008-05-08 17:43:27.000000000 +0200
-@@ -97,10 +97,10 @@
+diff -urNp -x '*.orig' amanda-3.5.1.org/example/template.d/advanced.conf.in amanda-3.5.1/example/template.d/advanced.conf.in
+--- amanda-3.5.1.org/example/template.d/advanced.conf.in	2017-12-01 14:26:34.000000000 +0100
++++ amanda-3.5.1/example/template.d/advanced.conf.in	2021-05-08 10:23:13.673469863 +0200
+@@ -84,10 +84,10 @@ autoflush no
  # Note that, although the keyword below is infofile, it is only so for
  # historic reasons, since now it is supposed to be a directory (unless
  # you have selected some database format other than the `text' default)
@@ -48,24 +48,23 @@ diff -ur amanda-2.6.0/example/template.d/advanced.conf.in amanda-2.6.0-fhs/examp
  # tapelist is stored, by default, in the directory that contains amanda.conf
  
  # Specify holding disks.  These are used as a temporary staging area for
-diff -ur amanda-2.6.0/server-src/amserverconfig.pl amanda-2.6.0-fhs/server-src/amserverconfig.pl
---- amanda-2.6.0/server-src/amserverconfig.pl	2008-01-18 01:31:25.000000000 +0100
-+++ amanda-2.6.0-fhs/server-src/amserverconfig.pl	2008-05-08 17:37:13.000000000 +0200
-@@ -99,16 +99,16 @@
+diff -urNp -x '*.orig' amanda-3.5.1.org/server-src/amserverconfig.pl amanda-3.5.1/server-src/amserverconfig.pl
+--- amanda-3.5.1.org/server-src/amserverconfig.pl	2017-12-01 14:26:29.000000000 +0100
++++ amanda-3.5.1/server-src/amserverconfig.pl	2021-05-08 10:23:13.673469863 +0200
+@@ -96,16 +96,16 @@ sub log_and_die {
  	    unlink "$confdir/$config/tapelist" || 
  	    print LOG "unlink $confdir/$config/tapelist failed: $!\n";
  	}
 -	if ( -e "$confdir/$config/curinfo" ) {
 -	    rmdir "$confdir/$config/curinfo" || 
 -	    print LOG "rmdir $confdir/$config failed: $!\n";
--	}
--	if ( -e "$confdir/$config/index" ) {
--	    rmdir "$confdir/$config/index" || 
--	    print LOG "rmdir $confdir/$config/index failed: $!\n";
 +	if ( -e "$localstatedir/lib/amanda/$config/curinfo" ) {
 +	    rmdir "$localstatedir/lib/amanda/$config/curinfo" || 
 +	    print LOG "rmdir $localstatedir/lib/amanda/$config/curinfo failed: $!\n";
-+	}
+ 	}
+-	if ( -e "$confdir/$config/index" ) {
+-	    rmdir "$confdir/$config/index" || 
+-	    print LOG "rmdir $confdir/$config/index failed: $!\n";
 +	if ( -e "$localstatedir/lib/amanda/$config/index" ) {
 +	    rmdir "$localstatedir/lib/amanda/$config/index" || 
 +	    print LOG "rmdir $localstatedir/lib/amanda/$config/index failed: $!\n";
@@ -76,7 +75,7 @@ diff -ur amanda-2.6.0/server-src/amserverconfig.pl amanda-2.6.0-fhs/server-src/a
      }
      die $err;
  }
-@@ -173,10 +173,12 @@
+@@ -159,10 +159,12 @@ sub copy_template_file {
  
  
  sub create_curinfo_index_dir {
