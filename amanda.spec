@@ -30,20 +30,17 @@ Source8:	amlvm-snapshot.conf
 Source9:	amlvm-snapshot.pl
 Source10:	amlvm-snapshot.README
 Patch0:		%{name}-no_libnsl.patch
-
-Patch2:		%{name}-tar.patch
-Patch3:		%{name}-common.patch
-Patch4:		%{name}-as_needed.patch
-Patch5:		%{name}-tapetypes.patch
-Patch6:		%{name}-FHS.patch
-Patch7:		%{name}-no-buildtime-ipv6.patch
-Patch8:		%{name}-heimdal.patch
-Patch9:		%{name}-ac.patch
-
-Patch12:	%{name}-krb5-auth.patch
-
-Patch14:	swig.patch
-Patch15:	krb5-ac.patch
+Patch1:		%{name}-tar.patch
+Patch2:		%{name}-common.patch
+Patch3:		%{name}-as_needed.patch
+Patch4:		%{name}-tapetypes.patch
+Patch5:		%{name}-FHS.patch
+Patch6:		%{name}-no-buildtime-ipv6.patch
+Patch7:		%{name}-heimdal.patch
+Patch8:		%{name}-ac.patch
+Patch9:		%{name}-krb5-auth.patch
+Patch10:	swig.patch
+Patch11:	krb5-ac.patch
 URL:		http://www.amanda.org/
 %{?with_samba:BuildRequires:	/usr/bin/smbclient}
 BuildRequires:	autoconf >= 2.64
@@ -205,7 +202,7 @@ typu streamer).
 %prep
 %setup -q
 %patch0 -p1
-
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -214,11 +211,8 @@ typu streamer).
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-
-%patch12 -p1
-
-%patch14 -p1
-%patch15 -p1
+%patch10 -p1
+%patch11 -p1
 cp -a %{SOURCE10} .
 
 find perl/ -name '*.swg' -print0 | xargs -0 touch
