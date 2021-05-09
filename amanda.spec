@@ -12,7 +12,7 @@ Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
 Version:	3.5.1
-Release:	3
+Release:	4
 License:	BSD
 Group:		Networking/Utilities
 Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
@@ -41,6 +41,8 @@ Patch8:		%{name}-ac.patch
 Patch9:		%{name}-krb5-auth.patch
 Patch10:	swig.patch
 Patch11:	krb5-ac.patch
+Patch12:	missing-extern.patch
+Patch13:	tirpc.patch
 URL:		http://www.amanda.org/
 %{?with_samba:BuildRequires:	/usr/bin/smbclient}
 BuildRequires:	autoconf >= 2.64
@@ -54,6 +56,7 @@ BuildRequires:	heimdal-devel
 BuildRequires:	rpmbuild(macros) >= 1.654
 # curl is broken, see curl-config --libs (c8cba693)
 BuildRequires:	keyutils-devel
+BuildRequires:	libtirpc-devel
 BuildRequires:	libtool
 BuildRequires:	libxslt-progs
 BuildRequires:	ncurses-devel
@@ -213,6 +216,8 @@ typu streamer).
 %patch9 -p1
 %patch10 -p1
 %patch11 -p1
+%patch12 -p1
+%patch13 -p1
 cp -a %{SOURCE10} .
 
 find perl/ -name '*.swg' -print0 | xargs -0 touch

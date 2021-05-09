@@ -1,0 +1,11 @@
+--- amanda-3.5.1/common-src/testutils.h~	2017-12-01 14:26:28.000000000 +0100
++++ amanda-3.5.1/common-src/testutils.h	2021-05-09 10:32:10.263953946 +0200
+@@ -75,7 +75,7 @@
+ #define tu_dbg(...) if (tu_debugging_enabled) { g_fprintf(stderr, __VA_ARGS__); }
+ 
+ /* Is debugging enabled for this test run? (set internally) */
+-int tu_debugging_enabled;
++extern int tu_debugging_enabled;
+ 
+ /*
+  * Main loop
