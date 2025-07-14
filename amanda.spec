@@ -204,20 +204,20 @@ typu streamer).
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
-%patch12 -p1
-%patch13 -p1
+%patch -P0 -p1
+%patch -P1 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
+%patch -P11 -p1
+%patch -P12 -p1
+%patch -P13 -p1
 cp -a %{SOURCE10} .
 
 find perl/ -name '*.swg' -print0 | xargs -0 touch
