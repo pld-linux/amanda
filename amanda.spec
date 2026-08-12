@@ -79,6 +79,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_ulibdir	%{_prefix}/lib
 
+%define		specflags	-std=gnu17
+
 %description
 AMANDA, the Advanced Maryland Automatic Network Disk Archiver, is a
 backup system that allows the administrator of a LAN to set up a
