@@ -68,6 +68,7 @@ BuildRequires:	readline-devel >= 4.2
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	swig
+BuildRequires:	swig-perl
 %{?with_xfs:BuildRequires:	xfsdump}
 Conflicts:	pwdutils < 3.1.2-2
 Conflicts:	shadow < 1:4.0.4.1-4
