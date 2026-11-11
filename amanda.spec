@@ -11,12 +11,12 @@
 Summary:	A network-capable tape backup solution
 Summary(pl.UTF-8):	Sieciowo zorientowany system tworzenia kopii zapasowych
 Name:		amanda
-Version:	3.5.1
-Release:	11
+Version:	3.5.4
+Release:	1
 License:	BSD
 Group:		Networking/Utilities
-Source0:	http://downloads.sourceforge.net/amanda/%{name}-%{version}.tar.gz
-# Source0-md5:	f57307959f79e722b1dcb3f985ebb0d0
+Source0:	https://github.com/zmanda/amanda/archive/tag-community-%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	01c881b6b75f1ef07d6e75db05a0afb0
 Source1:	%{name}-srv.crontab
 Source2:	%{name}.inetd
 Source3:	%{name}idx.inetd
@@ -41,19 +41,27 @@ Patch8:		%{name}-ac.patch
 Patch9:		%{name}-krb5-auth.patch
 Patch10:	swig.patch
 Patch11:	krb5-ac.patch
-Patch12:	missing-extern.patch
+# https://github.com/zmanda/amanda/pull/270
+Patch12:	perl-5.40.patch
 Patch13:	tirpc.patch
-URL:		http://www.amanda.org/
+Patch14:	docbook-xsl-version.patch
+# https://github.com/zmanda/amanda/pull/242
+Patch15:	runtar-const.patch
+Patch16:	perl-import-args.patch
+URL:		https://www.amanda.org/
 %{?with_samba:BuildRequires:	/usr/bin/smbclient}
 BuildRequires:	autoconf >= 2.64
 BuildRequires:	automake
+BuildRequires:	bison
 BuildRequires:	curl-devel >= 7.10.0
+BuildRequires:	docbook-dtd412-xml
+BuildRequires:	docbook-dtd42-xml
+BuildRequires:	docbook-style-xsl-nons
 BuildRequires:	dump
 BuildRequires:	flex
 BuildRequires:	glib2-devel
 BuildRequires:	gnuplot
 BuildRequires:	heimdal-devel
-BuildRequires:	rpmbuild(macros) >= 1.654
 # curl is broken, see curl-config --libs (c8cba693)
 BuildRequires:	keyutils-devel
 BuildRequires:	libtirpc-devel
@@ -65,6 +73,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl-devel >= 5.6.0
 BuildRequires:	pkgconfig
 BuildRequires:	readline-devel >= 4.2
+BuildRequires:	rpcsvc-proto
 BuildRequires:	rpm-perlprov
 BuildRequires:	rpmbuild(macros) >= 1.654
 BuildRequires:	swig
@@ -206,7 +215,7 @@ magazynowane kopie zapasowe (lub do których podpięte są urządzenia
 typu streamer).
 
 %prep
-%setup -q
+%setup -q -n %{name}-tag-community-%{version}
 %patch -P0 -p1
 %patch -P1 -p1
 %patch -P2 -p1
@@ -221,15 +230,15 @@ typu streamer).
 %patch -P11 -p1
 %patch -P12 -p1
 %patch -P13 -p1
+%patch -P14 -p1
+%patch -P15 -p1
+%patch -P16 -p1
 cp -a %{SOURCE10} .
-
-find perl/ -name '*.swg' -print0 | xargs -0 touch
 
 %build
 %{__libtoolize}
-%{__aclocal} -I config -I config/gettext-macros -I config/gnulib -I config/amanda -I config/macro-archive
-%{__autoconf}
-%{__automake}
+# also generates the m4/automake file lists and FULL_VERSION missing from the git tarball
+./autogen
 %configure \
 	DUMP=/sbin/dump \
 	GZIP=/bin/gzip \
@@ -241,6 +250,7 @@ find perl/ -name '*.swg' -print0 | xargs -0 touch
 	%{?with_xfs:XFSDUMP=/sbin/xfsdump} \
 	%{?with_xfs:XFSRESTORE=/sbin/xfsrestore} \
 	--disable-static \
+	--enable-manpage-build \
 	--enable-shared \
 	%{!?with_server:--without-server} \
 	%{!?with_client:--without-client} \
@@ -414,7 +424,7 @@ EOF
 
 %files common
 %defattr(644,root,root,755)
-%doc AUTHORS COPYRIGHT ChangeLog NEWS README ReleaseNotes UPGRADING amlvm-snapshot.README
+%doc AUTHORS COPYRIGHT ChangeLog NEWS README.md ReleaseNotes UPGRADING amlvm-snapshot.README
 %attr(755,root,root) %{_libdir}/amanda/libamanda*.so
 %attr(755,root,root) %{_libdir}/amanda/libamar*.so
 %attr(755,root,root) %{_libdir}/amanda/libamdevice*.so
@@ -619,7 +629,6 @@ EOF
 %{_libexecdir}/amanda/rest-server/public/dispatch.fcgi
 %{_libexecdir}/amanda/rest-server/public/favicon.ico
 %{_libexecdir}/amanda/rest-server/public/images
-%{_libexecdir}/amanda/rest-server/public/javascripts
 %{_libexecdir}/amanda/rest-server/views
 
 %attr(755,root,root) %{_sbindir}/activate-devpay

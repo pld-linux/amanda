@@ -1,0 +1,30 @@
+# these packages define no import(), so the tags were always ignored;
+# perl >= 5.40 warns about it on every run of amtape and amvault
+diff --git a/perl/Amanda/Vault.pm b/perl/Amanda/Vault.pm
+index da0d680..aeb9187 100644
+--- a/perl/Amanda/Vault.pm
++++ b/perl/Amanda/Vault.pm
+@@ -105,8 +105,8 @@ use Amanda::Recovery::Scan;
+ use Amanda::Recovery::Clerk;
+ use Amanda::Taper::Scan;
+ use Amanda::Taper::Scribe qw( get_splitting_args_from_config );
+-use Amanda::Storage qw( :constants );
+-use Amanda::Changer qw( :constants );
++use Amanda::Storage;
++use Amanda::Changer;
+ use Amanda::Cmdline;
+ use Amanda::Cmdfile;
+ use Amanda::Paths;
+diff --git a/server-src/amtape.pl b/server-src/amtape.pl
+index cbad0cb..bb6a7bc 100644
+--- a/server-src/amtape.pl
++++ b/server-src/amtape.pl
+@@ -39,7 +39,7 @@ use Amanda::Taper::Scan;
+ use Amanda::Recovery::Scan;
+ use Amanda::Interactivity;
+ use Amanda::Tapelist;
+-use Amanda::Message qw( :severity );
++use Amanda::Message;
+ 
+ my $exit_status = 0;
+ my $tl;

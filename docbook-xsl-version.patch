@@ -1,0 +1,52 @@
+# docbook-xsl >= 1.79.1 ships VERSION.xsl instead of VERSION, and the nons
+# 1.79.2 flavour calls itself "snapshot"; configure rejected both
+diff --git a/config/macro-archive/docbook-xslt-min.m4 b/config/macro-archive/docbook-xslt-min.m4
+index ebb5de2..5a8c9b4 100644
+--- a/config/macro-archive/docbook-xslt-min.m4
++++ b/config/macro-archive/docbook-xslt-min.m4
+@@ -74,16 +74,20 @@ AC_DEFUN([AC_CHECK_DOCBOOK_XSLT_MIN],
+ 		    <xsl:template match="text()"/>
+ 		</xsl:stylesheet>
+ EOF
+-	    echo "Trying '$XSLTPROC $XSLTPROC_FLAGS http://docbook.sourceforge.net/release/xsl/current/VERSION' with input:" >&AS_MESSAGE_LOG_FD
+-	    echo "====" >&AS_MESSAGE_LOG_FD
+-	    cat conftest.xsl >&AS_MESSAGE_LOG_FD
+-	    echo "====" >&AS_MESSAGE_LOG_FD
++	    # docbook-xsl 1.79.1 renamed VERSION to VERSION.xsl
++	    for version_file in VERSION.xsl VERSION; do
++		echo "Trying '$XSLTPROC $XSLTPROC_FLAGS http://docbook.sourceforge.net/release/xsl/current/$version_file' with input:" >&AS_MESSAGE_LOG_FD
++		echo "====" >&AS_MESSAGE_LOG_FD
++		cat conftest.xsl >&AS_MESSAGE_LOG_FD
++		echo "====" >&AS_MESSAGE_LOG_FD
+ 
+-	    ac_cv_docbook_xslt_current_version=`$XSLTPROC $XSLTPROC_FLAGS conftest.xsl http://docbook.sourceforge.net/release/xsl/current/VERSION 2>&AS_MESSAGE_LOG_FD`
++		ac_cv_docbook_xslt_current_version=`$XSLTPROC $XSLTPROC_FLAGS conftest.xsl http://docbook.sourceforge.net/release/xsl/current/$version_file 2>&AS_MESSAGE_LOG_FD`
+ 
+-	    if test "$?" != 0; then
++		if test "$?" = 0 && test -n "$ac_cv_docbook_xslt_current_version"; then
++		    break
++		fi
+ 		ac_cv_docbook_xslt_current_version='no'
+-	    fi
++	    done
+ 
+ 	    rm conftest.xsl
+ 	fi
+@@ -95,10 +99,13 @@ EOF
+     if test x"$DOCBOOK_XSLT_CURRENT_VERSION" = x"no"; then
+ 	AC_MSG_RESULT([no])
+     else
+-	AX_COMPARE_VERSION([$DOCBOOK_XSLT_CURRENT_VERSION], [lt], [$1], [
+-	    # version is less than required, so mark it as "no"
+-	    DOCBOOK_XSLT_CURRENT_VERSION=no
+-	])
++	# docbook-xsl-nons 1.79.2 reports its version as "snapshot"
++	if test x"$DOCBOOK_XSLT_CURRENT_VERSION" != x"snapshot"; then
++	    AX_COMPARE_VERSION([$DOCBOOK_XSLT_CURRENT_VERSION], [lt], [$1], [
++		# version is less than required, so mark it as "no"
++		DOCBOOK_XSLT_CURRENT_VERSION=no
++	    ])
++	fi
+ 
+ 	if test x"$DOCBOOK_XSLT_CURRENT_VERSION" = x"no"; then
+ 	    AC_MSG_RESULT([no])

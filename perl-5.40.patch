@@ -1,0 +1,45 @@
+From bd9ef8e5c004911b529d55b521d18d4d66c4e9b7 Mon Sep 17 00:00:00 2001
+From: Peter Bieringer <pb@bieringer.de>
+Date: Tue, 29 Oct 2024 21:42:32 +0100
+Subject: [PATCH 1/2] fixes https://github.com/zmanda/amanda/issues/262
+
+---
+ perl/Amanda/Taper/Scribe.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/perl/Amanda/Taper/Scribe.pm b/perl/Amanda/Taper/Scribe.pm
+index 8b21c77c0b..ecfd2a140a 100644
+--- a/perl/Amanda/Taper/Scribe.pm
++++ b/perl/Amanda/Taper/Scribe.pm
+@@ -1116,7 +1116,7 @@ sub _xmsg_no_space {
+ 	if ($chg->{'global_space'}) {
+ 	    $chg->inventory(inventory_cb => $steps->{'got_inventory'});
+ 	} else {
+-	    return $finished_cb();
++	    return $finished_cb->();
+ 	}
+     };
+ 
+
+From e083df9afaad61fc8772765d132a93ec8bc7ae5e Mon Sep 17 00:00:00 2001
+From: Peter Bieringer <pb@bieringer.de>
+Date: Tue, 29 Oct 2024 21:43:18 +0100
+Subject: [PATCH 2/2] fix for https://github.com/zmanda/amanda/issues/262
+
+---
+ perl/Amanda/Tapelist.swg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/perl/Amanda/Tapelist.swg b/perl/Amanda/Tapelist.swg
+index 9266961a4e..ba84c68ca0 100644
+--- a/perl/Amanda/Tapelist.swg
++++ b/perl/Amanda/Tapelist.swg
+@@ -36,7 +36,7 @@ use Amanda::Debug qw(:logging);
+ use Amanda::Config qw( config_dir_relative );
+ use File::Copy;
+ use Fcntl qw(:flock); # import LOCK_* constants
+-use Amanda::Message qw( :severity );
++use Amanda::Message;
+ 
+ ## package functions
+ 

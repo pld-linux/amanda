@@ -1,0 +1,30 @@
+Fix C type safety issue in CVE-2023-30547 change
+
+The types char ** and const char ** are distinct according to the
+C language.  Future compilers will treat pointer type mismatches
+as errors.
+
+Submitted upstream: <https://github.com/zmanda/amanda/pull/242>
+
+diff --git a/client-src/runtar.c b/client-src/runtar.c
+index 454e9b9a9b96449b..4d2451dc84840fa9 100644
+--- a/client-src/runtar.c
++++ b/client-src/runtar.c
+@@ -54,7 +54,7 @@ main(
+ {
+ #ifdef GNUTAR
+     int i;
+-    char **j;
++    const char **j;
+     char *e;
+     char *dbf;
+     char *cmdline;
+@@ -255,7 +255,7 @@ check_whitelist(
+     gchar* option)
+ {
+     bool result = TRUE;
+-    char** i;
++    const char** i;
+ 
+     for(i=whitelisted_args; *i; i++) {
+         if (g_str_has_prefix(option, *i)) {
